@@ -13,7 +13,8 @@ const config = defineConfig({
     devtools(),
     nitro({ rollupConfig: { external: [/^@sentry\//] } }),
     tailwindcss(),
-    tanstackStart(),
+    // Every page is written out as static HTML at build time, for search engines.
+    tanstackStart({ prerender: { enabled: true, crawlLinks: true } }),
     viteReact(),
   ],
 })

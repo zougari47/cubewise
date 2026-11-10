@@ -10,77 +10,23 @@ import {
   randomCube,
   solvedCube,
 } from './cubie.ts'
+import { FACE_NORMALS, STICKER_PLACES, dot, stickerAt, turnClockwise } from './geometry.ts'
 import { stickersFromCube } from './stickers.ts'
 import { randomMoves, seededRandom } from './testing.ts'
 
 // An independent model of the cube: 54 stickers as points in space, turned by
-// rotating the points. It shares no tables with the real code, so agreement
+// rotating the points. It shares no tables with the move code, so agreement
 // between the two checks the hand-written move and sticker tables.
-type Vec = [number, number, number]
-
-/** Outward direction of each face, in U R F D L B order (x right, y up, z front). */
-const NORMALS: Vec[] = [
-  [0, 1, 0],
-  [1, 0, 0],
-  [0, 0, 1],
-  [0, -1, 0],
-  [-1, 0, 0],
-  [0, 0, -1],
-]
-
-function stickerPlace(face: number, row: number, col: number): Vec {
-  switch (face) {
-    case 0:
-      return [col - 1, 1, row - 1]
-    case 1:
-      return [1, 1 - row, 1 - col]
-    case 2:
-      return [col - 1, 1 - row, 1]
-    case 3:
-      return [col - 1, -1, 1 - row]
-    case 4:
-      return [-1, 1 - row, col - 1]
-    default:
-      return [1 - col, 1 - row, -1]
-  }
-}
-
-const dot = (a: Vec, b: Vec) => a[0] * b[0] + a[1] * b[1] + a[2] * b[2]
-
-/** `v` after a clockwise quarter turn about `axis`, seen from outside. */
-function turnClockwise(v: Vec, axis: Vec): Vec {
-  const along = dot(v, axis)
-  return [
-    v[1] * axis[2] - v[2] * axis[1] + axis[0] * along,
-    v[2] * axis[0] - v[0] * axis[2] + axis[1] * along,
-    v[0] * axis[1] - v[1] * axis[0] + axis[2] * along,
-  ]
-}
-
-const key = (place: Vec, normal: Vec) => [...place, ...normal].join(',')
-
-const PLACES: { place: Vec; normal: Vec }[] = []
-const INDEX_OF = new Map<string, number>()
-for (let face = 0; face < 6; face++) {
-  for (let row = 0; row < 3; row++) {
-    for (let col = 0; col < 3; col++) {
-      const place = stickerPlace(face, row, col)
-      INDEX_OF.set(key(place, NORMALS[face]), PLACES.length)
-      PLACES.push({ place, normal: NORMALS[face] })
-    }
-  }
-}
-
 function geometricStickers(moves: readonly number[]): number[] {
-  let stickers = PLACES.map((_, i) => Math.floor(i / 9))
+  let stickers = STICKER_PLACES.map((_, i) => Math.floor(i / 9))
   for (const move of moves) {
-    const axis = NORMALS[Math.floor(move / 3)]
+    const axis = FACE_NORMALS[Math.floor(move / 3)]
     for (let quarter = 0; quarter <= move % 3; quarter++) {
       const next = stickers.slice()
-      PLACES.forEach(({ place, normal }, i) => {
+      STICKER_PLACES.forEach(({ place, normal }, i) => {
         if (dot(place, axis) !== 1) return
-        const target = INDEX_OF.get(key(turnClockwise(place, axis), turnClockwise(normal, axis)))
-        if (target === undefined) throw new Error('Sticker turned off the cube')
+        const target = stickerAt(turnClockwise(place, axis), turnClockwise(normal, axis))
+        if (target < 0) throw new Error('Sticker turned off the cube')
         next[target] = stickers[i]
       })
       stickers = next

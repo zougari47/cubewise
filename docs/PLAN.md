@@ -12,6 +12,8 @@ A website that solves a user's scrambled 3×3 cube from the colours they enter, 
 - Every page is server-rendered or prerendered to full HTML.
 - Heavy parts (3D rendering, solvers) are always lazy-loaded and never in a content page's initial bundle.
 - 3D: react-three-fiber (Three.js).
+- UI: shadcn UI components (`src/components/ui`, added with the shadcn CLI) styled with Tailwind.
+- All site text lives in `src/i18n/en.ts`; components never hard-code text.
 - Keyboard handling: written ourselves (plain keydown listener). TanStack Hotkeys (beta) not used for now; revisit if many global shortcuts appear.
 - English only for v1, but built with i18n in mind: no hard-coded UI strings, and room for `/fr/...`-style prefixes with English unprefixed.
 
@@ -79,10 +81,17 @@ Room left for `/learn/cfop/...` later.
 - Camera input for scanning the cube.
 - An input option for people without a full keyboard.
 
-## Suggested build order
+## Build status
 
-1. ~~Core cube logic and its tests (cube model, moves, validity check).~~ Done: `src/cube/cubie.ts`, `src/cube/stickers.ts`.
-2. Short solution: solver done (`src/cube/solver.ts`); still to do: run it in a Web Worker.
-3. Solver page: 3D cube, colour input, net, validation, playback.
-4. Beginner solver and its algorithm table.
-5. Home page and lesson pages (prerendered).
+Done:
+
+- Core cube logic and tests: `src/cube/` (cube model, stickers, geometry, orientation).
+- Short solution: our own solver (`src/cube/solver.ts`), run in a Web Worker (`src/solver/solver.worker.ts`).
+- Solver page: 3D cube, keyboard and mouse/touch colour entry, net, undo/redo, saving, validity messages, animated playback.
+- Home page and `/learn` (a list of the seven stages), all prerendered at build time.
+
+Still to do:
+
+- Beginner solver and its algorithm table; the method choice in the solver shows it as "Soon".
+- Lesson pages (`/learn/beginner/<stage>`) with 2D pictures and progress; content is postponed.
+- Cloudflare Web Analytics, a sitemap and `robots.txt` (these need the final domain).
