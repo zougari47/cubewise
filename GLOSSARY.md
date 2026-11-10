@@ -42,6 +42,10 @@ _Avoid_: Colour shortcut, colour hotkey
 
 ### Solving and learning
 
+**Move**:
+One turn of a single face, by a quarter or a half, written in standard notation (`R`, `U2`, `F'`).
+_Avoid_: Turn, rotation (turning the whole cube to see another face is not a move)
+
 **Solution**:
 The sequence of moves that takes the entered cube to solved.
 _Avoid_: Answer, result

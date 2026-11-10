@@ -51,7 +51,7 @@ Room left for `/learn/cfop/...` later.
 ## Solver: results
 
 - The user chooses the method:
-  - **Short solution** (default): about 20 moves. Uses **min2phase.js** under its MIT license (it is dual MIT/GPL-3.0), run in a Web Worker and loaded only on the solver page. About 10 KB gzip, ~350 ms start-up, ~2 ms per solve. Fallback if needed: cubejs (MIT, but 4–5 s start-up).
+  - **Short solution** (default): about 21 moves. Our own two-phase (Kociemba) solver in `src/cube/solver.ts`, with no dependency; it replaces the earlier plan to use min2phase.js. It still has to be moved into a Web Worker and loaded only on the solver page. Measured on Node: about 0.6 s to build its tables once, then about 40 ms per cube on average with the default 200 ms limit, and 21 moves or fewer for about 96% of random cubes (the rest 22).
   - **Beginner solution:** our own solver (no maintained library exists). Grouped by **stage**, described in the user's own colour scheme, each stage linking to its lesson. It shares its algorithm table with the lessons.
 - Animated 3D playback, with the move list shown and the current move highlighted.
 - Two modes, each with its own keys:
@@ -69,7 +69,7 @@ Room left for `/learn/cfop/...` later.
 ## Other
 
 - Analytics: Cloudflare Web Analytics (free, no cookies, so no cookie banner), added at launch.
-- Testing: thorough automated tests for the core cube logic (applying moves, the validity check, both solvers, and thousands of random scramble → solve → check-solved runs). No UI tests in v1.
+- Testing: run with `pnpm test` (Vitest, configured in `vitest.config.ts`). Thorough automated tests for the core cube logic (applying moves, the validity check, both solvers, and thousands of random scramble → solve → check-solved runs). No UI tests in v1.
 - No money-making in v1.
 
 ## Postponed
@@ -81,8 +81,8 @@ Room left for `/learn/cfop/...` later.
 
 ## Suggested build order
 
-1. Core cube logic and its tests (cube model, moves, validity check).
-2. Short solution in a Web Worker.
+1. ~~Core cube logic and its tests (cube model, moves, validity check).~~ Done: `src/cube/cubie.ts`, `src/cube/stickers.ts`.
+2. Short solution: solver done (`src/cube/solver.ts`); still to do: run it in a Web Worker.
 3. Solver page: 3D cube, colour input, net, validation, playback.
 4. Beginner solver and its algorithm table.
 5. Home page and lesson pages (prerendered).
