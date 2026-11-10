@@ -1,0 +1,3 @@
+# TanStack Start over Astro
+
+Every page must be search-friendly, and most of the site (home, lessons) is content, which is Astro's home ground. We stay on TanStack Start anyway: every page is still server-rendered or prerendered to full HTML, the solver is a real interactive app where Start is stronger, lesson pages need React for on-demand 3D players and progress anyway, and one stack is simpler than Astro plus React islands. The accepted cost is shipping the React runtime (~60 KB gzip) on content pages that Astro would ship with zero JavaScript, so heavy pieces (3D rendering, the solver) must be lazy-loaded and kept out of content pages' initial bundle.

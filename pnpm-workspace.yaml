@@ -1,0 +1,6 @@
+resolutionMode: time-based
+allowBuilds:
+  esbuild: true
+  lightningcss: true
+packages:
+  - .
