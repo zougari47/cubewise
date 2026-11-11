@@ -2,7 +2,7 @@
  * How the whole cube is turned in front of the user. Turning the whole cube
  * is not a move: no piece changes place, the user just sees another face.
  */
-import { FACE_NORMALS, dot, stickerAt } from './geometry.ts'
+import { FACE_NORMALS, STICKER_PLACES, dot, stickerAt } from './geometry.ts'
 import type { Vec3 } from './geometry.ts'
 
 /**
@@ -93,4 +93,22 @@ export function frontStickers(orientation: Orientation): number[] {
 export function orientationShowing(face: number): Orientation {
   const turns: TurnDirection[][] = [['up'], ['right'], [], ['down'], ['left'], ['right', 'right']]
   return turns[face].reduce(turnCube, DEFAULT_ORIENTATION)
+}
+
+/** The face of the cube that the user sees where face `seenFace` would normally be. */
+export function cubeFaceSeenAs(orientation: Orientation, seenFace: number): number {
+  const direction = cubeDirection(orientation, FACE_NORMALS[seenFace])
+  return FACE_NORMALS.findIndex((normal) => dot(normal, direction) === 1)
+}
+
+/**
+ * The sticker list as the user sees it after turning the whole cube: entry
+ * `i` of the result is whatever now sits where sticker `i` normally is.
+ */
+export function rotateStickers<T>(stickers: readonly T[], turn: Orientation): T[] {
+  const seen = new Array<T>(stickers.length)
+  STICKER_PLACES.forEach(({ place, normal }, sticker) => {
+    seen[stickerAt(seenDirection(turn, place), seenDirection(turn, normal))] = stickers[sticker]
+  })
+  return seen
 }

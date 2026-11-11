@@ -76,7 +76,6 @@ Room left for `/learn/cfop/...` later.
 
 ## Postponed
 
-- Lesson content and how lessons are written.
 - How translation (i18n) will work.
 - Camera input for scanning the cube.
 - An input option for people without a full keyboard.
@@ -85,13 +84,16 @@ Room left for `/learn/cfop/...` later.
 
 Done:
 
-- Core cube logic and tests: `src/cube/` (cube model, stickers, geometry, orientation).
-- Short solution: our own solver (`src/cube/solver.ts`), run in a Web Worker (`src/solver/solver.worker.ts`).
-- Solver page: 3D cube, keyboard and mouse/touch colour entry, net, undo/redo, saving, validity messages, animated playback.
-- Home page and `/learn` (a list of the seven stages), all prerendered at build time.
+- Core cube logic and tests: `src/cube/` (cube model, stickers, geometry, orientation, steps).
+- Short solution: our own solver (`src/cube/solver.ts`).
+- Beginner solution: our own solver (`src/beginner/solver.ts`), using only the sequences in `src/beginner/sequences.ts`. About 130 steps on average. It turns the cube over first (the entered top face goes to the bottom) and includes whole-cube turns (`y`), so every sequence is done from the same side, as taught.
+- Both solvers run in a Web Worker (`src/solver/solver.worker.ts`).
+- Solver page: 3D cube, keyboard and mouse/touch colour entry, net, undo/redo, saving, validity messages, choice of method, animated playback grouped by stage with links to the lessons.
+- Lessons: `/learn` and one page per stage (`/learn/beginner/<stage>`), each with 2D pictures of its cases, a 3D player loaded on demand, and "Mark as complete" saved on the device. Lesson text is in `src/i18n/en.ts`; the pictures and sequences are in `src/learn/lessons.ts`.
+- Home page, with a 3D cube that can be dragged round. All pages are prerendered at build time.
 
 Still to do:
 
-- Beginner solver and its algorithm table; the method choice in the solver shows it as "Soon".
-- Lesson pages (`/learn/beginner/<stage>`) with 2D pictures and progress; content is postponed.
+- Follow-along mode in the solver (one big move at a time).
 - Cloudflare Web Analytics, a sitemap and `robots.txt` (these need the final domain).
+- Postponed: translations, camera input, an input option for people without a full keyboard.

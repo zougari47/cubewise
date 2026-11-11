@@ -10,17 +10,13 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
-import { Route as LearnRouteImport } from './routes/learn'
 import { Route as SolverRouteImport } from './routes/solver'
+import { Route as LearnIndexRouteImport } from './routes/learn/index'
+import { Route as LearnBeginnerStageRouteImport } from './routes/learn/beginner.$stage'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const LearnRoute = LearnRouteImport.update({
-  id: '/learn',
-  path: '/learn',
   getParentRoute: () => rootRouteImport,
 } as any)
 const SolverRoute = SolverRouteImport.update({
@@ -28,35 +24,49 @@ const SolverRoute = SolverRouteImport.update({
   path: '/solver',
   getParentRoute: () => rootRouteImport,
 } as any)
+const LearnIndexRoute = LearnIndexRouteImport.update({
+  id: '/learn/',
+  path: '/learn/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const LearnBeginnerStageRoute = LearnBeginnerStageRouteImport.update({
+  id: '/learn/beginner/$stage',
+  path: '/learn/beginner/$stage',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
-  '/learn': typeof LearnRoute
   '/solver': typeof SolverRoute
+  '/learn/': typeof LearnIndexRoute
+  '/learn/beginner/$stage': typeof LearnBeginnerStageRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
-  '/learn': typeof LearnRoute
   '/solver': typeof SolverRoute
+  '/learn': typeof LearnIndexRoute
+  '/learn/beginner/$stage': typeof LearnBeginnerStageRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
-  '/learn': typeof LearnRoute
   '/solver': typeof SolverRoute
+  '/learn/': typeof LearnIndexRoute
+  '/learn/beginner/$stage': typeof LearnBeginnerStageRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/learn' | '/solver'
+  fullPaths: '/' | '/solver' | '/learn/' | '/learn/beginner/$stage'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/learn' | '/solver'
-  id: '__root__' | '/' | '/learn' | '/solver'
+  to: '/' | '/solver' | '/learn' | '/learn/beginner/$stage'
+  id: '__root__' | '/' | '/solver' | '/learn/' | '/learn/beginner/$stage'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
-  LearnRoute: typeof LearnRoute
   SolverRoute: typeof SolverRoute
+  LearnIndexRoute: typeof LearnIndexRoute
+  LearnBeginnerStageRoute: typeof LearnBeginnerStageRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -68,13 +78,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/learn': {
-      id: '/learn'
-      path: '/learn'
-      fullPath: '/learn'
-      preLoaderRoute: typeof LearnRouteImport
-      parentRoute: typeof rootRouteImport
-    }
     '/solver': {
       id: '/solver'
       path: '/solver'
@@ -82,13 +85,28 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof SolverRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/learn/': {
+      id: '/learn/'
+      path: '/learn'
+      fullPath: '/learn/'
+      preLoaderRoute: typeof LearnIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/learn/beginner/$stage': {
+      id: '/learn/beginner/$stage'
+      path: '/learn/beginner/$stage'
+      fullPath: '/learn/beginner/$stage'
+      preLoaderRoute: typeof LearnBeginnerStageRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
-  LearnRoute: LearnRoute,
   SolverRoute: SolverRoute,
+  LearnIndexRoute: LearnIndexRoute,
+  LearnBeginnerStageRoute: LearnBeginnerStageRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

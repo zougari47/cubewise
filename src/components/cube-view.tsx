@@ -36,6 +36,8 @@ export interface CubeViewProps {
   onStickerClick?: (sticker: number) => void
   /** Slowly spin the cube for show. */
   spin?: boolean
+  /** Let the user drag the cube round freely. For show only: it ignores `orientation`. */
+  draggable?: boolean
   className?: string
 }
 
@@ -51,6 +53,9 @@ interface Cubie {
 }
 
 const TOWARDS_VIEWER = new Vector3(0, 0, 1)
+const SCREEN_UP = new Vector3(0, 1, 0)
+const SCREEN_RIGHT = new Vector3(1, 0, 0)
+const SCRATCH = new Quaternion()
 
 const CUBIES: Cubie[] = []
 for (let x = -1; x <= 1; x++) {
@@ -122,8 +127,11 @@ function Scene({
   onTurnEnd,
   onStickerClick,
   spin = false,
+  draggable = false,
 }: CubeViewProps) {
   const invalidate = useThree((state) => state.invalidate)
+  const canvas = useThree((state) => state.gl.domElement)
+  const drag = useRef({ active: false, x: 0, y: 0, yaw: 0, pitch: 0 })
   const whole = useRef<Group>(null)
   const numberGroup = useRef<Group>(null)
   const cubieGroups = useRef<(Group | null)[]>([])
@@ -148,15 +156,55 @@ function Scene({
     invalidate()
   })
 
+  useEffect(() => {
+    if (!draggable) return
+    const state = drag.current
+    const down = (event: PointerEvent) => {
+      state.active = true
+      state.x = event.clientX
+      state.y = event.clientY
+      canvas.setPointerCapture(event.pointerId)
+    }
+    const move = (event: PointerEvent) => {
+      if (!state.active) return
+      state.yaw += (event.clientX - state.x) * 0.01
+      state.pitch += (event.clientY - state.y) * 0.01
+      state.x = event.clientX
+      state.y = event.clientY
+      invalidate()
+    }
+    const up = () => {
+      state.active = false
+    }
+    canvas.addEventListener('pointerdown', down)
+    canvas.addEventListener('pointermove', move)
+    canvas.addEventListener('pointerup', up)
+    canvas.addEventListener('pointercancel', up)
+    return () => {
+      canvas.removeEventListener('pointerdown', down)
+      canvas.removeEventListener('pointermove', move)
+      canvas.removeEventListener('pointerup', up)
+      canvas.removeEventListener('pointercancel', up)
+    }
+  }, [draggable, canvas, invalidate])
+
   useFrame((_, rawDelta) => {
     const delta = Math.min(rawDelta, 0.05)
     let moving = false
 
     const group = whole.current
     if (group) {
-      if (spin) {
-        group.rotation.y += delta * 0.5
-        moving = true
+      if (spin || draggable) {
+        // Free turning, about the screen's own up and sideways axes.
+        const pulled = drag.current
+        const yaw = pulled.yaw + (spin && !pulled.active ? delta * 0.5 : 0)
+        if (yaw !== 0) group.quaternion.premultiply(SCRATCH.setFromAxisAngle(SCREEN_UP, yaw))
+        if (pulled.pitch !== 0) {
+          group.quaternion.premultiply(SCRATCH.setFromAxisAngle(SCREEN_RIGHT, pulled.pitch))
+        }
+        pulled.yaw = 0
+        pulled.pitch = 0
+        moving = spin
       } else if (group.quaternion.angleTo(target) > 0.002) {
         group.quaternion.rotateTowards(target, delta * 7)
         moving = true
@@ -265,7 +313,13 @@ export default function CubeView({ className, ...scene }: CubeViewProps) {
       dpr={[1, 2]}
       camera={{ position: [3.4, 3.1, 7.2], fov: 36 }}
       className={className}
-      style={scene.onStickerClick ? { cursor: 'pointer' } : undefined}
+      style={
+        scene.draggable
+          ? { cursor: 'grab', touchAction: 'pan-y' }
+          : scene.onStickerClick
+            ? { cursor: 'pointer' }
+            : undefined
+      }
     >
       <Scene {...scene} />
     </Canvas>

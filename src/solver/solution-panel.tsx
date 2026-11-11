@@ -1,0 +1,167 @@
+import { Link } from '@tanstack/react-router'
+import { Pencil } from 'lucide-react'
+import { useEffect, useRef } from 'react'
+import { PlaybackButtons } from '#/components/playback-buttons.tsx'
+import { Badge } from '#/components/ui/badge'
+import { Button } from '#/components/ui/button'
+import { Card, CardContent, CardHeader, CardTitle } from '#/components/ui/card'
+import { Kbd } from '#/components/ui/kbd'
+import { cubeFaceSeenAs } from '#/cube/orientation.ts'
+import { m } from '#/i18n'
+import { cn } from '#/lib/utils'
+import type { ColourKey } from './entry.ts'
+import type { Playback } from './playback.ts'
+import type { SolvedSteps } from './solver.worker.ts'
+
+export function KeyHints({ hints }: { hints: { keys: string[]; text: string }[] }) {
+  return (
+    <ul className="hidden space-y-1.5 text-sm text-muted-foreground md:block">
+      {hints.map((hint) => (
+        <li key={hint.text} className="flex items-center gap-2">
+          <span className="flex shrink-0 gap-0.5">
+            {hint.keys.map((key) => (
+              <Kbd key={key}>{key}</Kbd>
+            ))}
+          </span>
+          {hint.text}
+        </li>
+      ))}
+    </ul>
+  )
+}
+
+function StepChips({
+  solved,
+  from,
+  count,
+  done,
+}: {
+  solved: SolvedSteps
+  from: number
+  count: number
+  done: number
+}) {
+  const current = useRef<HTMLLIElement>(null)
+  useEffect(() => {
+    current.current?.scrollIntoView({ block: 'nearest' })
+  }, [done])
+
+  return (
+    <ol className="flex flex-wrap gap-1.5">
+      {solved.steps.slice(from, from + count).map((step, offset) => {
+        const index = from + offset
+        return (
+          <li
+            key={index}
+            ref={index === done ? current : undefined}
+            aria-current={index === done ? 'step' : undefined}
+            className={cn(
+              'min-w-9 rounded-md border px-2 py-1 text-center font-mono text-sm font-medium',
+              step.move === undefined && 'border-dashed',
+              index < done && 'border-transparent bg-muted text-muted-foreground',
+              index === done && 'border-solid border-primary bg-primary text-primary-foreground',
+            )}
+          >
+            {step.text}
+          </li>
+        )
+      })}
+    </ol>
+  )
+}
+
+/** The solution beside the 3D cube: how to hold it, the steps, and the controls. */
+export function SolutionPanel({
+  solved,
+  scheme,
+  playback,
+  onEdit,
+}: {
+  solved: SolvedSteps
+  /** The user's centre colours, in U R F D L B order. */
+  scheme: ColourKey[]
+  playback: Playback
+  onEdit: () => void
+}) {
+  const text = m.solver.playback
+  const total = solved.steps.length
+  const moveCount = solved.steps.filter((step) => step.move !== undefined).length
+  const byStage = solved.stages.length > 0
+
+  let from = 0
+  const stages = solved.stages.map((stage) => {
+    const start = from
+    from += stage.count
+    return { ...stage, from: start }
+  })
+
+  return (
+    <Card>
+      <CardHeader>
+        <CardTitle className="flex items-center justify-between gap-2">
+          {text.heading}
+          <Badge variant="secondary">{text.moveCount(moveCount)}</Badge>
+        </CardTitle>
+      </CardHeader>
+      <CardContent className="space-y-5">
+        {total === 0 ? (
+          <p>{text.alreadySolved}</p>
+        ) : (
+          <>
+            <p className="text-sm text-muted-foreground">
+              {text.hold(
+                scheme[cubeFaceSeenAs(solved.start, 2)],
+                scheme[cubeFaceSeenAs(solved.start, 0)],
+              )}
+            </p>
+
+            <div
+              aria-label={solved.steps.map((step) => step.text).join(' ')}
+              className="max-h-72 space-y-4 overflow-y-auto pr-1"
+            >
+              {byStage ? (
+                stages.map((stage, i) => (
+                  <section key={stage.stage} className="space-y-1.5">
+                    <h3 className="flex items-baseline justify-between gap-2 text-sm font-semibold">
+                      <span>
+                        {i + 1}. {m.learn.stages[stage.stage].name}
+                      </span>
+                      <Link
+                        to="/learn/beginner/$stage"
+                        params={{ stage: stage.stage }}
+                        className="text-xs font-normal text-muted-foreground underline underline-offset-2 hover:text-foreground"
+                      >
+                        {text.lesson}
+                      </Link>
+                    </h3>
+                    {stage.count === 0 ? (
+                      <p className="text-sm text-muted-foreground">{text.stageDone}</p>
+                    ) : (
+                      <StepChips solved={solved} from={stage.from} count={stage.count} done={playback.done} />
+                    )}
+                  </section>
+                ))
+              ) : (
+                <StepChips solved={solved} from={0} count={total} done={playback.done} />
+              )}
+            </div>
+
+            <PlaybackButtons playback={playback} />
+            <p aria-live="polite" className="text-sm font-medium">
+              {playback.done >= total ? text.done : text.progress(playback.done, total)}
+            </p>
+            <p className="text-sm text-muted-foreground">
+              {text.notation}
+              {byStage && ` ${text.wholeCubeNotation}`}
+            </p>
+            <KeyHints hints={text.keys} />
+          </>
+        )}
+        <Button variant="outline" onClick={onEdit} className="w-full">
+          <Pencil />
+          {text.edit}
+        </Button>
+      </CardContent>
+    </Card>
+  )
+}

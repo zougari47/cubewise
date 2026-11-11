@@ -17,6 +17,7 @@ const COLOURS = stickersFromCube(applyMoves(solvedCube(), parseMoves(SCRAMBLE)))
  * The cube on the home page. It starts as a still picture so the page loads
  * instantly. With a mouse it becomes 3D by itself once the browser is idle;
  * on a touch screen it stays a picture until tapped, to save mobile data.
+ * Once 3D, it spins slowly and can be dragged round.
  */
 export function HomeCube() {
   const [live, setLive] = useState(false)
@@ -36,9 +37,14 @@ export function HomeCube() {
   return (
     <div className="relative mx-auto aspect-square w-full max-w-md">
       {live ? (
-        <Suspense fallback={picture}>
-          <CubeView colours={COLOURS} spin className="size-full" />
-        </Suspense>
+        <>
+          <Suspense fallback={picture}>
+            <CubeView colours={COLOURS} spin draggable className="size-full" />
+          </Suspense>
+          <p className="absolute inset-x-0 bottom-0 text-center text-sm text-muted-foreground">
+            {m.home.dragHint}
+          </p>
+        </>
       ) : (
         <button
           type="button"

@@ -1,33 +1,15 @@
 import { ClientOnly } from '@tanstack/react-router'
-import {
-  ArrowDown,
-  ArrowLeft,
-  ArrowRight,
-  ArrowUp,
-  Eraser,
-  Pause,
-  Pencil,
-  Play,
-  Redo2,
-  RotateCcw,
-  SkipBack,
-  StepBack,
-  StepForward,
-  Undo2,
-} from 'lucide-react'
+import { ArrowDown, ArrowLeft, ArrowRight, ArrowUp, Eraser, Redo2, RotateCcw, Undo2 } from 'lucide-react'
 import { Suspense, lazy, useCallback, useEffect, useMemo, useReducer, useRef, useState } from 'react'
 import { CubeNet } from '#/components/cube-net.tsx'
 import { CubePicture } from '#/components/cube-picture.tsx'
-import type { CubeTurn } from '#/components/cube-view.tsx'
 import { Alert, AlertDescription, AlertTitle } from '#/components/ui/alert'
-import { Badge } from '#/components/ui/badge'
 import { Button } from '#/components/ui/button'
-import { Card, CardContent, CardHeader, CardTitle } from '#/components/ui/card'
-import { Kbd } from '#/components/ui/kbd'
-import { applyMoves, formatMoves } from '#/cube/cubie.ts'
-import type { CubieCube, Move } from '#/cube/cubie.ts'
-import { DEFAULT_ORIENTATION, frontFace, frontStickers } from '#/cube/orientation.ts'
+import { Card, CardContent } from '#/components/ui/card'
+import type { CubieCube } from '#/cube/cubie.ts'
+import { frontFace, frontStickers } from '#/cube/orientation.ts'
 import type { TurnDirection } from '#/cube/orientation.ts'
+import { cubeAfterSteps } from '#/cube/steps.ts'
 import { stickersFromCube } from '#/cube/stickers.ts'
 import { m } from '#/i18n'
 import { cn } from '#/lib/utils'
@@ -42,7 +24,10 @@ import {
   isSavedStickers,
 } from './entry.ts'
 import type { ColourKey, EntryProblem } from './entry.ts'
-import { solveShort, warmUpSolver } from './solver-client.ts'
+import { usePlayback } from './playback.ts'
+import { KeyHints, SolutionPanel } from './solution-panel.tsx'
+import { solveCube, warmUpSolver } from './solver-client.ts'
+import type { SolveMethod, SolvedSteps } from './solver.worker.ts'
 
 const CubeView = lazy(() => import('#/components/cube-view.tsx'))
 
@@ -54,20 +39,8 @@ interface Solution {
   cube: CubieCube
   /** The user's centre colours, in U R F D L B order. */
   scheme: ColourKey[]
-  moves: Move[]
+  solved: SolvedSteps
 }
-
-interface Playback {
-  /** How many moves have been made. */
-  done: number
-  playing: boolean
-  /** The move being animated, and whether it goes forward (+1) or back (-1). */
-  turn: (CubeTurn & { step: 1 | -1 }) | null
-}
-
-const STOPPED: Playback = { done: 0, playing: false, turn: null }
-
-const inverse = (move: Move) => move - (move % 3) + (2 - (move % 3))
 
 function problemText(problem: EntryProblem | 'failed', counts: Record<ColourKey, number>): string {
   const text = m.solver.problems
@@ -87,32 +60,15 @@ function problemText(problem: EntryProblem | 'failed', counts: Record<ColourKey,
   }
 }
 
-function KeyHints({ hints }: { hints: { keys: string[]; text: string }[] }) {
-  return (
-    <ul className="hidden space-y-1.5 text-sm text-muted-foreground md:block">
-      {hints.map((hint) => (
-        <li key={hint.text} className="flex items-center gap-2">
-          <span className="flex shrink-0 gap-0.5">
-            {hint.keys.map((key) => (
-              <Kbd key={key}>{key}</Kbd>
-            ))}
-          </span>
-          {hint.text}
-        </li>
-      ))}
-    </ul>
-  )
-}
-
 export function SolverApp() {
   const [entry, dispatch] = useReducer(entryReducer, undefined, initialEntry)
   const [activeColour, setActiveColour] = useState<ColourKey>('W')
   const [problem, setProblem] = useState<EntryProblem | 'failed' | null>(null)
   const [solving, setSolving] = useState(false)
+  const [method, setMethod] = useState<SolveMethod>('short')
   const [solution, setSolution] = useState<Solution | null>(null)
-  const [playback, setPlayback] = useState<Playback>(STOPPED)
   const [loaded, setLoaded] = useState(false)
-  const turnId = useRef(0)
+  const playback = usePlayback(solution?.solved.steps ?? null)
 
   const front = frontStickers(entry.orientation)
   const cursorSticker = front[entry.cursor]
@@ -163,62 +119,13 @@ export function SolverApp() {
       return
     }
     setSolving(true)
-    solveShort(check.cube)
-      .then((moves) => {
-        setSolution({ cube: check.cube, scheme: check.scheme, moves })
-        setPlayback(STOPPED)
-      })
+    solveCube(check.cube, method)
+      .then((solved) => setSolution({ cube: check.cube, scheme: check.scheme, solved }))
       .catch(() => setProblem('failed'))
       .finally(() => setSolving(false))
-  }, [entry.stickers, solving])
+  }, [entry.stickers, solving, method])
 
-  // --- Playing the solution
-
-  const stepForward = useCallback(() => {
-    if (!solution) return
-    setPlayback((now) => {
-      if (now.turn || now.done >= solution.moves.length) return now
-      return { ...now, turn: { move: solution.moves[now.done], id: ++turnId.current, step: 1 } }
-    })
-  }, [solution])
-
-  const stepBack = useCallback(() => {
-    if (!solution) return
-    setPlayback((now) => {
-      if (now.turn || now.done === 0) return now
-      const move = inverse(solution.moves[now.done - 1])
-      return { ...now, playing: false, turn: { move, id: ++turnId.current, step: -1 } }
-    })
-  }, [solution])
-
-  const finishTurn = useCallback(() => {
-    setPlayback((now) => (now.turn ? { ...now, done: now.done + now.turn.step, turn: null } : now))
-  }, [])
-
-  const togglePlay = useCallback(() => {
-    if (!solution) return
-    setPlayback((now) => {
-      if (now.playing) return { ...now, playing: false }
-      // Pressing play at the end starts again from the beginning.
-      if (now.done >= solution.moves.length) return { done: 0, playing: true, turn: null }
-      return { ...now, playing: true }
-    })
-  }, [solution])
-
-  const editCube = useCallback(() => {
-    setSolution(null)
-    setPlayback(STOPPED)
-  }, [])
-
-  useEffect(() => {
-    if (!solution || !playback.playing || playback.turn) return
-    if (playback.done >= solution.moves.length) {
-      setPlayback((now) => ({ ...now, playing: false }))
-      return
-    }
-    const pause = setTimeout(stepForward, 120)
-    return () => clearTimeout(pause)
-  }, [solution, playback, stepForward])
+  const editCube = useCallback(() => setSolution(null), [])
 
   // --- Keyboard
 
@@ -231,9 +138,11 @@ export function SolverApp() {
 
     if (solution) {
       if (command || event.altKey) return
-      if (key === ' ') togglePlay()
-      else if (key === 'ArrowRight') stepForward()
-      else if (key === 'ArrowLeft') stepBack()
+      if (key === ' ') playback.toggle()
+      else if (key === 'ArrowRight') {
+        playback.pause()
+        playback.stepForward()
+      } else if (key === 'ArrowLeft') playback.stepBack()
       else if (key.toLowerCase() === 'e') editCube()
       else return
       event.preventDefault()
@@ -287,7 +196,7 @@ export function SolverApp() {
 
   const colours = useMemo(() => {
     if (!solution) return entry.stickers.map(hexOf)
-    const cube = applyMoves(solution.cube, solution.moves.slice(0, playback.done))
+    const cube = cubeAfterSteps(solution.cube, solution.solved.steps, playback.done)
     return stickersFromCube(cube).map((face) => COLOUR_HEX[solution.scheme[face]])
   }, [entry.stickers, solution, playback.done])
 
@@ -322,11 +231,15 @@ export function SolverApp() {
           <Suspense fallback={picture}>
             <CubeView
               colours={colours}
-              orientation={solution ? DEFAULT_ORIENTATION : entry.orientation}
+              orientation={
+                solution
+                  ? (solution.solved.steps[playback.done - 1]?.orientation ?? solution.solved.start)
+                  : entry.orientation
+              }
               numbers={!solution}
               frames={frames}
               turn={playback.turn}
-              onTurnEnd={finishTurn}
+              onTurnEnd={playback.finishTurn}
               onStickerClick={solution ? undefined : paintSticker}
               className="size-full"
             />
@@ -343,87 +256,12 @@ export function SolverApp() {
       </div>
 
       {solution ? (
-        <Card>
-          <CardHeader>
-            <CardTitle className="flex items-center justify-between gap-2">
-              {m.solver.playback.heading}
-              <Badge variant="secondary">{m.solver.playback.moveCount(solution.moves.length)}</Badge>
-            </CardTitle>
-          </CardHeader>
-          <CardContent className="space-y-5">
-            {solution.moves.length === 0 ? (
-              <p>{m.solver.playback.alreadySolved}</p>
-            ) : (
-              <>
-                <p className="text-sm text-muted-foreground">
-                  {m.solver.playback.hold(solution.scheme[2], solution.scheme[0])}
-                </p>
-                <ol aria-label={formatMoves(solution.moves)} className="flex flex-wrap gap-1.5">
-                  {solution.moves.map((move, i) => (
-                    <li
-                      key={i}
-                      aria-current={i === playback.done ? 'step' : undefined}
-                      className={cn(
-                        'min-w-9 rounded-md border px-2 py-1 text-center font-mono text-sm font-medium',
-                        i < playback.done && 'border-transparent bg-muted text-muted-foreground',
-                        i === playback.done && 'border-primary bg-primary text-primary-foreground',
-                      )}
-                    >
-                      {formatMoves([move])}
-                    </li>
-                  ))}
-                </ol>
-                <div className="flex items-center gap-2">
-                  <Button
-                    variant="outline"
-                    size="icon"
-                    aria-label={m.solver.playback.restart}
-                    disabled={playback.done === 0 && !playback.turn}
-                    onClick={() => setPlayback(STOPPED)}
-                  >
-                    <SkipBack />
-                  </Button>
-                  <Button
-                    variant="outline"
-                    size="icon"
-                    aria-label={m.solver.playback.back}
-                    disabled={playback.done === 0}
-                    onClick={stepBack}
-                  >
-                    <StepBack />
-                  </Button>
-                  <Button onClick={togglePlay} className="flex-1">
-                    {playback.playing ? <Pause /> : <Play />}
-                    {playback.playing ? m.solver.playback.pause : m.solver.playback.play}
-                  </Button>
-                  <Button
-                    variant="outline"
-                    size="icon"
-                    aria-label={m.solver.playback.forward}
-                    disabled={playback.done >= solution.moves.length}
-                    onClick={() => {
-                      setPlayback((now) => ({ ...now, playing: false }))
-                      stepForward()
-                    }}
-                  >
-                    <StepForward />
-                  </Button>
-                </div>
-                <p aria-live="polite" className="text-sm font-medium">
-                  {playback.done >= solution.moves.length
-                    ? m.solver.playback.done
-                    : m.solver.playback.progress(playback.done, solution.moves.length)}
-                </p>
-                <p className="text-sm text-muted-foreground">{m.solver.playback.notation}</p>
-                <KeyHints hints={m.solver.playback.keys} />
-              </>
-            )}
-            <Button variant="outline" onClick={editCube} className="w-full">
-              <Pencil />
-              {m.solver.playback.edit}
-            </Button>
-          </CardContent>
-        </Card>
+        <SolutionPanel
+          solved={solution.solved}
+          scheme={solution.scheme}
+          playback={playback}
+          onEdit={editCube}
+        />
       ) : (
         <Card>
           <CardContent className="space-y-5">
@@ -507,14 +345,19 @@ export function SolverApp() {
             <section className="space-y-2">
               <h2 className="text-sm font-semibold">{m.solver.method.label}</h2>
               <div className="grid grid-cols-2 gap-2">
-                <Button variant="secondary" aria-pressed className="border-foreground">
-                  {m.solver.method.short}
-                </Button>
-                <Button variant="outline" disabled>
-                  {m.solver.method.beginner}
-                  <Badge variant="secondary">{m.solver.method.soon}</Badge>
-                </Button>
+                {(['short', 'beginner'] as const).map((choice) => (
+                  <Button
+                    key={choice}
+                    variant={choice === method ? 'secondary' : 'outline'}
+                    aria-pressed={choice === method}
+                    onClick={() => setMethod(choice)}
+                    className={cn(choice === method && 'border-foreground')}
+                  >
+                    {m.solver.method[choice]}
+                  </Button>
+                ))}
               </div>
+              <p className="text-sm text-muted-foreground">{m.solver.method.hints[method]}</p>
             </section>
 
             {problem && (

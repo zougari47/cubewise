@@ -4,7 +4,7 @@ import { HomeCube } from '#/components/home-cube.tsx'
 import { Button } from '#/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '#/components/ui/card'
 import { m } from '#/i18n'
-import { BEGINNER_STAGES } from '#/learn/stages.ts'
+import { BEGINNER_STAGES } from '#/beginner/stages.ts'
 import { pageHead } from '#/lib/seo.ts'
 
 const faqStructuredData = JSON.stringify({

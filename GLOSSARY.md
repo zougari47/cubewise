@@ -44,7 +44,7 @@ _Avoid_: Colour shortcut, colour hotkey
 
 **Move**:
 One turn of a single face, by a quarter or a half, written in standard notation (`R`, `U2`, `F'`).
-_Avoid_: Turn, rotation (turning the whole cube to see another face is not a move)
+_Avoid_: Turn, rotation
 
 **Solution**:
 The sequence of moves that takes the entered cube to solved.
@@ -67,8 +67,24 @@ The layer-by-layer method taught in the lessons.
 _Avoid_: LBL, easy method
 
 **Stage**:
-One step of a method with its own goal, such as the cross or the first-layer corners; its name never mentions a colour.
-_Avoid_: Step, phase
+One part of a method with its own goal, such as the cross or the first-layer corners; its name never mentions a colour.
+_Avoid_: Phase, part (a step is one move, not a stage)
+
+**Sequence**:
+A fixed series of moves, taught in a lesson, that does one job such as placing a corner.
+_Avoid_: Algorithm, alg, formula, trigger
+
+**Case**:
+One situation within a stage that calls for a particular sequence, such as "white faces right".
+_Avoid_: Scenario, pattern, variant
+
+**Whole-cube turn**:
+Turning the entire cube in the hands to look at another side, written `y`; no piece changes place, so it is not a move.
+_Avoid_: Rotation, cube rotation, reorientation
+
+**Step**:
+One thing the user does while following a solution: a move or a whole-cube turn.
+_Avoid_: Action, instruction
 
 **Lesson**:
 A page that teaches one stage of a method, with cube pictures alongside the explanation.

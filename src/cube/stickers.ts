@@ -213,3 +213,18 @@ export function cubeFromStickers(colours: ArrayLike<unknown>): StickerResult {
   }
   return { ok: true, cube }
 }
+
+/** The stickers currently on the given pieces (by piece number), wherever those pieces are. */
+export function stickersOfPieces(
+  cube: CubieCube,
+  pieces: { corners?: readonly number[]; edges?: readonly number[] },
+): number[] {
+  const stickers: number[] = []
+  cube.cp.forEach((piece, position) => {
+    if (pieces.corners?.includes(piece)) stickers.push(...CORNER_STICKERS[position])
+  })
+  cube.ep.forEach((piece, position) => {
+    if (pieces.edges?.includes(piece)) stickers.push(...EDGE_STICKERS[position])
+  })
+  return stickers
+}

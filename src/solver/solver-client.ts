@@ -1,10 +1,10 @@
 /** The page's side of the solver worker. Browser only. */
-import type { CubieCube, Move } from '../cube/cubie.ts'
-import type { SolverRequest, SolverResponse } from './solver.worker.ts'
+import type { CubieCube } from '../cube/cubie.ts'
+import type { SolveMethod, SolvedSteps, SolverRequest, SolverResponse } from './solver.worker.ts'
 
 let worker: Worker | null = null
 let nextId = 1
-const waiting = new Map<number, { resolve: (moves: Move[]) => void; reject: (error: Error) => void }>()
+const waiting = new Map<number, { resolve: (solved: SolvedSteps) => void; reject: (error: Error) => void }>()
 
 function getWorker(): Worker {
   if (worker) return worker
@@ -15,7 +15,7 @@ function getWorker(): Worker {
     if (!request) return
     waiting.delete(response.id)
     if ('error' in response) request.reject(new Error(response.error))
-    else request.resolve(response.moves)
+    else request.resolve(response.solved)
   })
   worker.addEventListener('error', (event) => {
     for (const request of waiting.values()) request.reject(new Error(event.message))
@@ -30,11 +30,11 @@ export function warmUpSolver(): void {
   getWorker().postMessage({ warmUp: true } satisfies SolverRequest)
 }
 
-/** The short solution for a solvable cube. */
-export function solveShort(cube: CubieCube): Promise<Move[]> {
+/** Solves a solvable cube with the chosen method. */
+export function solveCube(cube: CubieCube, method: SolveMethod): Promise<SolvedSteps> {
   return new Promise((resolve, reject) => {
     const id = nextId++
     waiting.set(id, { resolve, reject })
-    getWorker().postMessage({ id, cube } satisfies SolverRequest)
+    getWorker().postMessage({ id, cube, method } satisfies SolverRequest)
   })
 }
