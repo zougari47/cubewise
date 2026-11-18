@@ -5,6 +5,7 @@
 import type { ColourKey } from '../pages/solver/entry.ts'
 import type { MethodId } from '../core/methods/index.ts'
 import { beginnerText } from './en/beginner.ts'
+import { keyholeText } from './en/keyhole.ts'
 import type { MethodText } from './method-text.ts'
 
 const colourNames: Record<ColourKey, string> = {
@@ -21,6 +22,7 @@ const faceNames = ['Up', 'Right', 'Front', 'Down', 'Left', 'Back']
 /** The text of every method, in the order of `METHOD_IDS`. */
 const methods: Record<MethodId, MethodText> = {
   beginner: beginnerText,
+  keyhole: keyholeText,
 }
 
 const plural = (count: number, one: string, many: string) => (count === 1 ? one : many)

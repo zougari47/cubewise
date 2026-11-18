@@ -4,10 +4,12 @@
  * only list stages do not download them.
  */
 import { BEGINNER_STAGES } from './beginner/stages.ts'
+import { KEYHOLE_STAGES } from './keyhole/stages.ts'
 
 /** Every method, in the order they are offered. */
 export const METHOD_STAGES = {
   beginner: BEGINNER_STAGES,
+  keyhole: KEYHOLE_STAGES,
 } as const satisfies Record<string, readonly string[]>
 
 export type MethodId = keyof typeof METHOD_STAGES
