@@ -78,6 +78,10 @@ _Avoid_: Algorithm, alg, formula, trigger
 One situation within a stage that calls for a particular sequence, such as "white faces right".
 _Avoid_: Scenario, pattern, variant
 
+**Slot**:
+In the first two layers, a corner place of the first layer together with the edge place above it, filled by a corner-edge pair.
+_Avoid_: Using "slot" for a sticker number
+
 **Whole-cube turn**:
 Turning the entire cube in the hands to look at another side, written `x`, `y` or `z` (the way R, U or F turns); no piece changes place, so it is not a move.
 _Avoid_: Rotation, cube rotation, reorientation

@@ -5,11 +5,13 @@
  */
 import { BEGINNER_STAGES } from './beginner/stages.ts'
 import { KEYHOLE_STAGES } from './keyhole/stages.ts'
+import { CFOP_STAGES } from './cfop/stages.ts'
 
 /** Every method, in the order they are offered. */
 export const METHOD_STAGES = {
   beginner: BEGINNER_STAGES,
   keyhole: KEYHOLE_STAGES,
+  cfop: CFOP_STAGES,
 } as const satisfies Record<string, readonly string[]>
 
 export type MethodId = keyof typeof METHOD_STAGES
