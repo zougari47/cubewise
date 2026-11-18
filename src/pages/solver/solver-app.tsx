@@ -24,7 +24,7 @@ import {
   isSavedStickers,
 } from './entry.ts'
 import type { ColourKey, EntryProblem, Paint } from './entry.ts'
-import { usePlayback } from './playback.ts'
+import { usePlayback, usePlaybackPause } from './playback.ts'
 import { KeyHints, SolutionPanel } from './solution-panel.tsx'
 import { solveCube, warmUpSolver } from './solver-client.ts'
 import type { SolveMethod, SolvedSteps } from './solver.worker.ts'
@@ -74,7 +74,8 @@ export function SolverApp() {
   const [scanned, setScanned] = useState<Paint[] | null>(null)
   /** Details of the last scan, for reporting one that went wrong. */
   const [scanReport, setScanReport] = useState<{ text: string; copied: boolean } | null>(null)
-  const playback = usePlayback(solution?.solved.steps ?? null)
+  const [pauseMs, setPauseMs] = usePlaybackPause()
+  const playback = usePlayback(solution?.solved.steps ?? null, pauseMs)
 
   const front = frontStickers(entry.orientation)
   const cursorSticker = front[entry.cursor]
@@ -153,7 +154,7 @@ export function SolverApp() {
   const onKey = useRef<(event: KeyboardEvent) => void>(() => {})
   onKey.current = (event) => {
     const target = event.target as HTMLElement | null
-    if (target?.closest('input, textarea, select, [contenteditable="true"]')) return
+    if (target?.closest('input, textarea, select, [contenteditable="true"], [role="slider"], [role="dialog"]')) return
     const key = event.key
     const command = event.ctrlKey || event.metaKey
 
@@ -296,6 +297,8 @@ export function SolverApp() {
           solved={solution.solved}
           scheme={solution.scheme}
           playback={playback}
+          pauseMs={pauseMs}
+          onPauseChange={setPauseMs}
           onEdit={editCube}
         />
       ) : (

@@ -6,10 +6,12 @@ import { Badge } from '#/components/ui/badge'
 import { Button } from '#/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '#/components/ui/card'
 import { Kbd } from '#/components/ui/kbd'
+import { Slider } from '#/components/ui/slider'
 import { cubeFaceSeenAs } from '#/cube/orientation.ts'
 import { m } from '#/i18n'
 import { cn } from '#/lib/utils'
 import type { ColourKey } from './entry.ts'
+import { MAX_PAUSE_MS } from './playback.ts'
 import type { Playback } from './playback.ts'
 import type { SolvedSteps } from './solver.worker.ts'
 
@@ -75,12 +77,17 @@ export function SolutionPanel({
   solved,
   scheme,
   playback,
+  pauseMs,
+  onPauseChange,
   onEdit,
 }: {
   solved: SolvedSteps
   /** The user's centre colours, in U R F D L B order. */
   scheme: ColourKey[]
   playback: Playback
+  /** The pause between two moves while playing, in milliseconds. */
+  pauseMs: number
+  onPauseChange: (pauseMs: number) => void
   onEdit: () => void
 }) {
   const text = m.solver.playback
@@ -147,6 +154,22 @@ export function SolutionPanel({
             </div>
 
             <PlaybackButtons playback={playback} />
+            <div className="space-y-2">
+              <div className="flex items-baseline justify-between gap-2 text-sm">
+                <span id="playback-pause" className="font-medium">
+                  {text.pauseLabel}
+                </span>
+                <span className="text-muted-foreground tabular-nums">{text.pauseValue(pauseMs)}</span>
+              </div>
+              <Slider
+                aria-labelledby="playback-pause"
+                min={0}
+                max={MAX_PAUSE_MS}
+                step={100}
+                value={[pauseMs]}
+                onValueChange={([value]) => onPauseChange(value)}
+              />
+            </div>
             <p aria-live="polite" className="text-sm font-medium">
               {playback.done >= total ? text.done : text.progress(playback.done, total)}
             </p>

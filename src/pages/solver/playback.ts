@@ -14,9 +14,43 @@ interface PlaybackState {
 
 const STOPPED: PlaybackState = { done: 0, playing: false, turn: null }
 
+/** The pause between two moves while playing, in milliseconds. */
+export const DEFAULT_PAUSE_MS = 100
+export const MAX_PAUSE_MS = 3000
+/** A whole-cube turn gets at least this long, so it can be seen before the next move. */
+const CUBE_TURN_PAUSE_MS = 550
+
+const PAUSE_KEY = 'cubewise.playback.pause.v1'
+
+/** The user's chosen pause between moves, kept on the device for next time. */
+export function usePlaybackPause(): [number, (pauseMs: number) => void] {
+  const [pauseMs, setPauseMs] = useState(DEFAULT_PAUSE_MS)
+
+  useEffect(() => {
+    try {
+      const saved = localStorage.getItem(PAUSE_KEY)
+      const value = saved === null ? NaN : Number(saved)
+      if (Number.isFinite(value)) setPauseMs(Math.min(MAX_PAUSE_MS, Math.max(0, value)))
+    } catch {
+      // Storage can be blocked; the default pause is used.
+    }
+  }, [])
+
+  const choose = useCallback((value: number) => {
+    setPauseMs(value)
+    try {
+      localStorage.setItem(PAUSE_KEY, String(value))
+    } catch {
+      // The choice still applies until the page is closed.
+    }
+  }, [])
+
+  return [pauseMs, choose]
+}
+
 const inverse = (move: Move) => move - (move % 3) + (2 - (move % 3))
 
-export function usePlayback(steps: readonly Step[] | null) {
+export function usePlayback(steps: readonly Step[] | null, pauseMs = DEFAULT_PAUSE_MS) {
   const [state, setState] = useState(STOPPED)
   const turnId = useRef(0)
   const total = steps?.length ?? 0
@@ -74,11 +108,10 @@ export function usePlayback(steps: readonly Step[] | null) {
       setState((now) => ({ ...now, playing: false }))
       return
     }
-    // Leave time to see the whole cube finish turning before the next move.
     const afterCubeTurn = state.done > 0 && steps[state.done - 1].move === undefined
-    const wait = setTimeout(stepForward, afterCubeTurn ? 550 : 120)
+    const wait = setTimeout(stepForward, afterCubeTurn ? Math.max(CUBE_TURN_PAUSE_MS, pauseMs) : pauseMs)
     return () => clearTimeout(wait)
-  }, [steps, state, stepForward])
+  }, [steps, state, stepForward, pauseMs])
 
   return { ...state, total, stepForward, stepBack, finishTurn, toggle, pause, restart }
 }

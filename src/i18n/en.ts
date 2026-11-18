@@ -406,6 +406,8 @@ export const en = {
       back: 'Step back',
       forward: 'Step forward',
       restart: 'Back to the start',
+      pauseLabel: 'Pause between moves',
+      pauseValue: (pauseMs: number) => (pauseMs === 0 ? 'None' : `${(pauseMs / 1000).toFixed(1)} s`),
       edit: 'Edit cube',
       done: 'Solved!',
       keys: [
