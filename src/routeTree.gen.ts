@@ -12,6 +12,7 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as SolverRouteImport } from './routes/solver'
 import { Route as LearnIndexRouteImport } from './routes/learn/index'
+import { Route as LearnBeforeYouStartRouteImport } from './routes/learn/before-you-start'
 import { Route as LearnMethodIndexRouteImport } from './routes/learn/$method/index'
 import { Route as LearnMethodStageRouteImport } from './routes/learn/$method/$stage'
 
@@ -30,6 +31,11 @@ const LearnIndexRoute = LearnIndexRouteImport.update({
   path: '/learn/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const LearnBeforeYouStartRoute = LearnBeforeYouStartRouteImport.update({
+  id: '/learn/before-you-start',
+  path: '/learn/before-you-start',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const LearnMethodIndexRoute = LearnMethodIndexRouteImport.update({
   id: '/learn/$method/',
   path: '/learn/$method/',
@@ -44,6 +50,7 @@ const LearnMethodStageRoute = LearnMethodStageRouteImport.update({
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/solver': typeof SolverRoute
+  '/learn/before-you-start': typeof LearnBeforeYouStartRoute
   '/learn/': typeof LearnIndexRoute
   '/learn/$method/$stage': typeof LearnMethodStageRoute
   '/learn/$method/': typeof LearnMethodIndexRoute
@@ -51,6 +58,7 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/solver': typeof SolverRoute
+  '/learn/before-you-start': typeof LearnBeforeYouStartRoute
   '/learn': typeof LearnIndexRoute
   '/learn/$method/$stage': typeof LearnMethodStageRoute
   '/learn/$method': typeof LearnMethodIndexRoute
@@ -59,6 +67,7 @@ export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/solver': typeof SolverRoute
+  '/learn/before-you-start': typeof LearnBeforeYouStartRoute
   '/learn/': typeof LearnIndexRoute
   '/learn/$method/$stage': typeof LearnMethodStageRoute
   '/learn/$method/': typeof LearnMethodIndexRoute
@@ -66,13 +75,25 @@ export interface FileRoutesById {
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
-    '/' | '/solver' | '/learn/' | '/learn/$method/$stage' | '/learn/$method/'
+    | '/'
+    | '/solver'
+    | '/learn/before-you-start'
+    | '/learn/'
+    | '/learn/$method/$stage'
+    | '/learn/$method/'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/solver' | '/learn' | '/learn/$method/$stage' | '/learn/$method'
+  to:
+    | '/'
+    | '/solver'
+    | '/learn/before-you-start'
+    | '/learn'
+    | '/learn/$method/$stage'
+    | '/learn/$method'
   id:
     | '__root__'
     | '/'
     | '/solver'
+    | '/learn/before-you-start'
     | '/learn/'
     | '/learn/$method/$stage'
     | '/learn/$method/'
@@ -81,6 +102,7 @@ export interface FileRouteTypes {
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   SolverRoute: typeof SolverRoute
+  LearnBeforeYouStartRoute: typeof LearnBeforeYouStartRoute
   LearnIndexRoute: typeof LearnIndexRoute
   LearnMethodStageRoute: typeof LearnMethodStageRoute
   LearnMethodIndexRoute: typeof LearnMethodIndexRoute
@@ -109,6 +131,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof LearnIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/learn/before-you-start': {
+      id: '/learn/before-you-start'
+      path: '/learn/before-you-start'
+      fullPath: '/learn/before-you-start'
+      preLoaderRoute: typeof LearnBeforeYouStartRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/learn/$method/': {
       id: '/learn/$method/'
       path: '/learn/$method'
@@ -129,6 +158,7 @@ declare module '@tanstack/react-router' {
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   SolverRoute: SolverRoute,
+  LearnBeforeYouStartRoute: LearnBeforeYouStartRoute,
   LearnIndexRoute: LearnIndexRoute,
   LearnMethodStageRoute: LearnMethodStageRoute,
   LearnMethodIndexRoute: LearnMethodIndexRoute,

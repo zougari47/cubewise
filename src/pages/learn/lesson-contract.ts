@@ -37,10 +37,21 @@ export function describeLessons<Stage extends string>(
       }
     })
 
+    test('a lesson has steps or parts, and its parts show every case once', () => {
+      for (const stage of stages) {
+        const lesson = text.lessons[stage]
+        expect((lesson.steps?.length ?? 0) > 0 || (lesson.parts?.length ?? 0) > 0, stage).toBe(true)
+        if (!lesson.parts) continue
+        expect(lesson.parts.flatMap((part) => part.cases ?? []).sort(), stage).toEqual(
+          lessons[stage].map((lessonCase) => lessonCase.id).sort(),
+        )
+      }
+    })
+
     test('every sequence brings home the pieces its picture shows', () => {
       for (const stage of stages) {
         for (const lessonCase of lessons[stage]) {
-          if (lessonCase.sequence === '') continue
+          if (lessonCase.sequence === '' || lessonCase.stopsShort) continue
           const steps = lessonSteps(lessonCase.sequence)
           const end = cubeAfterSteps(lessonCase.start, steps, steps.length)
           expect(areSolved(end, lessonCase.shown), `${stage} / ${lessonCase.id}`).toBe(true)

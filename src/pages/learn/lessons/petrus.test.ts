@@ -58,7 +58,7 @@ describe('petrus lesson cases', () => {
 
   test('text is within the lengths a lesson page expects, with no em dash', () => {
     for (const stage of PETRUS_STAGES) {
-      const { steps } = petrusText.lessons[stage]
+      const steps = petrusText.lessons[stage].steps ?? []
       expect(steps.length, stage).toBeGreaterThanOrEqual(3)
       expect(steps.length, stage).toBeLessThanOrEqual(6)
     }

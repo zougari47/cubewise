@@ -23,6 +23,14 @@ export function MethodPage({ method }: { method: MethodId }) {
         <Badge variant="secondary">{text.level}</Badge>
       </h1>
       <p className="mt-3 text-lg text-muted-foreground">{text.lead}</p>
+      {method === 'beginner' && (
+        <p className="mt-3 text-muted-foreground">
+          {m.learn.beforeYouStart.pointer.question}{' '}
+          <Link to="/learn/before-you-start" className="underline underline-offset-4 hover:text-foreground">
+            {m.learn.beforeYouStart.pointer.link}
+          </Link>
+        </p>
+      )}
 
       <h2 className="mt-10 text-xl font-semibold tracking-tight">{m.learn.method.stagesHeading}</h2>
       <ol className="mt-4 space-y-3">

@@ -29,8 +29,10 @@ export interface LessonCase {
   sequence: string
   /** The cube before the sequence, held with yellow on top and green in front. */
   start: CubieCube
-  /** Pieces drawn in full colour. After the sequence they must all be home. */
+  /** Pieces drawn in full colour. After the sequence they must all be home, unless `stopsShort`. */
   shown: Pieces
+  /** The sequence is one step on the way: it does not bring the shown pieces home. */
+  stopsShort?: boolean
   /** Pieces of which only the top-colour sticker is drawn. */
   topColourOnly?: Pieces
   /**

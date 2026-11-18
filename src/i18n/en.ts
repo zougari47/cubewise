@@ -10,6 +10,7 @@ import { cfopText } from './en/cfop.ts'
 import { rouxText } from './en/roux.ts'
 import { zzText } from './en/zz.ts'
 import { petrusText } from './en/petrus.ts'
+import { beforeYouStartText } from './en/before-you-start.ts'
 import type { MethodText } from './method-text.ts'
 
 const colourNames: Record<ColourKey, string> = {
@@ -300,6 +301,7 @@ export const en = {
     stageCount: (count: number) => `${count} ${plural(count, 'stage', 'stages')}`,
     progress: (done: number, total: number) => `${done} of ${total} completed`,
     stageNumber: (number: number) => `Stage ${number}`,
+    beforeYouStart: beforeYouStartText,
     method: {
       pageTitle: (name: string) => `${name}: learn it stage by stage | Cubewise`,
       allMethods: 'All methods',

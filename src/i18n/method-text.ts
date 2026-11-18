@@ -1,10 +1,23 @@
 /** The shape of the text every method needs, so each language file supplies the same pieces. */
 
+/** One section of a lesson told in parts: a heading, a few short paragraphs, and the cases that show it. */
+export interface LessonPart {
+  title: string
+  body: string[]
+  /** Ids of the lesson cases shown under this part, in order. */
+  cases?: string[]
+}
+
 export interface LessonText {
   /** What the cube looks like when the stage is finished. */
   goal: string
-  /** What to do, in order. */
-  steps: string[]
+  /** What to do, in order, with the cases listed together after them. */
+  steps?: string[]
+  /**
+   * The lesson told in parts instead, each with its own cases beside the
+   * words that explain them. Every case must belong to exactly one part.
+   */
+  parts?: LessonPart[]
   /** A title and a description for each lesson case, by case id. */
   cases: Record<string, { title: string; body: string }>
   tip: string

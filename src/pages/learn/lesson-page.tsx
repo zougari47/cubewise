@@ -6,7 +6,9 @@ import type { MethodId } from '#/core/methods/index.ts'
 import { m } from '#/i18n'
 import type { LessonText } from '#/i18n/method-text.ts'
 import { LessonCaseCard } from './lesson-case.tsx'
+import { LessonParts } from './lesson-parts.tsx'
 import { lessonSteps } from './lessons.ts'
+import type { LessonCase } from './lessons.ts'
 import { LESSONS } from './lessons/index.ts'
 import { useLessonProgress } from './progress.ts'
 
@@ -22,10 +24,20 @@ export function LessonPage({ method, stage }: { method: MethodId; stage: string 
   const lesson = (methodText.lessons as Record<string, LessonText>)[stage]
   const cases = LESSONS[method][stage]
   const text = m.learn.lesson
+  const pointer = m.learn.beforeYouStart.pointer
   const done = completed[method].includes(stage)
   /** Whether any sequence here needs more than face moves explained. */
   const beyondFaces = cases.some((lessonCase) =>
     lessonSteps(lessonCase.sequence).some((step) => step.moves.length !== 1),
+  )
+
+  const caseCard = (lessonCase: LessonCase) => (
+    <LessonCaseCard
+      key={lessonCase.id}
+      lessonCase={lessonCase}
+      title={lesson.cases[lessonCase.id].title}
+      body={lesson.cases[lessonCase.id].body}
+    />
   )
 
   return (
@@ -49,26 +61,23 @@ export function LessonPage({ method, stage }: { method: MethodId; stage: string 
         <p className="mt-1.5 text-lg">{lesson.goal}</p>
       </section>
 
-      <h2 className="mt-10 text-xl font-semibold tracking-tight">{text.steps}</h2>
-      <ol className="mt-4 list-decimal space-y-3 pl-5 marker:font-semibold marker:text-muted-foreground">
-        {lesson.steps.map((step) => (
-          <li key={step} className="pl-1">
-            {step}
-          </li>
-        ))}
-      </ol>
+      {lesson.parts ? (
+        <LessonParts parts={lesson.parts} cases={cases} caseText={lesson.cases} />
+      ) : (
+        <>
+          <h2 className="mt-10 text-xl font-semibold tracking-tight">{text.steps}</h2>
+          <ol className="mt-4 list-decimal space-y-3 pl-5 marker:font-semibold marker:text-muted-foreground">
+            {(lesson.steps ?? []).map((step) => (
+              <li key={step} className="pl-1">
+                {step}
+              </li>
+            ))}
+          </ol>
 
-      <h2 className="mt-10 text-xl font-semibold tracking-tight">{text.cases}</h2>
-      <div className="mt-4 space-y-4">
-        {cases.map((lessonCase) => (
-          <LessonCaseCard
-            key={lessonCase.id}
-            lessonCase={lessonCase}
-            title={lesson.cases[lessonCase.id].title}
-            body={lesson.cases[lessonCase.id].body}
-          />
-        ))}
-      </div>
+          <h2 className="mt-10 text-xl font-semibold tracking-tight">{text.cases}</h2>
+          <div className="mt-4 space-y-4">{cases.map(caseCard)}</div>
+        </>
+      )}
 
       <aside className="mt-8 rounded-xl border-l-4 border-primary bg-primary/10 p-4">
         <p className="font-semibold">{text.tip}</p>
@@ -77,7 +86,10 @@ export function LessonPage({ method, stage }: { method: MethodId; stage: string 
 
       <p className="mt-6 text-sm text-muted-foreground">
         {text.notation}
-        {beyondFaces && ` ${text.wideNotation}`}
+        {beyondFaces && ` ${text.wideNotation}`} {pointer.question}{' '}
+        <Link to="/learn/before-you-start" className="underline underline-offset-4 hover:text-foreground">
+          {pointer.link}
+        </Link>
       </p>
 
       <div className="mt-10 flex flex-wrap items-center gap-3">

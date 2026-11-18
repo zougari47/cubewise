@@ -48,7 +48,7 @@ describe('zz lesson cases', () => {
 
   test('text is within the lengths a lesson page expects, with no em dash', () => {
     for (const stage of ZZ_STAGES) {
-      const { steps } = zzText.lessons[stage]
+      const steps = zzText.lessons[stage].steps ?? []
       expect(steps.length, stage).toBeGreaterThanOrEqual(3)
       expect(steps.length, stage).toBeLessThanOrEqual(6)
     }
