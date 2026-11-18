@@ -1,8 +1,8 @@
 /** Playing a list of steps on the 3D cube: play, pause, and one step either way. */
 import { useCallback, useEffect, useRef, useState } from 'react'
 import type { CubeTurn } from '#/components/cube-view.tsx'
-import type { Move } from '#/cube/cubie.ts'
-import type { Step } from '#/cube/steps.ts'
+import type { Move } from '#/core/cube/cubie.ts'
+import type { Step } from '#/core/cube/steps.ts'
 
 interface PlaybackState {
   /** How many steps have been made. */

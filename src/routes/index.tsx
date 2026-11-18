@@ -3,7 +3,7 @@ import { ArrowRight, Grid3x3, Play, WandSparkles } from 'lucide-react'
 import { HomeCube } from '#/components/home-cube.tsx'
 import { Button } from '#/components/ui/button'
 import { m } from '#/i18n'
-import { BEGINNER_STAGES } from '#/beginner/stages.ts'
+import { BEGINNER_STAGES } from '#/core/methods/beginner/stages.ts'
 import { pageHead } from '#/lib/seo.ts'
 import { COLOUR_HEX } from '#/pages/solver/colours.ts'
 

@@ -1,7 +1,7 @@
 import { describe, expect, test } from 'vitest'
-import { applyMoves, parseMoves, solvedCube } from '../../cube/cubie.ts'
-import { frontFace } from '../../cube/orientation.ts'
-import { stickersFromCube } from '../../cube/stickers.ts'
+import { applyMoves, parseMoves, solvedCube } from '../../core/cube/cubie.ts'
+import { frontFace } from '../../core/cube/orientation.ts'
+import { stickersFromCube } from '../../core/cube/stickers.ts'
 import {
   STANDARD_SCHEME,
   checkEntry,

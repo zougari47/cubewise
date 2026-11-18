@@ -5,11 +5,11 @@
  *
  * Lessons use the standard colours with the first layer (white) at the bottom.
  */
-import { SEQUENCES as A } from '../../beginner/sequences.ts'
-import type { BeginnerStage } from '../../beginner/stages.ts'
-import { applyMoves, invertMoves, parseMoves, solvedCube } from '../../cube/cubie.ts'
-import type { CubieCube } from '../../cube/cubie.ts'
-import { stickersFromCube, stickersOfPieces } from '../../cube/stickers.ts'
+import { SEQUENCES as A } from '../../core/methods/beginner/sequences.ts'
+import type { BeginnerStage } from '../../core/methods/beginner/stages.ts'
+import { applyMoves, invertMoves, parseMoves, solvedCube } from '../../core/cube/cubie.ts'
+import type { CubieCube } from '../../core/cube/cubie.ts'
+import { stickersFromCube, stickersOfPieces } from '../../core/cube/stickers.ts'
 import { COLOUR_HEX } from '../solver/colours.ts'
 import type { ColourKey } from '../solver/entry.ts'
 

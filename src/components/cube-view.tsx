@@ -6,11 +6,11 @@ import { Canvas, useFrame, useThree } from '@react-three/fiber'
 import { useEffect, useLayoutEffect, useMemo, useRef } from 'react'
 import { CanvasTexture, Matrix4, Quaternion, Shape, ShapeGeometry, Vector3 } from 'three'
 import type { Group } from 'three'
-import { FACE_NORMALS, dot, stickerAt } from '#/cube/geometry.ts'
-import type { Vec3 } from '#/cube/geometry.ts'
-import { DEFAULT_ORIENTATION } from '#/cube/orientation.ts'
-import type { Orientation } from '#/cube/orientation.ts'
-import type { Move } from '#/cube/cubie.ts'
+import { FACE_NORMALS, dot, stickerAt } from '#/core/cube/geometry.ts'
+import type { Vec3 } from '#/core/cube/geometry.ts'
+import { DEFAULT_ORIENTATION } from '#/core/cube/orientation.ts'
+import type { Orientation } from '#/core/cube/orientation.ts'
+import type { Move } from '#/core/cube/cubie.ts'
 
 /** One move to animate. Give each new turn a new `id`. */
 export interface CubeTurn {

@@ -3,7 +3,7 @@
  * turns the cube when told to. Each face is found wherever it is held and
  * captured by itself; the colours are worked out from all six together, then
  * checked once against the pictures taken. Loaded on demand; the logic is in
- * `src/scan`.
+ * `src/core/scan`.
  */
 import { Camera, Check, RotateCcw, Undo2, X } from 'lucide-react'
 import { useCallback, useEffect, useRef, useState } from 'react'
@@ -12,13 +12,13 @@ import { Button } from '#/components/ui/button'
 import { Card, CardContent } from '#/components/ui/card'
 import { m } from '#/i18n'
 import { cn } from '#/lib/utils'
-import { guessCube, nameCentres } from '#/scan/classify.ts'
-import { rgbToHex } from '#/scan/colour.ts'
-import type { Rgb } from '#/scan/colour.ts'
-import { findFace } from '#/scan/detect.ts'
-import { GUIDE, faceChange, sampleFace, steadyColours } from '#/scan/sample.ts'
-import type { Guide, StickerSample } from '#/scan/sample.ts'
-import { SCAN_FACES, SCAN_FACE_COUNT, SCAN_STICKERS, placeScan } from '#/scan/sequence.ts'
+import { guessCube, nameCentres } from '#/core/scan/classify.ts'
+import { rgbToHex } from '#/core/scan/colour.ts'
+import type { Rgb } from '#/core/scan/colour.ts'
+import { findFace } from '#/core/scan/detect.ts'
+import { GUIDE, faceChange, sampleFace, steadyColours } from '#/core/scan/sample.ts'
+import type { Guide, StickerSample } from '#/core/scan/sample.ts'
+import { SCAN_FACES, SCAN_FACE_COUNT, SCAN_STICKERS, placeScan } from '#/core/scan/sequence.ts'
 import { COLOUR_HEX } from '../colours.ts'
 import { COLOUR_KEYS } from '../entry.ts'
 import type { ColourKey, Paint } from '../entry.ts'

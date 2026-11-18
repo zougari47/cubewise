@@ -1,5 +1,5 @@
-import { STICKER_PLACES } from '#/cube/geometry.ts'
-import type { Vec3 } from '#/cube/geometry.ts'
+import { STICKER_PLACES } from '#/core/cube/geometry.ts'
+import type { Vec3 } from '#/core/cube/geometry.ts'
 
 /** Flattens a point on the cube onto the page, seen from the front-right and above. */
 function project([x, y, z]: Vec3): string {

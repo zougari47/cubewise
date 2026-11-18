@@ -7,13 +7,13 @@
  * solving, the cube is described as the user sees it ("the view"), which
  * changes whenever the whole cube is turned.
  */
-import { MOVE_CUBES, applyMove, findUnsolvableReason, isSolved, parseMoves } from '../cube/cubie.ts'
-import type { CubieCube, Move } from '../cube/cubie.ts'
-import { DEFAULT_ORIENTATION, cubeFaceSeenAs, rotateStickers, turnCube } from '../cube/orientation.ts'
-import type { Orientation } from '../cube/orientation.ts'
-import { cubeFromStickers, stickersFromCube } from '../cube/stickers.ts'
-import { cubeAfterSteps } from '../cube/steps.ts'
-import type { Step } from '../cube/steps.ts'
+import { MOVE_CUBES, applyMove, findUnsolvableReason, isSolved, parseMoves } from '../../cube/cubie.ts'
+import type { CubieCube, Move } from '../../cube/cubie.ts'
+import { DEFAULT_ORIENTATION, cubeFaceSeenAs, rotateStickers, turnCube } from '../../cube/orientation.ts'
+import type { Orientation } from '../../cube/orientation.ts'
+import { cubeFromStickers, stickersFromCube } from '../../cube/stickers.ts'
+import { cubeAfterSteps } from '../../cube/steps.ts'
+import type { Step } from '../../cube/steps.ts'
 import { SEQUENCES } from './sequences.ts'
 import { BEGINNER_STAGES } from './stages.ts'
 import type { BeginnerStage } from './stages.ts'

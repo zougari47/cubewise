@@ -9,11 +9,11 @@ import {
   frontStickers,
   orientationShowing,
   turnCube,
-} from '../../cube/orientation.ts'
-import type { Orientation, TurnDirection } from '../../cube/orientation.ts'
-import { STICKER_COUNT, cubeFromStickers } from '../../cube/stickers.ts'
-import type { StickerError } from '../../cube/stickers.ts'
-import type { CubieCube } from '../../cube/cubie.ts'
+} from '../../core/cube/orientation.ts'
+import type { Orientation, TurnDirection } from '../../core/cube/orientation.ts'
+import { STICKER_COUNT, cubeFromStickers } from '../../core/cube/stickers.ts'
+import type { StickerError } from '../../core/cube/stickers.ts'
+import type { CubieCube } from '../../core/cube/cubie.ts'
 
 /** The colour keys, in the order shown in the palette. */
 export const COLOUR_KEYS = ['W', 'Y', 'R', 'O', 'B', 'G'] as const

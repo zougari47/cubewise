@@ -1,6 +1,6 @@
 import { Link, createFileRoute } from '@tanstack/react-router'
 import { ArrowRight, Check } from 'lucide-react'
-import { BEGINNER_STAGES } from '#/beginner/stages.ts'
+import { BEGINNER_STAGES } from '#/core/methods/beginner/stages.ts'
 import { Badge } from '#/components/ui/badge'
 import { Button } from '#/components/ui/button'
 import { m } from '#/i18n'

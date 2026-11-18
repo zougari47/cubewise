@@ -6,11 +6,11 @@ Use the vocabulary in [GLOSSARY.md](GLOSSARY.md) for names in code, text and com
 
 ## Where things live
 
-Core logic is pure TypeScript: no React, no browser APIs, tested in Node.
+Core logic sits under `src/core/` and is pure TypeScript: no React, no browser APIs, tested in Node.
 
-- `src/cube/`: the cube model, moves, stickers, orientation, and the short-solution solver (`solver.ts`, our own Kociemba two-phase).
-- `src/beginner/`: the beginner-method solver, its stages and the sequence table shared with the lessons.
-- `src/scan/`: camera-scan logic on plain pixel data: finding a face anywhere in a picture, reading its stickers, working out every colour from all six faces together, the order faces are shown.
+- `src/core/cube/`: the cube model, moves, stickers, orientation, and the short-solution solver (`solver.ts`, our own Kociemba two-phase).
+- `src/core/methods/`: one folder per solving method people learn. `beginner/` is the beginner-method solver, its stages and the sequence table shared with the lessons.
+- `src/core/scan/`: camera-scan logic on plain pixel data: finding a face anywhere in a picture, reading its stickers, working out every colour from all six faces together, the order faces are shown.
 
 Page code sits under `src/pages/`, one folder per page; core never imports from it.
 

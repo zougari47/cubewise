@@ -3,8 +3,8 @@
  * here and never hard-code it, so another language is one more file like this.
  */
 import type { ColourKey } from '../pages/solver/entry.ts'
-import { SEQUENCES as A } from '../beginner/sequences.ts'
-import type { BeginnerStage } from '../beginner/stages.ts'
+import { SEQUENCES as A } from '../core/methods/beginner/sequences.ts'
+import type { BeginnerStage } from '../core/methods/beginner/stages.ts'
 
 const colourNames: Record<ColourKey, string> = {
   W: 'white',

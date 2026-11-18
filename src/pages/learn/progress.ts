@@ -1,7 +1,7 @@
 /** Which lessons the user has marked as complete, kept on their device. */
 import { useCallback, useEffect, useState } from 'react'
-import { BEGINNER_STAGES } from '#/beginner/stages.ts'
-import type { BeginnerStage } from '#/beginner/stages.ts'
+import { BEGINNER_STAGES } from '#/core/methods/beginner/stages.ts'
+import type { BeginnerStage } from '#/core/methods/beginner/stages.ts'
 
 const STORAGE_KEY = 'cubewise.lessons.v1'
 
