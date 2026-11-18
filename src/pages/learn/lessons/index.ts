@@ -4,9 +4,11 @@ import type { LessonCase } from '../lessons.ts'
 import { BEGINNER_LESSONS } from './beginner.ts'
 import { KEYHOLE_LESSONS } from './keyhole.ts'
 import { CFOP_LESSONS } from './cfop.ts'
+import { ROUX_LESSONS } from './roux.ts'
 
 export const LESSONS: Record<MethodId, Record<string, LessonCase[]>> = {
   beginner: BEGINNER_LESSONS,
   keyhole: KEYHOLE_LESSONS,
   cfop: CFOP_LESSONS,
+  roux: ROUX_LESSONS,
 }
