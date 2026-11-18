@@ -349,6 +349,32 @@ export const en = {
       done: 'Scanned. Compare the colours with your cube, fix any that are wrong, then press Solve.',
       copyReport: 'Copy scan report',
       reportCopied: 'Copied',
+      guide: {
+        open: 'How to scan',
+        title: 'How to scan your cube',
+        intro: 'You show the camera one face at a time, six in all. Hold each face still until you see the tick, then turn the cube.',
+        laptop: {
+          title: 'On a laptop',
+          picture: 'A person facing a laptop holds a cube up to its camera, holds still, then turns the cube to the next face, six times.',
+          hold: 'Sit facing the screen and hold the cube up to the webcam, one face flat towards it.',
+        },
+        phone: {
+          title: 'On a phone',
+          picture: 'A person holds a phone in one hand and a cube in the other, points the back camera at the cube, then turns the cube to the next face, six times.',
+          hold: 'Hold the phone in one hand and the cube in the other, about a hand apart. Turn the cube, not the phone.',
+        },
+        stepsTitle: 'The six faces, in order',
+        steps: [
+          'Show the front face.',
+          'Turn the cube to the next side face.',
+          'Turn it the same way again.',
+          'And once more, for the last side face.',
+          'Tilt the cube to show the top face.',
+          'Tilt it right over to show the bottom face.',
+        ],
+        light: 'Light from the side works best. A lamp straight above makes the stickers shine.',
+        close: 'Got it',
+      },
       errors: {
         unsupported: 'This browser cannot use the camera. Enter the colours by hand instead.',
         denied: 'The camera was blocked. Allow camera access for this site in your browser, then try again.',

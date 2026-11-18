@@ -23,6 +23,9 @@ import { COLOUR_HEX } from '../colours.ts'
 import { COLOUR_KEYS } from '../entry.ts'
 import type { ColourKey, Paint } from '../entry.ts'
 import { useCamera } from './camera.ts'
+import { ScanGuide } from './scan-guide.tsx'
+
+const GUIDE_SEEN_KEY = 'cubewise.scan.guide-seen.v1'
 
 /** Side of the small square picture the stickers are read from, in pixels. */
 const READ_SIZE = 240
@@ -154,6 +157,17 @@ export default function ScanPanel({
   const [ticked, setTicked] = useState(0)
   const [tick, setTick] = useState(false)
   const whiteBalanceHeld = useRef(false)
+  /** The guide opens by itself the first time, and from its button after that. */
+  const [guideOpen, setGuideOpen] = useState(false)
+  useEffect(() => {
+    try {
+      if (localStorage.getItem(GUIDE_SEEN_KEY)) return
+      localStorage.setItem(GUIDE_SEEN_KEY, '1')
+    } catch {
+      // Without storage the guide simply opens each time.
+    }
+    setGuideOpen(true)
+  }, [])
 
   const reading = useRef<{
     faces: CapturedFace[]
@@ -240,7 +254,7 @@ export default function ScanPanel({
 
   // --- Finding and reading the face
 
-  const paused = review !== null
+  const paused = review !== null || guideOpen
   useEffect(() => {
     if (status !== 'ready' || paused) return
     const timer = window.setInterval(() => {
@@ -409,7 +423,10 @@ export default function ScanPanel({
       <Card>
         <CardContent className="space-y-5">
           <header className="space-y-1">
-            <h2 className="text-lg font-semibold">{review ? text.reviewHeading : text.heading}</h2>
+            <div className="flex items-center justify-between gap-2">
+              <h2 className="text-lg font-semibold">{review ? text.reviewHeading : text.heading}</h2>
+              {!review && <ScanGuide open={guideOpen} onOpenChange={setGuideOpen} />}
+            </div>
             {!failed && !review && <p className="text-sm text-muted-foreground">{text.progress(step + 1)}</p>}
           </header>
 
