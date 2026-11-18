@@ -42,26 +42,82 @@ const stages: MethodText<BeginnerStage>['stages'] = {
 
 const lessons: MethodText<BeginnerStage>['lessons'] = {
   cross: {
-    goal: 'Four white edges form a plus sign on the bottom, and the side colour of each one matches the centre next to it.',
-    steps: [
-      'Hold the cube with the yellow centre on top and the white centre on the bottom.',
-      'Find the four edges that have a white sticker. Bring each one to the top layer with its white sticker facing up, next to the yellow centre. The order does not matter. This shape is called the daisy.',
-      'Look at the side sticker of one petal. Turn the top layer until that sticker is above the centre of the same colour.',
-      'Turn that side face twice. The edge drops to the bottom, into its own place.',
-      'Do the same for the other three petals.',
+    goal: 'Four white edges form a plus sign on the white face, and the side colour of each one matches the centre next to it.',
+    parts: [
+      {
+        title: 'The plan: a daisy first, then the cross',
+        body: [
+          'The cross belongs on the white face, underneath, where you cannot see it. So we build it in two easy halves.',
+          'First, gather the four white edges on top, around the yellow centre, with white facing up. This is called the daisy. White next to yellow looks wrong, and it is: the daisy is only a place to park the edges where you can see them.',
+          'Then send each petal down to the white face with one half turn. That makes the cross.',
+        ],
+        cases: ['daisy', 'done'],
+      },
+      {
+        title: 'Making the daisy',
+        body: [
+          'Look for an edge with a white sticker. It can be in one of a few kinds of place, and each has its own short answer below. Do them in any order, one edge at a time.',
+          'One rule keeps you safe: before you bring an edge up, check the place on top where it will land. If a petal is already there, turn the top layer first so that an empty place is waiting. Turning the top never spoils the daisy.',
+        ],
+        cases: ['middle', 'make-room', 'bottom', 'flipped-top', 'flipped-bottom'],
+      },
+      {
+        title: 'Turning the daisy into the cross',
+        body: [
+          'Pick a petal and look at its other sticker, the one on the side of the cube.',
+          'Turn the top layer until that sticker is directly above the centre of the same colour.',
+          'Turn that side face twice. The petal goes down to the white face, in its own place. Do the same for the other three.',
+        ],
+        cases: ['petal', 'line-up'],
+      },
+      {
+        title: 'A whole cross, from start to finish',
+        body: [
+          'Here is everything together on one scrambled cube: four white edges brought up one at a time, then four petals sent down. Step through it slowly and say what each move is for.',
+        ],
+        cases: ['whole'],
+      },
     ],
     cases: {
       daisy: {
         title: 'The daisy',
-        body: 'Four white edges around the yellow centre. Getting here takes no sequence, only a little trial and error.',
-      },
-      petal: {
-        title: 'Dropping a petal',
-        body: 'The green side of this petal is above the green centre, so the front face is turned twice.',
+        body: 'Four white edges around the yellow centre, white facing up. The side stickers do not need to match anything yet.',
       },
       done: {
         title: 'The finished cross, seen from below',
-        body: 'Every white edge matches the centre beside it.',
+        body: 'The cube is turned over to show the white face. Every white edge also matches the centre beside it.',
+      },
+      middle: {
+        title: 'A white edge in the middle layer',
+        body: 'The white sticker faces you, on the right of the front face, and the place above it on the right is empty. One turn of the right face (R) swings the edge up, white on top. On the left side it is the same with L’.',
+      },
+      'make-room': {
+        title: 'The same edge, with a petal in the way',
+        body: 'Here a petal already sits on the right of the top. R would knock it out. So turn the top first (U) to bring the empty place round, then do R.',
+      },
+      bottom: {
+        title: 'A white edge on the bottom, white facing down',
+        body: 'You can see only its orange sticker, at the bottom of the right face; the white one is underneath. The place above it on top is empty, so turn the right face twice (R2).',
+      },
+      'flipped-top': {
+        title: 'A white edge on top, the wrong way up',
+        body: 'It is in the top layer, but white faces you and orange is on top. Turn the front face (F): the edge moves to the middle layer on the right, and now it is the first case. R finishes it.',
+      },
+      'flipped-bottom': {
+        title: 'A white edge on the bottom, white facing you',
+        body: 'White is at the bottom of the front face. Turn the front face the other way (F’) to move the edge to the middle layer on the right, then R brings it up.',
+      },
+      petal: {
+        title: 'Dropping a petal',
+        body: 'The side sticker of the front petal is green and it is above the green centre, so the front face is turned twice (F2).',
+      },
+      'line-up': {
+        title: 'Lining a petal up first',
+        body: 'The green petal is on the right, above the orange centre. That does not match. Turn the top (U) to bring it above the green centre, then turn the front face twice.',
+      },
+      whole: {
+        title: 'Seven moves to the daisy, eight to the cross',
+        body: 'L’ lifts the orange edge from the middle layer. U makes room and L2 lifts the red edge from the bottom. F’ then R brings up the blue edge, which had white facing you. U’ makes room and R lifts the green edge. Then each petal is lined up with the top layer and dropped: green, blue, orange, red.',
       },
     },
     tip: 'In the solver, the cross is made by a shorter route than the daisy. Once the daisy feels easy, try putting edges straight into the bottom.',

@@ -17,7 +17,7 @@ describe('lessonColours', () => {
   const grey = '#a1a1aa'
 
   test('colours the centres and the shown pieces, and greys out the rest', () => {
-    const daisy = LESSONS.beginner.cross[0]
+    const daisy = LESSONS.beginner.cross.find((lessonCase) => lessonCase.id === 'daisy')!
     const colours = lessonColours(daisy.start, daisy)
     expect(colours).toHaveLength(54)
     // Top face: yellow centre, four white petals, grey corners.
