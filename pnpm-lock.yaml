@@ -8,6 +8,9 @@ importers:
 
   .:
     dependencies:
+      '@fontsource-variable/bricolage-grotesque':
+        specifier: ^5.3.0
+        version: 5.3.0
       '@fontsource-variable/geist':
         specifier: ^5.3.0
         version: 5.3.0
@@ -259,6 +262,9 @@ packages:
 
   '@floating-ui/utils@0.2.12':
     resolution: {integrity: sha512-HpCo8tmWzLVad5s2d19EhAz5zqrrQ6s69qd6moPMQvkOuSwDT1YgRfWSVuc4ennqrgv3OHppiOGMQ7oC13yIww==}
+
+  '@fontsource-variable/bricolage-grotesque@5.3.0':
+    resolution: {integrity: sha512-TLi9Q4hJjS2UvoTMRSS2nHu6c4R56lAw60NR9QYtVRCHn0XtsFpiEhNffZ8Glsoxu6wEEwLKBP8lb94J52PNBA==}
 
   '@fontsource-variable/geist@5.3.0':
     resolution: {integrity: sha512-j0m+vLQuG5XAYoHtGCVu0spvlGreR3EzpECUVzkFmI1mTVnAO38l/NEPDCFgZ177JxzYJCLSmTQibIiYPilGrA==}
@@ -3618,6 +3624,8 @@ snapshots:
 
   '@floating-ui/utils@0.2.12': {}
 
+  '@fontsource-variable/bricolage-grotesque@5.3.0': {}
+
   '@fontsource-variable/geist@5.3.0': {}
 
   '@jridgewell/gen-mapping@0.3.13':
@@ -6413,6 +6421,7 @@ snapshots:
       use-sync-external-store: 1.7.0(react@19.2.0)
 
 time:
+  '@fontsource-variable/bricolage-grotesque@5.3.0': '2026-07-19T03:49:43.925Z'
   '@fontsource-variable/geist@5.3.0': '2026-07-19T03:50:13.458Z'
   '@react-three/fiber@9.8.2': '2026-10-14T20:48:26.872Z'
   '@tailwindcss/vite@4.1.18': '2025-12-11T16:41:11.134Z'

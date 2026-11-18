@@ -204,6 +204,8 @@ export const en = {
     description:
       'Enter the colours of your scrambled 3×3 cube and get a short, animated solution in seconds. Then learn to solve it yourself, step by step.',
     nav: { solver: 'Solver', learn: 'Learn' },
+    menu: { open: 'Open the menu', close: 'Close the menu' },
+    theme: { label: 'Theme', system: 'Same as your device', light: 'Light', dark: 'Dark' },
     footer: 'Made for people who have a scrambled cube on their desk.',
     builtBy: 'Built by',
     author: 'Ahmed Zougari',
@@ -225,7 +227,6 @@ export const en = {
     learnAction: 'Learn to solve it',
     cubeAlt: 'A scrambled 3×3 cube',
     load3d: 'Tap to load the 3D cube',
-    dragHint: 'Drag the cube to look around it.',
     how: {
       heading: 'How it works',
       steps: [

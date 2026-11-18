@@ -5,6 +5,7 @@ import { SiteFooter, SiteHeader } from '#/components/site-header.tsx'
 import { Button } from '#/components/ui/button'
 import { m } from '#/i18n'
 import { pageHead } from '#/lib/seo.ts'
+import { THEME_HEAD_SCRIPT } from '#/lib/theme.ts'
 
 import appCss from '../styles.css?url'
 
@@ -13,7 +14,7 @@ export const Route = createRootRoute({
     meta: [
       { charSet: 'utf-8' },
       { name: 'viewport', content: 'width=device-width, initial-scale=1' },
-      { name: 'theme-color', content: '#ffffff' },
+      { name: 'theme-color', content: '#0d0f1a' },
       ...pageHead({ title: m.home.title, description: m.site.description }).meta,
     ],
     links: [
@@ -52,9 +53,12 @@ function NotFound() {
 
 function RootDocument({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en" className="dark">
+    // The server sends the dark theme; the head script then switches to the
+    // visitor's choice before the page is drawn, hence the hydration allowance.
+    <html lang="en" className="dark" suppressHydrationWarning>
       <head>
         <HeadContent />
+        <script dangerouslySetInnerHTML={{ __html: THEME_HEAD_SCRIPT }} />
       </head>
       <body>
         {children}

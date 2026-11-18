@@ -77,7 +77,7 @@ function LessonPage() {
         ))}
       </div>
 
-      <aside className="mt-8 rounded-xl border-l-4 border-sky-500 bg-sky-50 p-4">
+      <aside className="mt-8 rounded-xl border-l-4 border-primary bg-primary/10 p-4">
         <p className="font-semibold">{text.tip}</p>
         <p className="mt-1">{lesson.tip}</p>
       </aside>

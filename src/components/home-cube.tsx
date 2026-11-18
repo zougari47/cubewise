@@ -37,20 +37,15 @@ export function HomeCube() {
   return (
     <div className="relative mx-auto aspect-square w-full max-w-md">
       {live ? (
-        <>
-          <Suspense fallback={picture}>
-            <CubeView colours={COLOURS} spin draggable className="size-full" />
-          </Suspense>
-          <p className="absolute inset-x-0 bottom-0 text-center text-sm text-muted-foreground">
-            {m.home.dragHint}
-          </p>
-        </>
+        <Suspense fallback={picture}>
+          <CubeView colours={COLOURS} spin draggable className="size-full" />
+        </Suspense>
       ) : (
         <button
           type="button"
           onClick={() => setLive(true)}
           aria-label={m.home.load3d}
-          className="size-full cursor-pointer rounded-2xl outline-none focus-visible:ring-2 focus-visible:ring-sky-500"
+          className="size-full cursor-pointer rounded-2xl outline-none focus-visible:ring-2 focus-visible:ring-ring"
         >
           {picture}
         </button>

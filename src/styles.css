@@ -2,11 +2,18 @@
 @import "tw-animate-css";
 @import "shadcn/tailwind.css";
 @import "@fontsource-variable/geist";
+@import "@fontsource-variable/bricolage-grotesque";
+
+/*
+ * The whole look of the site is set in this file: the two fonts just below,
+ * and the colours in :root (light) and .dark (the theme the site ships with).
+ */
 
 @custom-variant dark (&:is(.dark *));
 
 @theme inline {
   --font-sans: "Geist Variable", ui-sans-serif, system-ui, sans-serif;
+  --font-heading: "Bricolage Grotesque Variable", "Geist Variable", ui-sans-serif, system-ui, sans-serif;
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --color-card: var(--card);
@@ -35,47 +42,48 @@
 }
 
 :root {
-  --radius: 0.625rem;
-  --background: oklch(1 0 0);
-  --foreground: oklch(0.145 0 0);
+  color-scheme: light;
+  --radius: 0.875rem;
+  --background: oklch(0.985 0.006 265);
+  --foreground: oklch(0.2 0.03 265);
   --card: oklch(1 0 0);
-  --card-foreground: oklch(0.145 0 0);
+  --card-foreground: oklch(0.2 0.03 265);
   --popover: oklch(1 0 0);
-  --popover-foreground: oklch(0.145 0 0);
-  --primary: oklch(0.205 0 0);
-  --primary-foreground: oklch(0.985 0 0);
-  --secondary: oklch(0.97 0 0);
-  --secondary-foreground: oklch(0.205 0 0);
-  --muted: oklch(0.97 0 0);
-  --muted-foreground: oklch(0.556 0 0);
-  --accent: oklch(0.97 0 0);
-  --accent-foreground: oklch(0.205 0 0);
+  --popover-foreground: oklch(0.2 0.03 265);
+  --primary: oklch(0.5 0.17 268);
+  --primary-foreground: oklch(0.985 0.006 265);
+  --secondary: oklch(0.95 0.012 265);
+  --secondary-foreground: oklch(0.25 0.03 265);
+  --muted: oklch(0.955 0.01 265);
+  --muted-foreground: oklch(0.5 0.025 265);
+  --accent: oklch(0.94 0.016 265);
+  --accent-foreground: oklch(0.25 0.03 265);
   --destructive: oklch(0.577 0.245 27.325);
-  --border: oklch(0.922 0 0);
-  --input: oklch(0.922 0 0);
-  --ring: oklch(0.708 0 0);
+  --border: oklch(0.9 0.012 265);
+  --input: oklch(0.9 0.012 265);
+  --ring: oklch(0.5 0.17 268);
 }
 
 .dark {
   color-scheme: dark;
-  --background: oklch(0.145 0 0);
-  --foreground: oklch(0.985 0 0);
-  --card: oklch(0.205 0 0);
-  --card-foreground: oklch(0.985 0 0);
-  --popover: oklch(0.205 0 0);
-  --popover-foreground: oklch(0.985 0 0);
-  --primary: oklch(0.922 0 0);
-  --primary-foreground: oklch(0.205 0 0);
-  --secondary: oklch(0.269 0 0);
-  --secondary-foreground: oklch(0.985 0 0);
-  --muted: oklch(0.269 0 0);
-  --muted-foreground: oklch(0.708 0 0);
-  --accent: oklch(0.269 0 0);
-  --accent-foreground: oklch(0.985 0 0);
+  --background: oklch(0.165 0.022 265);
+  --foreground: oklch(0.97 0.006 265);
+  --card: oklch(0.21 0.026 265);
+  --card-foreground: oklch(0.97 0.006 265);
+  --popover: oklch(0.21 0.026 265);
+  --popover-foreground: oklch(0.97 0.006 265);
+  --primary: oklch(0.76 0.11 268);
+  --primary-foreground: oklch(0.2 0.035 265);
+  --secondary: oklch(0.27 0.03 265);
+  --secondary-foreground: oklch(0.97 0.006 265);
+  --muted: oklch(0.25 0.026 265);
+  --muted-foreground: oklch(0.74 0.022 265);
+  --accent: oklch(0.29 0.034 265);
+  --accent-foreground: oklch(0.97 0.006 265);
   --destructive: oklch(0.704 0.191 22.216);
-  --border: oklch(1 0 0 / 10%);
-  --input: oklch(1 0 0 / 15%);
-  --ring: oklch(0.556 0 0);
+  --border: oklch(0.8 0.05 265 / 14%);
+  --input: oklch(0.8 0.05 265 / 20%);
+  --ring: oklch(0.76 0.11 268);
 }
 
 @layer base {
@@ -87,5 +95,10 @@
   }
   body {
     @apply bg-background text-foreground min-h-dvh antialiased;
+  }
+  h1,
+  h2,
+  h3 {
+    @apply font-heading;
   }
 }
