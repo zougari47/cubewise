@@ -1,7 +1,7 @@
 import { Pause, Play, SkipBack, StepBack, StepForward } from 'lucide-react'
 import { Button } from '#/components/ui/button'
 import { m } from '#/i18n'
-import type { Playback } from '#/solver/playback.ts'
+import type { Playback } from '#/pages/solver/playback.ts'
 
 /** Restart, step back, play/pause and step forward for a playback. */
 export function PlaybackButtons({ playback }: { playback: Playback }) {

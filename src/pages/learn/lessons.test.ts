@@ -1,7 +1,7 @@
 import { describe, expect, test } from 'vitest'
-import { BEGINNER_STAGES } from '../beginner/stages.ts'
-import { applyMoves, isSolved, parseMoves } from '../cube/cubie.ts'
-import { en } from '../i18n/en.ts'
+import { BEGINNER_STAGES } from '../../beginner/stages.ts'
+import { applyMoves, isSolved, parseMoves } from '../../cube/cubie.ts'
+import { en } from '../../i18n/en.ts'
 import { LESSON_CASES, lessonColours } from './lessons.ts'
 
 describe('lesson cases', () => {

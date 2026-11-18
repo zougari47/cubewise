@@ -1,7 +1,7 @@
 import { cn } from '#/lib/utils'
 import { m } from '#/i18n'
-import { hexOf } from '#/solver/colours.ts'
-import type { Paint } from '#/solver/entry.ts'
+import { hexOf } from '#/pages/solver/colours.ts'
+import type { Paint } from '#/pages/solver/entry.ts'
 
 /** Where each face (U R F D L B) sits in the unfolded cube: [column, row]. */
 const FACE_CELLS = [

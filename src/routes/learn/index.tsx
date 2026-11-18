@@ -4,7 +4,7 @@ import { BEGINNER_STAGES } from '#/beginner/stages.ts'
 import { Badge } from '#/components/ui/badge'
 import { Button } from '#/components/ui/button'
 import { m } from '#/i18n'
-import { useLessonProgress } from '#/learn/progress.ts'
+import { useLessonProgress } from '#/pages/learn/progress.ts'
 import { pageHead } from '#/lib/seo.ts'
 
 export const Route = createFileRoute('/learn/')({

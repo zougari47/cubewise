@@ -1,12 +1,12 @@
 /** Runs the solvers off the main thread so the page never freezes. */
-import { solveBeginner } from '../beginner/solver.ts'
-import type { BeginnerStage } from '../beginner/stages.ts'
-import { DEFAULT_ORIENTATION } from '../cube/orientation.ts'
-import type { Orientation } from '../cube/orientation.ts'
-import { prepareSolver, solve } from '../cube/solver.ts'
-import { stepsFromMoves } from '../cube/steps.ts'
-import type { Step } from '../cube/steps.ts'
-import type { CubieCube } from '../cube/cubie.ts'
+import { solveBeginner } from '../../beginner/solver.ts'
+import type { BeginnerStage } from '../../beginner/stages.ts'
+import { DEFAULT_ORIENTATION } from '../../cube/orientation.ts'
+import type { Orientation } from '../../cube/orientation.ts'
+import { prepareSolver, solve } from '../../cube/solver.ts'
+import { stepsFromMoves } from '../../cube/steps.ts'
+import type { Step } from '../../cube/steps.ts'
+import type { CubieCube } from '../../cube/cubie.ts'
 
 export type SolveMethod = 'short' | 'beginner'
 

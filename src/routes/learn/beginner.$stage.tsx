@@ -4,9 +4,9 @@ import { BEGINNER_STAGES } from '#/beginner/stages.ts'
 import type { BeginnerStage } from '#/beginner/stages.ts'
 import { Button } from '#/components/ui/button'
 import { m } from '#/i18n'
-import { LessonCaseCard } from '#/learn/lesson-case.tsx'
-import { LESSON_CASES } from '#/learn/lessons.ts'
-import { useLessonProgress } from '#/learn/progress.ts'
+import { LessonCaseCard } from '#/pages/learn/lesson-case.tsx'
+import { LESSON_CASES } from '#/pages/learn/lessons.ts'
+import { useLessonProgress } from '#/pages/learn/progress.ts'
 import { pageHead } from '#/lib/seo.ts'
 
 const isStage = (value: string): value is BeginnerStage =>

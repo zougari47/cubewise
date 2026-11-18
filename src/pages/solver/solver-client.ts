@@ -1,5 +1,5 @@
 /** The page's side of the solver worker. Browser only. */
-import type { CubieCube } from '../cube/cubie.ts'
+import type { CubieCube } from '../../cube/cubie.ts'
 import type { SolveMethod, SolvedSteps, SolverRequest, SolverResponse } from './solver.worker.ts'
 
 let worker: Worker | null = null

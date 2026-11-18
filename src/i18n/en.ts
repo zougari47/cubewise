@@ -2,7 +2,7 @@
  * Every piece of text the site shows, in English. Components read text from
  * here and never hard-code it, so another language is one more file like this.
  */
-import type { ColourKey } from '../solver/entry.ts'
+import type { ColourKey } from '../pages/solver/entry.ts'
 import { SEQUENCES as A } from '../beginner/sequences.ts'
 import type { BeginnerStage } from '../beginner/stages.ts'
 

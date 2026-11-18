@@ -3,8 +3,8 @@ import { CubePicture } from '#/components/cube-picture.tsx'
 import { applyMoves, parseMoves, solvedCube } from '#/cube/cubie.ts'
 import { stickersFromCube } from '#/cube/stickers.ts'
 import { m } from '#/i18n'
-import { COLOUR_HEX } from '#/solver/colours.ts'
-import { STANDARD_SCHEME } from '#/solver/entry.ts'
+import { COLOUR_HEX } from '#/pages/solver/colours.ts'
+import { STANDARD_SCHEME } from '#/pages/solver/entry.ts'
 
 const CubeView = lazy(() => import('#/components/cube-view.tsx'))
 

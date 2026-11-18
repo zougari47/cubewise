@@ -1,7 +1,7 @@
 import { createFileRoute } from '@tanstack/react-router'
 import { m } from '#/i18n'
 import { pageHead } from '#/lib/seo.ts'
-import { SolverApp } from '#/solver/solver-app.tsx'
+import { SolverApp } from '#/pages/solver/solver-app.tsx'
 
 export const Route = createFileRoute('/solver')({
   head: () => pageHead({ title: m.solver.title, description: m.solver.description }),

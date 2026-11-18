@@ -8,7 +8,7 @@ import { parseMoves } from '#/cube/cubie.ts'
 import { DEFAULT_ORIENTATION, rotateStickers, turnCube } from '#/cube/orientation.ts'
 import { cubeAfterSteps, stepsFromMoves } from '#/cube/steps.ts'
 import { m } from '#/i18n'
-import { usePlayback } from '#/solver/playback.ts'
+import { usePlayback } from '#/pages/solver/playback.ts'
 import { lessonColours } from './lessons.ts'
 import type { LessonCase } from './lessons.ts'
 
