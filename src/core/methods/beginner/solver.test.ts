@@ -43,7 +43,7 @@ describe('solveBeginner', () => {
     for (let n = 0; n < 100; n++) {
       const cross = solveBeginner(randomCube(random)).stages[0].steps
       expect(cross.length).toBeLessThanOrEqual(8)
-      expect(cross.every((step) => step.move !== undefined)).toBe(true)
+      expect(cross.every((step) => step.moves.length === 1)).toBe(true)
     }
   })
 
@@ -99,7 +99,7 @@ describe('solveBeginner', () => {
     const cube = applyMoves(solvedCube(), parseMoves('F'))
     const steps = allSteps(cube)
     expect(steps.map((step) => step.text).join(' ')).toBe("F'")
-    expect(steps[0].move).toBe(parseMoves("F'")[0])
+    expect(steps[0].moves).toEqual(parseMoves("F'"))
   })
 
   test('refuses an unsolvable cube', () => {

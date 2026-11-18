@@ -8,6 +8,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '#/components/ui/card'
 import { Kbd } from '#/components/ui/kbd'
 import { Slider } from '#/components/ui/slider'
 import { cubeFaceSeenAs } from '#/core/cube/orientation.ts'
+import { isWholeCubeTurn } from '#/core/cube/steps.ts'
 import { m } from '#/i18n'
 import { cn } from '#/lib/utils'
 import type { ColourKey } from './entry.ts'
@@ -59,7 +60,7 @@ function StepChips({
             aria-current={index === done ? 'step' : undefined}
             className={cn(
               'min-w-9 rounded-md border px-2 py-1 text-center font-mono text-sm font-medium',
-              step.move === undefined && 'border-dashed',
+              isWholeCubeTurn(step) && 'border-dashed',
               index < done && 'border-transparent bg-muted text-muted-foreground',
               index === done && 'border-solid border-primary bg-primary text-primary-foreground',
             )}
@@ -92,8 +93,10 @@ export function SolutionPanel({
 }) {
   const text = m.solver.playback
   const total = solved.steps.length
-  const moveCount = solved.steps.filter((step) => step.move !== undefined).length
-  const byStage = solved.stages.length > 0
+  const moveCount = solved.steps.filter((step) => !isWholeCubeTurn(step)).length
+  const byStage = solved.method !== 'short'
+  const stageNames: Record<string, { name: string }> =
+    solved.method === 'short' ? {} : m.methods[solved.method].stages
 
   let from = 0
   const stages = solved.stages.map((stage) => {
@@ -131,11 +134,11 @@ export function SolutionPanel({
                   <section key={stage.stage} className="space-y-1.5">
                     <h3 className="flex items-baseline justify-between gap-2 text-sm font-semibold">
                       <span>
-                        {i + 1}. {m.learn.stages[stage.stage].name}
+                        {i + 1}. {stageNames[stage.stage].name}
                       </span>
                       <Link
-                        to="/learn/beginner/$stage"
-                        params={{ stage: stage.stage }}
+                        to="/learn/$method/$stage"
+                        params={{ method: solved.method as string, stage: stage.stage }}
                         className="text-xs font-normal text-muted-foreground underline underline-offset-2 hover:text-foreground"
                       >
                         {text.lesson}
@@ -175,7 +178,8 @@ export function SolutionPanel({
             </p>
             <p className="text-sm text-muted-foreground">
               {text.notation}
-              {byStage && ` ${text.wholeCubeNotation}`}
+              {solved.steps.some(isWholeCubeTurn) && ` ${text.wholeCubeNotation}`}
+              {solved.steps.some((step) => step.layers) && ` ${text.wideNotation}`}
             </p>
             <KeyHints hints={text.keys} />
           </>

@@ -12,7 +12,8 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as SolverRouteImport } from './routes/solver'
 import { Route as LearnIndexRouteImport } from './routes/learn/index'
-import { Route as LearnBeginnerStageRouteImport } from './routes/learn/beginner.$stage'
+import { Route as LearnMethodIndexRouteImport } from './routes/learn/$method/index'
+import { Route as LearnMethodStageRouteImport } from './routes/learn/$method/$stage'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -29,9 +30,14 @@ const LearnIndexRoute = LearnIndexRouteImport.update({
   path: '/learn/',
   getParentRoute: () => rootRouteImport,
 } as any)
-const LearnBeginnerStageRoute = LearnBeginnerStageRouteImport.update({
-  id: '/learn/beginner/$stage',
-  path: '/learn/beginner/$stage',
+const LearnMethodIndexRoute = LearnMethodIndexRouteImport.update({
+  id: '/learn/$method/',
+  path: '/learn/$method/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const LearnMethodStageRoute = LearnMethodStageRouteImport.update({
+  id: '/learn/$method/$stage',
+  path: '/learn/$method/$stage',
   getParentRoute: () => rootRouteImport,
 } as any)
 
@@ -39,34 +45,45 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/solver': typeof SolverRoute
   '/learn/': typeof LearnIndexRoute
-  '/learn/beginner/$stage': typeof LearnBeginnerStageRoute
+  '/learn/$method/$stage': typeof LearnMethodStageRoute
+  '/learn/$method/': typeof LearnMethodIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/solver': typeof SolverRoute
   '/learn': typeof LearnIndexRoute
-  '/learn/beginner/$stage': typeof LearnBeginnerStageRoute
+  '/learn/$method/$stage': typeof LearnMethodStageRoute
+  '/learn/$method': typeof LearnMethodIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/solver': typeof SolverRoute
   '/learn/': typeof LearnIndexRoute
-  '/learn/beginner/$stage': typeof LearnBeginnerStageRoute
+  '/learn/$method/$stage': typeof LearnMethodStageRoute
+  '/learn/$method/': typeof LearnMethodIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/solver' | '/learn/' | '/learn/beginner/$stage'
+  fullPaths:
+    '/' | '/solver' | '/learn/' | '/learn/$method/$stage' | '/learn/$method/'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/solver' | '/learn' | '/learn/beginner/$stage'
-  id: '__root__' | '/' | '/solver' | '/learn/' | '/learn/beginner/$stage'
+  to: '/' | '/solver' | '/learn' | '/learn/$method/$stage' | '/learn/$method'
+  id:
+    | '__root__'
+    | '/'
+    | '/solver'
+    | '/learn/'
+    | '/learn/$method/$stage'
+    | '/learn/$method/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   SolverRoute: typeof SolverRoute
   LearnIndexRoute: typeof LearnIndexRoute
-  LearnBeginnerStageRoute: typeof LearnBeginnerStageRoute
+  LearnMethodStageRoute: typeof LearnMethodStageRoute
+  LearnMethodIndexRoute: typeof LearnMethodIndexRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -92,11 +109,18 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof LearnIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/learn/beginner/$stage': {
-      id: '/learn/beginner/$stage'
-      path: '/learn/beginner/$stage'
-      fullPath: '/learn/beginner/$stage'
-      preLoaderRoute: typeof LearnBeginnerStageRouteImport
+    '/learn/$method/': {
+      id: '/learn/$method/'
+      path: '/learn/$method'
+      fullPath: '/learn/$method/'
+      preLoaderRoute: typeof LearnMethodIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/learn/$method/$stage': {
+      id: '/learn/$method/$stage'
+      path: '/learn/$method/$stage'
+      fullPath: '/learn/$method/$stage'
+      preLoaderRoute: typeof LearnMethodStageRouteImport
       parentRoute: typeof rootRouteImport
     }
   }
@@ -106,7 +130,8 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   SolverRoute: SolverRoute,
   LearnIndexRoute: LearnIndexRoute,
-  LearnBeginnerStageRoute: LearnBeginnerStageRoute,
+  LearnMethodStageRoute: LearnMethodStageRoute,
+  LearnMethodIndexRoute: LearnMethodIndexRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

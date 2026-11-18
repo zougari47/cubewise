@@ -101,24 +101,29 @@ function Home() {
           {BEGINNER_STAGES.map((stage, i) => (
             <li key={stage}>
               <Link
-                to="/learn/beginner/$stage"
-                params={{ stage }}
+                to="/learn/$method/$stage"
+                params={{ method: 'beginner', stage }}
                 className="group flex h-full items-center gap-3 rounded-xl border bg-card px-4 py-3 transition-colors hover:border-primary/50 hover:bg-accent"
               >
                 <span className="flex size-7 shrink-0 items-center justify-center rounded-md bg-primary/15 text-sm font-semibold text-primary tabular-nums">
                   {i + 1}
                 </span>
-                <span className="font-medium">{m.learn.stages[stage].name}</span>
+                <span className="font-medium">{m.methods.beginner.stages[stage].name}</span>
               </Link>
             </li>
           ))}
         </ol>
-        <Button asChild variant="outline" className="mt-8">
-          <Link to="/learn">
-            {m.home.learn.action}
-            <ArrowRight />
-          </Link>
-        </Button>
+        <div className="mt-8 flex flex-wrap gap-3">
+          <Button asChild variant="outline">
+            <Link to="/learn/$method" params={{ method: 'beginner' }}>
+              {m.home.learn.action}
+              <ArrowRight />
+            </Link>
+          </Button>
+          <Button asChild variant="ghost">
+            <Link to="/learn">{m.home.learn.otherMethods}</Link>
+          </Button>
+        </div>
       </section>
 
       <section className="border-t bg-muted/40">

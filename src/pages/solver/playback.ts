@@ -2,6 +2,7 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
 import type { CubeTurn } from '#/components/cube-view.tsx'
 import type { Move } from '#/core/cube/cubie.ts'
+import { isWholeCubeTurn } from '#/core/cube/steps.ts'
 import type { Step } from '#/core/cube/steps.ts'
 
 interface PlaybackState {
@@ -50,6 +51,12 @@ export function usePlaybackPause(): [number, (pauseMs: number) => void] {
 
 const inverse = (move: Move) => move - (move % 3) + (2 - (move % 3))
 
+/** What the 3D cube draws for a step: one face, or the layers of a wide or slice turn. */
+function turnOf(step: Step, backwards: boolean): Omit<CubeTurn, 'id'> {
+  const move = step.layers?.move ?? step.moves[0]
+  return { move: backwards ? inverse(move) : move, layers: step.layers?.layers }
+}
+
 export function usePlayback(steps: readonly Step[] | null, pauseMs = DEFAULT_PAUSE_MS) {
   const [state, setState] = useState(STOPPED)
   const turnId = useRef(0)
@@ -61,10 +68,10 @@ export function usePlayback(steps: readonly Step[] | null, pauseMs = DEFAULT_PAU
     if (!steps) return
     setState((now) => {
       if (now.turn || now.done >= steps.length) return now
-      const move = steps[now.done].move
+      const step = steps[now.done]
       // Turning the whole cube changes no sticker, so there is no move to animate.
-      if (move === undefined) return { ...now, done: now.done + 1 }
-      return { ...now, turn: { move, id: ++turnId.current, direction: 1 } }
+      if (isWholeCubeTurn(step)) return { ...now, done: now.done + 1 }
+      return { ...now, turn: { ...turnOf(step, false), id: ++turnId.current, direction: 1 } }
     })
   }, [steps])
 
@@ -72,12 +79,12 @@ export function usePlayback(steps: readonly Step[] | null, pauseMs = DEFAULT_PAU
     if (!steps) return
     setState((now) => {
       if (now.turn || now.done === 0) return now
-      const move = steps[now.done - 1].move
-      if (move === undefined) return { ...now, playing: false, done: now.done - 1 }
+      const step = steps[now.done - 1]
+      if (isWholeCubeTurn(step)) return { ...now, playing: false, done: now.done - 1 }
       return {
         ...now,
         playing: false,
-        turn: { move: inverse(move), id: ++turnId.current, direction: -1 },
+        turn: { ...turnOf(step, true), id: ++turnId.current, direction: -1 },
       }
     })
   }, [steps])
@@ -108,7 +115,7 @@ export function usePlayback(steps: readonly Step[] | null, pauseMs = DEFAULT_PAU
       setState((now) => ({ ...now, playing: false }))
       return
     }
-    const afterCubeTurn = state.done > 0 && steps[state.done - 1].move === undefined
+    const afterCubeTurn = state.done > 0 && isWholeCubeTurn(steps[state.done - 1])
     const wait = setTimeout(stepForward, afterCubeTurn ? Math.max(CUBE_TURN_PAUSE_MS, pauseMs) : pauseMs)
     return () => clearTimeout(wait)
   }, [steps, state, stepForward, pauseMs])

@@ -4,17 +4,15 @@ import { CubePicture } from '#/components/cube-picture.tsx'
 import { PlaybackButtons } from '#/components/playback-buttons.tsx'
 import { Button } from '#/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '#/components/ui/card'
-import { parseMoves } from '#/core/cube/cubie.ts'
-import { DEFAULT_ORIENTATION, rotateStickers, turnCube } from '#/core/cube/orientation.ts'
-import { cubeAfterSteps, stepsFromMoves } from '#/core/cube/steps.ts'
+import { rotateStickers } from '#/core/cube/orientation.ts'
+import { cubeAfterSteps, isWholeCubeTurn } from '#/core/cube/steps.ts'
 import { m } from '#/i18n'
+import { cn } from '#/lib/utils'
 import { usePlayback } from '#/pages/solver/playback.ts'
-import { lessonColours } from './lessons.ts'
+import { lessonColours, lessonOrientation, lessonSteps } from './lessons.ts'
 import type { LessonCase } from './lessons.ts'
 
 const CubeView = lazy(() => import('#/components/cube-view.tsx'))
-
-const FROM_BELOW = turnCube(turnCube(DEFAULT_ORIENTATION, 'up'), 'up')
 
 /**
  * One case of a lesson: a 2D picture of the cube before the sequence, the
@@ -30,10 +28,10 @@ export function LessonCaseCard({
   body: string
 }) {
   const [live, setLive] = useState(false)
-  const steps = useMemo(() => stepsFromMoves(parseMoves(lessonCase.sequence)), [lessonCase])
+  const steps = useMemo(() => lessonSteps(lessonCase.sequence), [lessonCase])
   const playback = usePlayback(steps)
 
-  const orientation = lessonCase.fromBelow ? FROM_BELOW : DEFAULT_ORIENTATION
+  const orientation = lessonOrientation(lessonCase, steps, playback.done)
   const colours = lessonColours(cubeAfterSteps(lessonCase.start, steps, playback.done), lessonCase)
   const picture = (
     <CubePicture
@@ -72,11 +70,13 @@ export function LessonCaseCard({
                 {steps.map((step, i) => (
                   <span
                     key={i}
-                    className={
-                      i === playback.done && live
-                        ? 'rounded-md border border-primary bg-primary px-2 py-0.5 font-mono text-sm font-medium text-primary-foreground'
-                        : 'rounded-md border px-2 py-0.5 font-mono text-sm font-medium'
-                    }
+                    className={cn(
+                      'rounded-md border px-2 py-0.5 font-mono text-sm font-medium',
+                      isWholeCubeTurn(step) && 'border-dashed',
+                      i === playback.done &&
+                        live &&
+                        'border-solid border-primary bg-primary text-primary-foreground',
+                    )}
                   >
                     {step.text}
                   </span>

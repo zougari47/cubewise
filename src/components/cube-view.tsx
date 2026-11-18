@@ -16,6 +16,13 @@ import type { Move } from '#/core/cube/cubie.ts'
 export interface CubeTurn {
   move: Move
   id: number
+  /**
+   * Which layers turn, counted from the move's face: 1 is the face itself, 0
+   * the middle layer. Default: the face alone. When a middle layer turns, the
+   * centres move, so `orientation` changes with the turn's end and is not
+   * animated a second time.
+   */
+  layers?: readonly number[]
 }
 
 export interface CubeViewProps {
@@ -135,7 +142,7 @@ function Scene({
   const whole = useRef<Group>(null)
   const numberGroup = useRef<Group>(null)
   const cubieGroups = useRef<(Group | null)[]>([])
-  const animation = useRef({ id: -1, progress: 0, done: true, applied: false })
+  const animation = useRef({ id: -1, progress: 0, done: true, applied: false, movedCentres: false })
   const onTurnEndRef = useRef(onTurnEnd)
   onTurnEndRef.current = onTurnEnd
 
@@ -192,8 +199,23 @@ function Scene({
     const delta = Math.min(rawDelta, 0.05)
     let moving = false
 
+    // The last turn is over once it is taken away or replaced by the next one.
+    const turnEnded = animation.current.applied && animation.current.id !== (turn?.id ?? -1)
+    if (turnEnded) {
+      CUBIES.forEach((cubie, i) => {
+        cubieGroups.current[i]?.quaternion.identity()
+        cubieGroups.current[i]?.position.set(...cubie.home)
+      })
+      animation.current.applied = false
+    }
+
     const group = whole.current
     if (group) {
+      if (turnEnded && animation.current.movedCentres) {
+        // A wide or slice turn has just ended: the cube is already where it should be.
+        group.quaternion.copy(target)
+        animation.current.movedCentres = false
+      }
       if (spin || draggable) {
         // Free turning, about the screen's own up and sideways axes.
         const pulled = drag.current
@@ -219,6 +241,8 @@ function Scene({
       state.id = turn.id
       state.progress = 0
       state.done = false
+    } else if (!turn) {
+      state.id = -1
     }
     if (turn && !state.done) {
       const face = Math.floor(turn.move / 3)
@@ -228,9 +252,11 @@ function Scene({
       state.progress = Math.min(1, state.progress + (delta * 1000) / (turnMs * (quarters === 2 ? 1.5 : 1)))
       const axis = new Vector3(...FACE_NORMALS[face])
       const angle = fullAngle * easeInOut(state.progress)
+      const layers = turn.layers ?? [1]
+      state.movedCentres = layers.includes(0)
       CUBIES.forEach((cubie, i) => {
         const cubieGroup = cubieGroups.current[i]
-        if (!cubieGroup || dot(cubie.home, FACE_NORMALS[face]) !== 1) return
+        if (!cubieGroup || !layers.includes(dot(cubie.home, FACE_NORMALS[face]))) return
         cubieGroup.quaternion.setFromAxisAngle(axis, angle)
         cubieGroup.position.set(...cubie.home).applyQuaternion(cubieGroup.quaternion)
       })
@@ -240,12 +266,6 @@ function Scene({
         state.done = true
         onTurnEndRef.current?.()
       }
-    } else if (!turn && state.applied) {
-      CUBIES.forEach((cubie, i) => {
-        cubieGroups.current[i]?.quaternion.identity()
-        cubieGroups.current[i]?.position.set(...cubie.home)
-      })
-      state.applied = false
     }
 
     if (moving) invalidate()

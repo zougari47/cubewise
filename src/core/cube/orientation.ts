@@ -46,6 +46,19 @@ const TURNS: Record<TurnDirection, Orientation> = {
   ],
 }
 
+/** The three ways to turn the whole cube: `x` like R, `y` like U, `z` like F. */
+export type CubeAxis = 'x' | 'y' | 'z'
+
+const WHOLE_TURNS: Record<CubeAxis, Orientation> = {
+  x: TURNS.down,
+  y: TURNS.right,
+  z: [
+    [0, 1, 0],
+    [-1, 0, 0],
+    [0, 0, 1],
+  ],
+}
+
 function compose(after: Orientation, before: Orientation): Orientation {
   const column = (m: Orientation, c: number): Vec3 => [m[0][c], m[1][c], m[2][c]]
   return after.map((row) => [0, 1, 2].map((c) => dot(row, column(before, c)))) as Orientation
@@ -54,6 +67,13 @@ function compose(after: Orientation, before: Orientation): Orientation {
 /** The orientation after bringing the face on the given side to the front. */
 export function turnCube(orientation: Orientation, direction: TurnDirection): Orientation {
   return compose(TURNS[direction], orientation)
+}
+
+/** The orientation after turning the whole cube `quarters` quarter turns about `axis`. */
+export function turnCubeAbout(orientation: Orientation, axis: CubeAxis, quarters = 1): Orientation {
+  let result = orientation
+  for (let n = 0; n < ((quarters % 4) + 4) % 4; n++) result = compose(WHOLE_TURNS[axis], result)
+  return result
 }
 
 /** Where a direction on the cube points from the user's side. */

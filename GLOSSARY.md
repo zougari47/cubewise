@@ -54,8 +54,8 @@ _Avoid_: Answer, result
 A solution aimed at the fewest moves (about 20), with no stages a human could follow.
 _Avoid_: Optimal solution, fast solve, computer solution
 
-**Beginner solution**:
-A solution that follows the beginner method, grouped by stage and described in the user's own colour scheme.
+**Method solution**:
+A solution that follows one method, grouped by stage and described in the user's own colour scheme. The **beginner solution** is the one that follows the beginner method.
 _Avoid_: Teach-me solution, guided solve, long solution
 
 **Method**:
@@ -79,13 +79,29 @@ One situation within a stage that calls for a particular sequence, such as "whit
 _Avoid_: Scenario, pattern, variant
 
 **Whole-cube turn**:
-Turning the entire cube in the hands to look at another side, written `y`; no piece changes place, so it is not a move.
+Turning the entire cube in the hands to look at another side, written `x`, `y` or `z` (the way R, U or F turns); no piece changes place, so it is not a move.
 _Avoid_: Rotation, cube rotation, reorientation
 
+**Wide turn**:
+A face turned together with the middle layer behind it, written with a small letter (`r`, `u`).
+_Avoid_: Double-layer turn, fat turn
+
+**Slice turn**:
+A middle layer turned alone, written `M`, `E` or `S` (the way L, D or F turns).
+_Avoid_: Middle turn, inner turn
+
+**Turn**:
+Anything written in notation: a move, a wide turn, a slice turn or a whole-cube turn. In code, method solvers work in turns; a move stays one face only.
+_Avoid_: Using "move" for wide, slice or whole-cube turns
+
 **Step**:
-One thing the user does while following a solution: a move or a whole-cube turn.
+One thing the user does while following a solution: one turn.
 _Avoid_: Action, instruction
 
+**View**:
+The cube as the user sees it at one moment of a solution, after any whole-cube, wide or slice turns: a piece counts as home when it matches the centres as they are now held.
+_Avoid_: Frame, perspective
+
 **Lesson**:
-A page that teaches one stage of a method, with cube pictures alongside the explanation.
+A page that teaches one stage of a method, with cube pictures alongside the explanation. Its address is `/learn/<method>/<stage>`.
 _Avoid_: Tutorial, guide, chapter

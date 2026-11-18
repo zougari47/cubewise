@@ -1,0 +1,49 @@
+import { Link } from '@tanstack/react-router'
+import { ArrowRight } from 'lucide-react'
+import { Badge } from '#/components/ui/badge'
+import { METHOD_IDS, stagesOf } from '#/core/methods/index.ts'
+import { m } from '#/i18n'
+import { useLessonProgress } from './progress.ts'
+
+/** The first page of the lessons: every method, to choose one to learn. */
+export function MethodListPage() {
+  const { completed } = useLessonProgress()
+
+  return (
+    <div className="mx-auto max-w-5xl px-4 py-10">
+      <h1 className="text-3xl font-semibold tracking-tight">{m.learn.heading}</h1>
+      <p className="mt-3 max-w-prose text-lg text-muted-foreground">{m.learn.lead}</p>
+
+      <h2 className="mt-10 text-xl font-semibold tracking-tight">{m.learn.methodsHeading}</h2>
+      <ul className="mt-4 grid gap-4 sm:grid-cols-2">
+        {METHOD_IDS.map((method) => {
+          const text = m.methods[method]
+          const total = stagesOf(method).length
+          const done = completed[method].length
+          return (
+            <li key={method}>
+              <Link
+                to="/learn/$method"
+                params={{ method }}
+                className="group flex h-full flex-col rounded-xl border bg-card p-5 transition-colors hover:border-primary/50 hover:bg-accent"
+              >
+                <div className="flex flex-wrap items-center justify-between gap-2">
+                  <h3 className="flex items-center gap-2 text-lg font-semibold">
+                    {text.name}
+                    <ArrowRight className="size-4 text-muted-foreground transition-transform group-hover:translate-x-0.5" />
+                  </h3>
+                  <Badge variant="secondary">{text.level}</Badge>
+                </div>
+                <p className="mt-2 flex-1 text-muted-foreground">{text.summary}</p>
+                <p className="mt-4 text-sm font-medium text-muted-foreground">
+                  {m.learn.stageCount(total)}
+                  {done > 0 && ` · ${m.learn.progress(done, total)}`}
+                </p>
+              </Link>
+            </li>
+          )
+        })}
+      </ul>
+    </div>
+  )
+}

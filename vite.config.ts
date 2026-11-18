@@ -17,7 +17,14 @@ const config = defineConfig({
     nitro({ rollupConfig: { external: [/^@sentry\//] } }),
     tailwindcss(),
     // Every page is written out as static HTML at build time, for search engines.
-    tanstackStart({ prerender: { enabled: true, crawlLinks: true } }),
+    tanstackStart({
+      prerender: {
+        enabled: true,
+        crawlLinks: true,
+        // A link with a query, such as /solver?method=cfop, is the same page again.
+        filter: ({ path }) => !path.includes("?"),
+      },
+    }),
     viteReact(),
   ],
 });

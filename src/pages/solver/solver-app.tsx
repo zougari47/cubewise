@@ -6,7 +6,18 @@ import { CubePicture } from '#/components/cube-picture.tsx'
 import { Alert, AlertDescription, AlertTitle } from '#/components/ui/alert'
 import { Button } from '#/components/ui/button'
 import { Card, CardContent } from '#/components/ui/card'
+import {
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectLabel,
+  SelectSeparator,
+  SelectTrigger,
+  SelectValue,
+} from '#/components/ui/select'
 import type { CubieCube } from '#/core/cube/cubie.ts'
+import { METHOD_IDS } from '#/core/methods/index.ts'
 import { frontFace, frontStickers } from '#/core/cube/orientation.ts'
 import type { TurnDirection } from '#/core/cube/orientation.ts'
 import { cubeAfterSteps } from '#/core/cube/steps.ts'
@@ -61,13 +72,18 @@ function problemText(problem: EntryProblem | 'failed', counts: Record<ColourKey,
   }
 }
 
-export function SolverApp() {
+export function SolverApp({ initialMethod }: { initialMethod?: SolveMethod }) {
   const [entry, dispatch] = useReducer(entryReducer, undefined, initialEntry)
   const [activeColour, setActiveColour] = useState<ColourKey>('W')
   const [problem, setProblem] = useState<EntryProblem | 'failed' | null>(null)
   const [solving, setSolving] = useState(false)
   const [method, setMethod] = useState<SolveMethod>('short')
   const [solution, setSolution] = useState<Solution | null>(null)
+
+  // Set after the first render, which must match the prerendered page.
+  useEffect(() => {
+    if (initialMethod) setMethod(initialMethod)
+  }, [initialMethod])
   const [loaded, setLoaded] = useState(false)
   const [scanning, setScanning] = useState(false)
   /** The stickers a scan filled in, while they are still untouched. */
@@ -397,21 +413,29 @@ export function SolverApp() {
             </div>
 
             <section className="space-y-2">
-              <h2 className="text-sm font-semibold">{m.solver.method.label}</h2>
-              <div className="grid grid-cols-2 gap-2">
-                {(['short', 'beginner'] as const).map((choice) => (
-                  <Button
-                    key={choice}
-                    variant={choice === method ? 'secondary' : 'outline'}
-                    aria-pressed={choice === method}
-                    onClick={() => setMethod(choice)}
-                    className={cn(choice === method && 'border-foreground')}
-                  >
-                    {m.solver.method[choice]}
-                  </Button>
-                ))}
-              </div>
-              <p className="text-sm text-muted-foreground">{m.solver.method.hints[method]}</p>
+              <h2 id="solve-method" className="text-sm font-semibold">
+                {m.solver.method.label}
+              </h2>
+              <Select value={method} onValueChange={(value) => setMethod(value as SolveMethod)}>
+                <SelectTrigger aria-labelledby="solve-method" className="w-full">
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="short">{m.solver.method.short}</SelectItem>
+                  <SelectSeparator />
+                  <SelectGroup>
+                    <SelectLabel>{m.solver.method.methodsGroup}</SelectLabel>
+                    {METHOD_IDS.map((id) => (
+                      <SelectItem key={id} value={id}>
+                        {m.methods[id].name}
+                      </SelectItem>
+                    ))}
+                  </SelectGroup>
+                </SelectContent>
+              </Select>
+              <p className="text-sm text-muted-foreground">
+                {method === 'short' ? m.solver.method.shortHint : m.methods[method].solverHint}
+              </p>
             </section>
 
             {problem && (
