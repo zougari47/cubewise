@@ -12,7 +12,7 @@ import type { CubieCube } from './cubie.ts'
 export const STICKER_COUNT = 54
 
 /** Sticker indexes of each corner position, starting with its U or D sticker. */
-const CORNER_STICKERS = [
+export const CORNER_STICKERS = [
   [8, 9, 20],
   [6, 18, 38],
   [0, 36, 47],
@@ -24,7 +24,7 @@ const CORNER_STICKERS = [
 ]
 
 /** Sticker indexes of each edge position. */
-const EDGE_STICKERS = [
+export const EDGE_STICKERS = [
   [5, 10],
   [7, 19],
   [3, 37],

@@ -1,5 +1,5 @@
 import { ClientOnly } from '@tanstack/react-router'
-import { ArrowDown, ArrowLeft, ArrowRight, ArrowUp, Eraser, Redo2, RotateCcw, Undo2 } from 'lucide-react'
+import { ArrowDown, ArrowLeft, ArrowRight, ArrowUp, Camera, Eraser, Redo2, RotateCcw, Undo2 } from 'lucide-react'
 import { Suspense, lazy, useCallback, useEffect, useMemo, useReducer, useRef, useState } from 'react'
 import { CubeNet } from '#/components/cube-net.tsx'
 import { CubePicture } from '#/components/cube-picture.tsx'
@@ -23,13 +23,14 @@ import {
   isColourKey,
   isSavedStickers,
 } from './entry.ts'
-import type { ColourKey, EntryProblem } from './entry.ts'
+import type { ColourKey, EntryProblem, Paint } from './entry.ts'
 import { usePlayback } from './playback.ts'
 import { KeyHints, SolutionPanel } from './solution-panel.tsx'
 import { solveCube, warmUpSolver } from './solver-client.ts'
 import type { SolveMethod, SolvedSteps } from './solver.worker.ts'
 
 const CubeView = lazy(() => import('#/components/cube-view.tsx'))
+const ScanPanel = lazy(() => import('./scan/scan-panel.tsx'))
 
 const STORAGE_KEY = 'cubewise.entry.v1'
 const CURSOR_FRAME = '#0ea5e9'
@@ -68,6 +69,11 @@ export function SolverApp() {
   const [method, setMethod] = useState<SolveMethod>('short')
   const [solution, setSolution] = useState<Solution | null>(null)
   const [loaded, setLoaded] = useState(false)
+  const [scanning, setScanning] = useState(false)
+  /** The stickers a scan filled in, while they are still untouched. */
+  const [scanned, setScanned] = useState<Paint[] | null>(null)
+  /** Details of the last scan, for reporting one that went wrong. */
+  const [scanReport, setScanReport] = useState<{ text: string; copied: boolean } | null>(null)
   const playback = usePlayback(solution?.solved.steps ?? null)
 
   const front = frontStickers(entry.orientation)
@@ -127,6 +133,21 @@ export function SolverApp() {
 
   const editCube = useCallback(() => setSolution(null), [])
 
+  const finishScan = useCallback((stickers: Paint[], report: string) => {
+    dispatch({ type: 'fill', stickers })
+    setScanned(stickers)
+    setScanReport({ text: report, copied: false })
+    setScanning(false)
+  }, [])
+  const cancelScan = useCallback(() => setScanning(false), [])
+  const copyScanReport = () => {
+    if (!scanReport) return
+    navigator.clipboard
+      ?.writeText(scanReport.text)
+      .then(() => setScanReport({ ...scanReport, copied: true }))
+      .catch(() => {})
+  }
+
   // --- Keyboard
 
   const onKey = useRef<(event: KeyboardEvent) => void>(() => {})
@@ -135,6 +156,11 @@ export function SolverApp() {
     if (target?.closest('input, textarea, select, [contenteditable="true"]')) return
     const key = event.key
     const command = event.ctrlKey || event.metaKey
+
+    if (scanning) {
+      if (key === 'Escape') cancelScan()
+      return
+    }
 
     if (solution) {
       if (command || event.altKey) return
@@ -224,6 +250,16 @@ export function SolverApp() {
     </Button>
   )
 
+  if (scanning) {
+    return (
+      <div className="grid gap-6 lg:grid-cols-[minmax(0,1fr)_26rem]">
+        <Suspense fallback={<p className="text-sm text-muted-foreground">{m.solver.scan.starting}</p>}>
+          <ScanPanel onDone={finishScan} onCancel={cancelScan} />
+        </Suspense>
+      </div>
+    )
+  }
+
   return (
     <div className="grid gap-6 lg:grid-cols-[minmax(0,1fr)_26rem]">
       <div className="relative mx-auto aspect-square w-full max-w-xl overflow-hidden rounded-2xl border bg-muted/40">
@@ -265,6 +301,21 @@ export function SolverApp() {
       ) : (
         <Card>
           <CardContent className="space-y-5">
+            <Button variant="outline" size="lg" onClick={() => setScanning(true)} className="w-full">
+              <Camera />
+              {m.solver.scan.open}
+            </Button>
+            {scanned === entry.stickers && (
+              <Alert aria-live="polite">
+                <AlertDescription>{m.solver.scan.done}</AlertDescription>
+              </Alert>
+            )}
+            {scanReport && (
+              <Button variant="ghost" size="sm" onClick={copyScanReport} className="text-muted-foreground">
+                {scanReport.copied ? m.solver.scan.reportCopied : m.solver.scan.copyReport}
+              </Button>
+            )}
+
             <section className="space-y-2">
               <h2 className="text-sm font-semibold">{m.solver.entry.colours}</h2>
               <div className="grid grid-cols-6 gap-2">

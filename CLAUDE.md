@@ -10,10 +10,11 @@ Core logic is pure TypeScript: no React, no browser APIs, tested in Node.
 
 - `src/cube/`: the cube model, moves, stickers, orientation, and the short-solution solver (`solver.ts`, our own Kociemba two-phase).
 - `src/beginner/`: the beginner-method solver, its stages and the sequence table shared with the lessons.
+- `src/scan/`: camera-scan logic on plain pixel data: finding a face anywhere in a picture, reading its stickers, working out every colour from all six faces together, the order faces are shown.
 
 Page code sits under `src/pages/`, one folder per page; core never imports from it.
 
-- `src/pages/solver/`: colour entry (`entry.ts`), playback, the solution panel, and the Web Worker that runs both solvers.
+- `src/pages/solver/`: colour entry (`entry.ts`), playback, the solution panel, and the Web Worker that runs both solvers; `scan/` is the camera panel, loaded on demand.
 - `src/pages/learn/`: lesson cases, pictures and progress.
 
 Shared pieces:

@@ -55,6 +55,8 @@ export type EntryAction =
   | { type: 'reset' }
   /** Replace the stickers with a saved set. */
   | { type: 'load'; stickers: Paint[] }
+  /** Paint the whole cube at once (a camera scan); it can be undone. */
+  | { type: 'fill'; stickers: Paint[] }
 
 const HISTORY_LIMIT = 200
 
@@ -163,6 +165,10 @@ export function entryReducer(state: EntryState, action: EntryAction): EntryState
     case 'load':
       if (!isSavedStickers(action.stickers)) return state
       return withOrientation({ ...state, stickers: action.stickers, past: [], future: [] }, state.orientation)
+
+    case 'fill':
+      if (!isSavedStickers(action.stickers)) return state
+      return withOrientation(withStickers(state, action.stickers), DEFAULT_ORIENTATION)
   }
 }
 

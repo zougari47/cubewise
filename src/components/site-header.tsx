@@ -40,6 +40,12 @@ export function SiteFooter() {
     <footer className="border-t">
       <div className="mx-auto flex max-w-6xl flex-col items-center justify-between gap-2 px-4 py-6 text-sm text-muted-foreground sm:flex-row">
         <span>{m.site.footer}</span>
+        <span>
+          {m.site.builtBy}{' '}
+          <a href="https://ahmedz.dev/" className="underline underline-offset-4 hover:text-foreground">
+            {m.site.author}
+          </a>
+        </span>
         <nav className="flex gap-4">
           <Link to="/solver" className="hover:text-foreground">
             {m.site.nav.solver}

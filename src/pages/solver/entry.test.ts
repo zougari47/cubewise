@@ -160,6 +160,25 @@ describe('saved stickers', () => {
   })
 })
 
+describe('filling the whole cube', () => {
+  test('paints every sticker, shows the front again, and can be undone', () => {
+    const before = run([
+      { type: 'paint', colour: 'R' },
+      { type: 'turn', direction: 'right' },
+    ])
+    const stickers = stickersOf("R U R' U'")
+    const filled = run([{ type: 'fill', stickers }], before)
+    expect(filled.stickers).toEqual(stickers)
+    expect(frontFace(filled.orientation)).toBe(2)
+    expect(run([{ type: 'undo' }], filled).stickers).toEqual(before.stickers)
+  })
+
+  test('rejects a damaged set', () => {
+    const state = initialEntry()
+    expect(run([{ type: 'fill', stickers: ['W'] }], state)).toBe(state)
+  })
+})
+
 describe('colourCounts', () => {
   test('counts painted stickers per colour', () => {
     expect(colourCounts(initialEntry().stickers)).toEqual({ W: 1, Y: 1, R: 1, O: 1, B: 1, G: 1 })
