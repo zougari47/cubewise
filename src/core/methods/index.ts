@@ -8,6 +8,7 @@ import { KEYHOLE_STAGES } from './keyhole/stages.ts'
 import { CFOP_STAGES } from './cfop/stages.ts'
 import { ROUX_STAGES } from './roux/stages.ts'
 import { ZZ_STAGES } from './zz/stages.ts'
+import { PETRUS_STAGES } from './petrus/stages.ts'
 
 /** Every method, in the order they are offered. */
 export const METHOD_STAGES = {
@@ -16,6 +17,7 @@ export const METHOD_STAGES = {
   cfop: CFOP_STAGES,
   roux: ROUX_STAGES,
   zz: ZZ_STAGES,
+  petrus: PETRUS_STAGES,
 } as const satisfies Record<string, readonly string[]>
 
 export type MethodId = keyof typeof METHOD_STAGES

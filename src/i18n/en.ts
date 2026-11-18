@@ -9,6 +9,7 @@ import { keyholeText } from './en/keyhole.ts'
 import { cfopText } from './en/cfop.ts'
 import { rouxText } from './en/roux.ts'
 import { zzText } from './en/zz.ts'
+import { petrusText } from './en/petrus.ts'
 import type { MethodText } from './method-text.ts'
 
 const colourNames: Record<ColourKey, string> = {
@@ -29,6 +30,7 @@ const methods: Record<MethodId, MethodText> = {
   cfop: cfopText,
   roux: rouxText,
   zz: zzText,
+  petrus: petrusText,
 }
 
 const plural = (count: number, one: string, many: string) => (count === 1 ? one : many)

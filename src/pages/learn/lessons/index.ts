@@ -6,6 +6,7 @@ import { KEYHOLE_LESSONS } from './keyhole.ts'
 import { CFOP_LESSONS } from './cfop.ts'
 import { ROUX_LESSONS } from './roux.ts'
 import { ZZ_LESSONS } from './zz.ts'
+import { PETRUS_LESSONS } from './petrus.ts'
 
 export const LESSONS: Record<MethodId, Record<string, LessonCase[]>> = {
   beginner: BEGINNER_LESSONS,
@@ -13,4 +14,5 @@ export const LESSONS: Record<MethodId, Record<string, LessonCase[]>> = {
   cfop: CFOP_LESSONS,
   roux: ROUX_LESSONS,
   zz: ZZ_LESSONS,
+  petrus: PETRUS_LESSONS,
 }
