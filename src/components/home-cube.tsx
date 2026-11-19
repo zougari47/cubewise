@@ -1,25 +1,24 @@
 import { Suspense, lazy, useEffect, useState } from 'react'
 import { CubePicture } from '#/components/cube-picture.tsx'
-import { applyMoves, parseMoves, solvedCube } from '#/core/cube/cubie.ts'
+import { solvedCube } from '#/core/cube/cubie.ts'
 import { stickersFromCube } from '#/core/cube/stickers.ts'
-import { m } from '#/i18n'
+import { useM } from '#/i18n'
 import { COLOUR_HEX } from '#/pages/solver/colours.ts'
 import { STANDARD_SCHEME } from '#/pages/solver/entry.ts'
 
 const CubeView = lazy(() => import('#/components/cube-view.tsx'))
 
-const SCRAMBLE = "R U2 F' D L2 B' R' U F2 D' L U2"
-const COLOURS = stickersFromCube(applyMoves(solvedCube(), parseMoves(SCRAMBLE))).map(
-  (face) => COLOUR_HEX[STANDARD_SCHEME[face]],
-)
+/** A solved cube in the standard colour scheme: every face a single colour. */
+const COLOURS = stickersFromCube(solvedCube()).map((face) => COLOUR_HEX[STANDARD_SCHEME[face]])
 
 /**
- * The cube on the home page. It starts as a still picture so the page loads
+ * The cube on the home page, shown solved. It starts as a still picture so the page loads
  * instantly. With a mouse it becomes 3D by itself once the browser is idle;
  * on a touch screen it stays a picture until tapped, to save mobile data.
  * Once 3D, it spins slowly and can be dragged round.
  */
 export function HomeCube() {
+  const m = useM()
   const [live, setLive] = useState(false)
 
   useEffect(() => {
