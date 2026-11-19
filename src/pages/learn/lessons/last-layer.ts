@@ -1,7 +1,7 @@
 /**
  * Lesson cases for the last-layer finish that several methods share: one case
  * per sequence in `core/methods/shared/last-layer.ts`, with the same ids.
- * Their text is in `i18n/en/last-layer.ts`.
+ * Their text is in `i18n/<language>/last-layer.ts`.
  */
 import { CORNER_ORIENTATIONS, PERMUTATIONS } from '../../../core/methods/shared/last-layer.ts'
 import { BOTTOM, MIDDLE, TOP, solvedBy } from '../lessons.ts'

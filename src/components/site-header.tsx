@@ -3,8 +3,10 @@ import { Link } from '@tanstack/react-router'
 import { Menu, X } from 'lucide-react'
 import { Button } from '#/components/ui/button'
 import { Popover, PopoverAnchor, PopoverContent, PopoverTrigger } from '#/components/ui/popover'
+import { LanguageMenu } from '#/components/language-menu.tsx'
 import { ThemeToggle } from '#/components/theme-toggle.tsx'
-import { m } from '#/i18n'
+import { useLocale, useM } from '#/i18n'
+import { localeParam } from '#/i18n/locales.ts'
 
 function Logo() {
   const colours = ['#dc2626', '#facc15', '#2563eb', '#16a34a', '#ffffff', '#f97316', '#2563eb', '#dc2626', '#16a34a']
@@ -18,6 +20,9 @@ function Logo() {
 }
 
 export function SiteHeader() {
+  const m = useM()
+  // Given to every link here, because a page that was not found has no language of its own to pass on.
+  const params = { locale: localeParam(useLocale()) }
   const [menuOpen, setMenuOpen] = useState(false)
   const closeMenu = () => setMenuOpen(false)
   const linkClass =
@@ -32,7 +37,8 @@ export function SiteHeader() {
         <header className="sticky top-0 z-40 border-b bg-background/85 backdrop-blur">
           <div className="mx-auto flex h-14 max-w-6xl items-center justify-between px-4">
             <Link
-              to="/"
+              to="/{-$locale}"
+              params={params}
               onClick={closeMenu}
               className="flex items-center gap-2 text-base font-semibold tracking-tight"
             >
@@ -40,13 +46,14 @@ export function SiteHeader() {
               {m.site.name}
             </Link>
             <nav className="hidden items-center gap-1 sm:flex">
-              <Link to="/solver" className={linkClass}>
+              <Link to="/{-$locale}/solver" params={params} className={linkClass}>
                 {m.site.nav.solver}
               </Link>
-              <Link to="/learn" className={linkClass}>
+              <Link to="/{-$locale}/learn" params={params} className={linkClass}>
                 {m.site.nav.learn}
               </Link>
-              <ThemeToggle className="ml-2" />
+              <LanguageMenu className="ms-1" />
+              <ThemeToggle className="ms-1" />
             </nav>
             <PopoverTrigger asChild>
               <Button
@@ -68,14 +75,18 @@ export function SiteHeader() {
         className="w-screen gap-1 rounded-none border-b bg-background/85 px-4 py-3 shadow-none ring-0 backdrop-blur data-open:zoom-in-100 data-closed:zoom-out-100 sm:hidden"
       >
         <nav className="flex flex-col gap-1">
-          <Link to="/solver" className={menuLinkClass} onClick={closeMenu}>
+          <Link to="/{-$locale}/solver" params={params} className={menuLinkClass} onClick={closeMenu}>
             {m.site.nav.solver}
           </Link>
-          <Link to="/learn" className={menuLinkClass} onClick={closeMenu}>
+          <Link to="/{-$locale}/learn" params={params} className={menuLinkClass} onClick={closeMenu}>
             {m.site.nav.learn}
           </Link>
         </nav>
         <div className="mt-2 flex items-center justify-between border-t px-3 pt-3">
+          <span className="text-sm font-medium text-muted-foreground">{m.site.language}</span>
+          <LanguageMenu />
+        </div>
+        <div className="flex items-center justify-between px-3 pt-2">
           <span className="text-sm font-medium text-muted-foreground">{m.site.theme.label}</span>
           <ThemeToggle />
         </div>
@@ -85,6 +96,8 @@ export function SiteHeader() {
 }
 
 export function SiteFooter() {
+  const m = useM()
+  const params = { locale: localeParam(useLocale()) }
   return (
     <footer className="border-t">
       <div className="mx-auto flex max-w-6xl flex-col items-center justify-between gap-2 px-4 py-6 text-sm text-muted-foreground sm:flex-row">
@@ -96,10 +109,10 @@ export function SiteFooter() {
           </a>
         </span>
         <nav className="flex gap-4">
-          <Link to="/solver" className="hover:text-foreground">
+          <Link to="/{-$locale}/solver" params={params} className="hover:text-foreground">
             {m.site.nav.solver}
           </Link>
-          <Link to="/learn" className="hover:text-foreground">
+          <Link to="/{-$locale}/learn" params={params} className="hover:text-foreground">
             {m.site.nav.learn}
           </Link>
         </nav>

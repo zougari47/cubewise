@@ -10,7 +10,7 @@ import { useCallback, useEffect, useRef, useState } from 'react'
 import { Alert, AlertDescription } from '#/components/ui/alert'
 import { Button } from '#/components/ui/button'
 import { Card, CardContent } from '#/components/ui/card'
-import { m } from '#/i18n'
+import { useM } from '#/i18n'
 import { cn } from '#/lib/utils'
 import { guessCube, nameCentres } from '#/core/scan/classify.ts'
 import { rgbToHex } from '#/core/scan/colour.ts'
@@ -142,6 +142,7 @@ export default function ScanPanel({
   onDone: (stickers: Paint[], report: string) => void
   onCancel: () => void
 }) {
+  const m = useM()
   const text = m.solver.scan
   const video = useRef<HTMLVideoElement>(null)
   const { status, errorName, retry: restartCamera, holdWhiteBalance, settings } = useCamera(video)
@@ -339,6 +340,7 @@ export default function ScanPanel({
   return (
     <>
       <div
+        dir="ltr"
         className={cn(
           'relative mx-auto aspect-square w-full max-w-xl overflow-hidden rounded-2xl border bg-black',
           review && 'hidden',
@@ -392,7 +394,7 @@ export default function ScanPanel({
       </div>
 
       {review && (
-        <div className="mx-auto grid w-full max-w-xl gap-3 sm:grid-cols-2">
+        <div dir="ltr" className="mx-auto grid w-full max-w-xl gap-3 sm:grid-cols-2">
           {review.labels.map((labels, face) => (
             <div key={face} className="flex items-center gap-2 rounded-xl border bg-neutral-900 p-2">
               {/* What the camera saw, so the cube need not be picked up again to check it. */}

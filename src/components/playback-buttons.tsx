@@ -1,13 +1,14 @@
 import { Pause, Play, SkipBack, StepBack, StepForward } from 'lucide-react'
 import { Button } from '#/components/ui/button'
-import { m } from '#/i18n'
+import { useM } from '#/i18n'
 import type { Playback } from '#/pages/solver/playback.ts'
 
 /** Restart, step back, play/pause and step forward for a playback. */
 export function PlaybackButtons({ playback }: { playback: Playback }) {
-  const text = m.solver.playback
+  const text = useM().solver.playback
   return (
-    <div className="flex items-center gap-2">
+    // Back is on the left and forward on the right in every language, as on any player.
+    <div dir="ltr" className="flex items-center gap-2">
       <Button
         variant="outline"
         size="icon"

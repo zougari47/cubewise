@@ -22,7 +22,11 @@ import { frontFace, frontStickers } from '#/core/cube/orientation.ts'
 import type { TurnDirection } from '#/core/cube/orientation.ts'
 import { cubeAfterSteps } from '#/core/cube/steps.ts'
 import { stickersFromCube } from '#/core/cube/stickers.ts'
-import { m } from '#/i18n'
+import { useM } from '#/i18n'
+import type { Messages } from '#/i18n'
+import { issueReportBody } from '#/i18n/issue-report.ts'
+import { copyText } from '#/lib/clipboard.ts'
+import { newIssueUrl } from '#/lib/repo.ts'
 import { cn } from '#/lib/utils'
 import { COLOUR_HEX, hexOf } from './colours.ts'
 import {
@@ -33,9 +37,11 @@ import {
   initialEntry,
   isColourKey,
   isSavedStickers,
+  stickersText,
 } from './entry.ts'
 import type { ColourKey, EntryProblem, Paint } from './entry.ts'
 import { usePlayback, usePlaybackPause } from './playback.ts'
+import { ReportIssue } from './report-issue.tsx'
 import { KeyHints, SolutionPanel } from './solution-panel.tsx'
 import { solveCube, warmUpSolver } from './solver-client.ts'
 import type { SolveMethod, SolvedSteps } from './solver.worker.ts'
@@ -54,8 +60,11 @@ interface Solution {
   solved: SolvedSteps
 }
 
-function problemText(problem: EntryProblem | 'failed', counts: Record<ColourKey, number>): string {
-  const text = m.solver.problems
+function problemText(
+  text: Messages['solver']['problems'],
+  problem: EntryProblem | 'failed',
+  counts: Record<ColourKey, number>,
+): string {
   if (problem === 'failed') return text.failed
   switch (problem.code) {
     case 'unpainted':
@@ -73,6 +82,7 @@ function problemText(problem: EntryProblem | 'failed', counts: Record<ColourKey,
 }
 
 export function SolverApp({ initialMethod }: { initialMethod?: SolveMethod }) {
+  const m = useM()
   const [entry, dispatch] = useReducer(entryReducer, undefined, initialEntry)
   const [activeColour, setActiveColour] = useState<ColourKey>('W')
   const [problem, setProblem] = useState<EntryProblem | 'failed' | null>(null)
@@ -159,10 +169,9 @@ export function SolverApp({ initialMethod }: { initialMethod?: SolveMethod }) {
   const cancelScan = useCallback(() => setScanning(false), [])
   const copyScanReport = () => {
     if (!scanReport) return
-    navigator.clipboard
-      ?.writeText(scanReport.text)
-      .then(() => setScanReport({ ...scanReport, copied: true }))
-      .catch(() => {})
+    void copyText(scanReport.text).then((copied) => {
+      if (copied) setScanReport({ ...scanReport, copied: true })
+    })
   }
 
   // --- Keyboard
@@ -251,6 +260,21 @@ export function SolverApp({ initialMethod }: { initialMethod?: SolveMethod }) {
     return map
   }, [solution, cursorSticker, flagged])
 
+  // A report starts with what the page knows: the colours, the method, and
+  // the problem on screen, if there is one. It is in English whatever the
+  // page's language, for the maintainers who read it.
+  const reportHref = useMemo(
+    () =>
+      newIssueUrl({
+        body: issueReportBody({
+          stickers: stickersText(entry.stickers),
+          method,
+          problem: problem ? (problem === 'failed' ? problem : problem.code) : undefined,
+        }),
+      }),
+    [entry.stickers, method, problem],
+  )
+
   const picture = (
     <CubePicture colours={colours} label={m.solver.loading3d} className="size-full p-[8%]" />
   )
@@ -279,7 +303,11 @@ export function SolverApp({ initialMethod }: { initialMethod?: SolveMethod }) {
 
   return (
     <div className="grid gap-6 lg:grid-cols-[minmax(0,1fr)_26rem]">
-      <div className="relative mx-auto aspect-square w-full max-w-xl overflow-hidden rounded-2xl border bg-muted/40">
+      {/* The cube and the arrows round it are a picture of the real cube: left stays left. */}
+      <div
+        dir="ltr"
+        className="relative mx-auto aspect-square w-full max-w-xl overflow-hidden rounded-2xl border bg-muted/40"
+      >
         <ClientOnly fallback={picture}>
           <Suspense fallback={picture}>
             <CubeView
@@ -316,6 +344,7 @@ export function SolverApp({ initialMethod }: { initialMethod?: SolveMethod }) {
           pauseMs={pauseMs}
           onPauseChange={setPauseMs}
           onEdit={editCube}
+          reportHref={reportHref}
         />
       ) : (
         <Card>
@@ -441,13 +470,14 @@ export function SolverApp({ initialMethod }: { initialMethod?: SolveMethod }) {
             {problem && (
               <Alert variant="destructive" aria-live="assertive">
                 <AlertTitle>{m.solver.problems.title}</AlertTitle>
-                <AlertDescription>{problemText(problem, counts)}</AlertDescription>
+                <AlertDescription>{problemText(m.solver.problems, problem, counts)}</AlertDescription>
               </Alert>
             )}
 
             <Button size="lg" onClick={solve} disabled={solving} className="w-full">
               {solving ? m.solver.entry.solving : m.solver.entry.solve}
             </Button>
+            <ReportIssue href={reportHref} />
           </CardContent>
         </Card>
       )}

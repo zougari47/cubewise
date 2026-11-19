@@ -1,5 +1,5 @@
 import { cn } from '#/lib/utils'
-import { m } from '#/i18n'
+import { useM } from '#/i18n'
 import { hexOf } from '#/pages/solver/colours.ts'
 import type { Paint } from '#/pages/solver/entry.ts'
 
@@ -35,8 +35,10 @@ export function CubeNet({
   onStickerClick: (sticker: number) => void
   className?: string
 }) {
+  const m = useM()
   return (
-    <div className={cn('grid grid-cols-4 gap-1.5', className)}>
+    // The net is a drawing of the cube: left stays left in a right-to-left language.
+    <div dir="ltr" className={cn('grid grid-cols-4 gap-1.5', className)}>
       {FACE_CELLS.map(([column, row], face) => (
         <div
           key={face}

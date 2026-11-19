@@ -9,159 +9,200 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
-import { Route as IndexRouteImport } from './routes/index'
-import { Route as SolverRouteImport } from './routes/solver'
-import { Route as LearnIndexRouteImport } from './routes/learn/index'
-import { Route as LearnBeforeYouStartRouteImport } from './routes/learn/before-you-start'
-import { Route as LearnMethodIndexRouteImport } from './routes/learn/$method/index'
-import { Route as LearnMethodStageRouteImport } from './routes/learn/$method/$stage'
+import { Route as Char123LocaleChar125RouteRouteImport } from './routes/{-$locale}/route'
+import { Route as Char123LocaleChar125IndexRouteImport } from './routes/{-$locale}/index'
+import { Route as Char123LocaleChar125SolverRouteImport } from './routes/{-$locale}/solver'
+import { Route as Char123LocaleChar125LearnIndexRouteImport } from './routes/{-$locale}/learn/index'
+import { Route as Char123LocaleChar125LearnBeforeYouStartRouteImport } from './routes/{-$locale}/learn/before-you-start'
+import { Route as Char123LocaleChar125LearnMethodIndexRouteImport } from './routes/{-$locale}/learn/$method/index'
+import { Route as Char123LocaleChar125LearnMethodStageRouteImport } from './routes/{-$locale}/learn/$method/$stage'
 
-const IndexRoute = IndexRouteImport.update({
-  id: '/',
-  path: '/',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const SolverRoute = SolverRouteImport.update({
-  id: '/solver',
-  path: '/solver',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const LearnIndexRoute = LearnIndexRouteImport.update({
-  id: '/learn/',
-  path: '/learn/',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const LearnBeforeYouStartRoute = LearnBeforeYouStartRouteImport.update({
-  id: '/learn/before-you-start',
-  path: '/learn/before-you-start',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const LearnMethodIndexRoute = LearnMethodIndexRouteImport.update({
-  id: '/learn/$method/',
-  path: '/learn/$method/',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const LearnMethodStageRoute = LearnMethodStageRouteImport.update({
-  id: '/learn/$method/$stage',
-  path: '/learn/$method/$stage',
-  getParentRoute: () => rootRouteImport,
-} as any)
+const Char123LocaleChar125RouteRoute =
+  Char123LocaleChar125RouteRouteImport.update({
+    id: '/{-$locale}',
+    path: '/{-$locale}',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const Char123LocaleChar125IndexRoute =
+  Char123LocaleChar125IndexRouteImport.update({
+    id: '/',
+    path: '/',
+    getParentRoute: () => Char123LocaleChar125RouteRoute,
+  } as any)
+const Char123LocaleChar125SolverRoute =
+  Char123LocaleChar125SolverRouteImport.update({
+    id: '/solver',
+    path: '/solver',
+    getParentRoute: () => Char123LocaleChar125RouteRoute,
+  } as any)
+const Char123LocaleChar125LearnIndexRoute =
+  Char123LocaleChar125LearnIndexRouteImport.update({
+    id: '/learn/',
+    path: '/learn/',
+    getParentRoute: () => Char123LocaleChar125RouteRoute,
+  } as any)
+const Char123LocaleChar125LearnBeforeYouStartRoute =
+  Char123LocaleChar125LearnBeforeYouStartRouteImport.update({
+    id: '/learn/before-you-start',
+    path: '/learn/before-you-start',
+    getParentRoute: () => Char123LocaleChar125RouteRoute,
+  } as any)
+const Char123LocaleChar125LearnMethodIndexRoute =
+  Char123LocaleChar125LearnMethodIndexRouteImport.update({
+    id: '/learn/$method/',
+    path: '/learn/$method/',
+    getParentRoute: () => Char123LocaleChar125RouteRoute,
+  } as any)
+const Char123LocaleChar125LearnMethodStageRoute =
+  Char123LocaleChar125LearnMethodStageRouteImport.update({
+    id: '/learn/$method/$stage',
+    path: '/learn/$method/$stage',
+    getParentRoute: () => Char123LocaleChar125RouteRoute,
+  } as any)
 
 export interface FileRoutesByFullPath {
-  '/': typeof IndexRoute
-  '/solver': typeof SolverRoute
-  '/learn/before-you-start': typeof LearnBeforeYouStartRoute
-  '/learn/': typeof LearnIndexRoute
-  '/learn/$method/$stage': typeof LearnMethodStageRoute
-  '/learn/$method/': typeof LearnMethodIndexRoute
+  '/{-$locale}': typeof Char123LocaleChar125RouteRouteWithChildren
+  '/{-$locale}/solver': typeof Char123LocaleChar125SolverRoute
+  '/{-$locale}/': typeof Char123LocaleChar125IndexRoute
+  '/{-$locale}/learn/before-you-start': typeof Char123LocaleChar125LearnBeforeYouStartRoute
+  '/{-$locale}/learn/': typeof Char123LocaleChar125LearnIndexRoute
+  '/{-$locale}/learn/$method/$stage': typeof Char123LocaleChar125LearnMethodStageRoute
+  '/{-$locale}/learn/$method/': typeof Char123LocaleChar125LearnMethodIndexRoute
 }
 export interface FileRoutesByTo {
-  '/': typeof IndexRoute
-  '/solver': typeof SolverRoute
-  '/learn/before-you-start': typeof LearnBeforeYouStartRoute
-  '/learn': typeof LearnIndexRoute
-  '/learn/$method/$stage': typeof LearnMethodStageRoute
-  '/learn/$method': typeof LearnMethodIndexRoute
+  '/{-$locale}/solver': typeof Char123LocaleChar125SolverRoute
+  '/{-$locale}': typeof Char123LocaleChar125IndexRoute
+  '/{-$locale}/learn/before-you-start': typeof Char123LocaleChar125LearnBeforeYouStartRoute
+  '/{-$locale}/learn': typeof Char123LocaleChar125LearnIndexRoute
+  '/{-$locale}/learn/$method/$stage': typeof Char123LocaleChar125LearnMethodStageRoute
+  '/{-$locale}/learn/$method': typeof Char123LocaleChar125LearnMethodIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
-  '/': typeof IndexRoute
-  '/solver': typeof SolverRoute
-  '/learn/before-you-start': typeof LearnBeforeYouStartRoute
-  '/learn/': typeof LearnIndexRoute
-  '/learn/$method/$stage': typeof LearnMethodStageRoute
-  '/learn/$method/': typeof LearnMethodIndexRoute
+  '/{-$locale}': typeof Char123LocaleChar125RouteRouteWithChildren
+  '/{-$locale}/solver': typeof Char123LocaleChar125SolverRoute
+  '/{-$locale}/': typeof Char123LocaleChar125IndexRoute
+  '/{-$locale}/learn/before-you-start': typeof Char123LocaleChar125LearnBeforeYouStartRoute
+  '/{-$locale}/learn/': typeof Char123LocaleChar125LearnIndexRoute
+  '/{-$locale}/learn/$method/$stage': typeof Char123LocaleChar125LearnMethodStageRoute
+  '/{-$locale}/learn/$method/': typeof Char123LocaleChar125LearnMethodIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
-    | '/'
-    | '/solver'
-    | '/learn/before-you-start'
-    | '/learn/'
-    | '/learn/$method/$stage'
-    | '/learn/$method/'
+    | '/{-$locale}'
+    | '/{-$locale}/solver'
+    | '/{-$locale}/'
+    | '/{-$locale}/learn/before-you-start'
+    | '/{-$locale}/learn/'
+    | '/{-$locale}/learn/$method/$stage'
+    | '/{-$locale}/learn/$method/'
   fileRoutesByTo: FileRoutesByTo
   to:
-    | '/'
-    | '/solver'
-    | '/learn/before-you-start'
-    | '/learn'
-    | '/learn/$method/$stage'
-    | '/learn/$method'
+    | '/{-$locale}/solver'
+    | '/{-$locale}'
+    | '/{-$locale}/learn/before-you-start'
+    | '/{-$locale}/learn'
+    | '/{-$locale}/learn/$method/$stage'
+    | '/{-$locale}/learn/$method'
   id:
     | '__root__'
-    | '/'
-    | '/solver'
-    | '/learn/before-you-start'
-    | '/learn/'
-    | '/learn/$method/$stage'
-    | '/learn/$method/'
+    | '/{-$locale}'
+    | '/{-$locale}/solver'
+    | '/{-$locale}/'
+    | '/{-$locale}/learn/before-you-start'
+    | '/{-$locale}/learn/'
+    | '/{-$locale}/learn/$method/$stage'
+    | '/{-$locale}/learn/$method/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
-  IndexRoute: typeof IndexRoute
-  SolverRoute: typeof SolverRoute
-  LearnBeforeYouStartRoute: typeof LearnBeforeYouStartRoute
-  LearnIndexRoute: typeof LearnIndexRoute
-  LearnMethodStageRoute: typeof LearnMethodStageRoute
-  LearnMethodIndexRoute: typeof LearnMethodIndexRoute
+  Char123LocaleChar125RouteRoute: typeof Char123LocaleChar125RouteRouteWithChildren
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
-    '/': {
-      id: '/'
+    '/{-$locale}': {
+      id: '/{-$locale}'
+      path: '/{-$locale}'
+      fullPath: '/{-$locale}'
+      preLoaderRoute: typeof Char123LocaleChar125RouteRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/{-$locale}/': {
+      id: '/{-$locale}/'
       path: '/'
-      fullPath: '/'
-      preLoaderRoute: typeof IndexRouteImport
-      parentRoute: typeof rootRouteImport
+      fullPath: '/{-$locale}/'
+      preLoaderRoute: typeof Char123LocaleChar125IndexRouteImport
+      parentRoute: typeof Char123LocaleChar125RouteRoute
     }
-    '/solver': {
-      id: '/solver'
+    '/{-$locale}/solver': {
+      id: '/{-$locale}/solver'
       path: '/solver'
-      fullPath: '/solver'
-      preLoaderRoute: typeof SolverRouteImport
-      parentRoute: typeof rootRouteImport
+      fullPath: '/{-$locale}/solver'
+      preLoaderRoute: typeof Char123LocaleChar125SolverRouteImport
+      parentRoute: typeof Char123LocaleChar125RouteRoute
     }
-    '/learn/': {
-      id: '/learn/'
+    '/{-$locale}/learn/': {
+      id: '/{-$locale}/learn/'
       path: '/learn'
-      fullPath: '/learn/'
-      preLoaderRoute: typeof LearnIndexRouteImport
-      parentRoute: typeof rootRouteImport
+      fullPath: '/{-$locale}/learn/'
+      preLoaderRoute: typeof Char123LocaleChar125LearnIndexRouteImport
+      parentRoute: typeof Char123LocaleChar125RouteRoute
     }
-    '/learn/before-you-start': {
-      id: '/learn/before-you-start'
+    '/{-$locale}/learn/before-you-start': {
+      id: '/{-$locale}/learn/before-you-start'
       path: '/learn/before-you-start'
-      fullPath: '/learn/before-you-start'
-      preLoaderRoute: typeof LearnBeforeYouStartRouteImport
-      parentRoute: typeof rootRouteImport
+      fullPath: '/{-$locale}/learn/before-you-start'
+      preLoaderRoute: typeof Char123LocaleChar125LearnBeforeYouStartRouteImport
+      parentRoute: typeof Char123LocaleChar125RouteRoute
     }
-    '/learn/$method/': {
-      id: '/learn/$method/'
+    '/{-$locale}/learn/$method/': {
+      id: '/{-$locale}/learn/$method/'
       path: '/learn/$method'
-      fullPath: '/learn/$method/'
-      preLoaderRoute: typeof LearnMethodIndexRouteImport
-      parentRoute: typeof rootRouteImport
+      fullPath: '/{-$locale}/learn/$method/'
+      preLoaderRoute: typeof Char123LocaleChar125LearnMethodIndexRouteImport
+      parentRoute: typeof Char123LocaleChar125RouteRoute
     }
-    '/learn/$method/$stage': {
-      id: '/learn/$method/$stage'
+    '/{-$locale}/learn/$method/$stage': {
+      id: '/{-$locale}/learn/$method/$stage'
       path: '/learn/$method/$stage'
-      fullPath: '/learn/$method/$stage'
-      preLoaderRoute: typeof LearnMethodStageRouteImport
-      parentRoute: typeof rootRouteImport
+      fullPath: '/{-$locale}/learn/$method/$stage'
+      preLoaderRoute: typeof Char123LocaleChar125LearnMethodStageRouteImport
+      parentRoute: typeof Char123LocaleChar125RouteRoute
     }
   }
 }
 
+interface Char123LocaleChar125RouteRouteChildren {
+  Char123LocaleChar125SolverRoute: typeof Char123LocaleChar125SolverRoute
+  Char123LocaleChar125IndexRoute: typeof Char123LocaleChar125IndexRoute
+  Char123LocaleChar125LearnBeforeYouStartRoute: typeof Char123LocaleChar125LearnBeforeYouStartRoute
+  Char123LocaleChar125LearnIndexRoute: typeof Char123LocaleChar125LearnIndexRoute
+  Char123LocaleChar125LearnMethodStageRoute: typeof Char123LocaleChar125LearnMethodStageRoute
+  Char123LocaleChar125LearnMethodIndexRoute: typeof Char123LocaleChar125LearnMethodIndexRoute
+}
+
+const Char123LocaleChar125RouteRouteChildren: Char123LocaleChar125RouteRouteChildren =
+  {
+    Char123LocaleChar125SolverRoute: Char123LocaleChar125SolverRoute,
+    Char123LocaleChar125IndexRoute: Char123LocaleChar125IndexRoute,
+    Char123LocaleChar125LearnBeforeYouStartRoute:
+      Char123LocaleChar125LearnBeforeYouStartRoute,
+    Char123LocaleChar125LearnIndexRoute: Char123LocaleChar125LearnIndexRoute,
+    Char123LocaleChar125LearnMethodStageRoute:
+      Char123LocaleChar125LearnMethodStageRoute,
+    Char123LocaleChar125LearnMethodIndexRoute:
+      Char123LocaleChar125LearnMethodIndexRoute,
+  }
+
+const Char123LocaleChar125RouteRouteWithChildren =
+  Char123LocaleChar125RouteRoute._addFileChildren(
+    Char123LocaleChar125RouteRouteChildren,
+  )
+
 const rootRouteChildren: RootRouteChildren = {
-  IndexRoute: IndexRoute,
-  SolverRoute: SolverRoute,
-  LearnBeforeYouStartRoute: LearnBeforeYouStartRoute,
-  LearnIndexRoute: LearnIndexRoute,
-  LearnMethodStageRoute: LearnMethodStageRoute,
-  LearnMethodIndexRoute: LearnMethodIndexRoute,
+  Char123LocaleChar125RouteRoute: Char123LocaleChar125RouteRouteWithChildren,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

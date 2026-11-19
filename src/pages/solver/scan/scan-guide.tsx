@@ -15,7 +15,7 @@ import {
   DialogTitle,
   DialogTrigger,
 } from '#/components/ui/dialog'
-import { m } from '#/i18n'
+import { useM } from '#/i18n'
 
 /** The recorded animation for a device, in the light or dark version that matches the page. */
 function GuidePicture({ device, label }: { device: 'laptop' | 'phone'; label: string }) {
@@ -34,7 +34,7 @@ function GuidePicture({ device, label }: { device: 'laptop' | 'phone'; label: st
 
 /** The "How to scan" button and the guide it opens. */
 export function ScanGuide({ open, onOpenChange }: { open: boolean; onOpenChange: (open: boolean) => void }) {
-  const text = m.solver.scan.guide
+  const text = useM().solver.scan.guide
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogTrigger asChild>

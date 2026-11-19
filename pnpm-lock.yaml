@@ -14,6 +14,9 @@ importers:
       '@fontsource-variable/geist':
         specifier: ^5.3.0
         version: 5.3.0
+      '@fontsource-variable/noto-sans-arabic':
+        specifier: ^5.3.0
+        version: 5.3.0
       '@react-three/fiber':
         specifier: ^9.8.2
         version: 9.8.2(@types/react@19.2.0)(react-dom@19.2.0(react@19.2.0))(react@19.2.0)(three@0.187.0)
@@ -268,6 +271,9 @@ packages:
 
   '@fontsource-variable/geist@5.3.0':
     resolution: {integrity: sha512-j0m+vLQuG5XAYoHtGCVu0spvlGreR3EzpECUVzkFmI1mTVnAO38l/NEPDCFgZ177JxzYJCLSmTQibIiYPilGrA==}
+
+  '@fontsource-variable/noto-sans-arabic@5.3.0':
+    resolution: {integrity: sha512-Rz8+DBzza3//cmN+DBQajJhx3x+Dx12eUgnQsTOgPWbOT0+In6APmE8z4I/QQnUWfAx+s8l93+60qDT5vJH1sA==}
 
   '@jridgewell/gen-mapping@0.3.13':
     resolution: {integrity: sha512-2kkt/7niJ6MgEPxF0bYdQ6etZaA+fQvDcLKckhy1yIQOzaoKjBBjSj63/aLVjYE3qhRt5dvM+uUyfCg6UKCBbA==}
@@ -3628,6 +3634,8 @@ snapshots:
 
   '@fontsource-variable/geist@5.3.0': {}
 
+  '@fontsource-variable/noto-sans-arabic@5.3.0': {}
+
   '@jridgewell/gen-mapping@0.3.13':
     dependencies:
       '@jridgewell/sourcemap-codec': 1.6.0
@@ -6423,6 +6431,7 @@ snapshots:
 time:
   '@fontsource-variable/bricolage-grotesque@5.3.0': '2026-07-19T03:49:43.925Z'
   '@fontsource-variable/geist@5.3.0': '2026-07-19T03:50:13.458Z'
+  '@fontsource-variable/noto-sans-arabic@5.3.0': '2026-07-19T03:50:53.927Z'
   '@react-three/fiber@9.8.2': '2026-10-14T20:48:26.872Z'
   '@tailwindcss/vite@4.1.18': '2025-12-11T16:41:11.134Z'
   '@tanstack/devtools-vite@0.8.6': '2026-10-29T17:10:03.591Z'

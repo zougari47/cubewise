@@ -109,3 +109,42 @@ _Avoid_: Frame, perspective
 **Lesson**:
 A page that teaches one stage of a method, with cube pictures alongside the explanation. Its address is `/learn/<method>/<stage>`.
 _Avoid_: Tutorial, guide, chapter
+
+## Translations
+
+One word per term in each language of the site. Notation (`R U R' F2`, `x`, `M`), the face letters and the names CFOP, Roux, ZZ, Petrus, OLL, PLL and F2L are never translated.
+
+| English | French | Arabic |
+|---|---|---|
+| Face | face | وجه |
+| Front face | face avant | الوجه الأمامي |
+| Sticker | autocollant | ملصق |
+| Centre | centre | مركز |
+| Colour scheme | schéma de couleurs | نظام الألوان |
+| Net | patron | شبكة المكعب |
+| Colour key | touche de couleur | مفتاح اللون |
+| Piece, edge, corner | pièce, arête, coin | قطعة، حافة، زاوية |
+| Layer | couche | طبقة |
+| Move | mouvement | حركة |
+| Turn | rotation | دورة |
+| Quarter turn, half turn | quart de tour, demi-tour | ربع دورة، نصف دورة |
+| Whole-cube turn | rotation du cube entier | تدوير المكعب كاملاً |
+| Wide turn | rotation large | دورة عريضة |
+| Slice turn | rotation de tranche | دورة الشريحة |
+| Step | pas | خطوة |
+| Solution, short solution | solution, solution courte | الحل، الحل القصير |
+| Solver | solveur | أداة الحل |
+| Method | méthode | طريقة |
+| Beginner method | méthode débutant | طريقة المبتدئين |
+| Stage | étape | مرحلة |
+| Lesson | leçon | درس |
+| Sequence | séquence | متتالية |
+| Case | cas | حالة |
+| Slot | emplacement | خانة |
+| Pair, block | paire, bloc | زوج، كتلة |
+| View | vue | منظور |
+| Cross, daisy, petal | croix, marguerite, pétale | صليب، أقحوانة، بتلة |
+| Orient, permute | orienter, permuter | توجيه، تبديل المواضع |
+| Scrambled | mélangé | مخلوط |
+| Home (a piece) | à sa place | في مكانها الصحيح |
+| Speedsolvers | speedcubeurs | ممارسو الحل السريع |

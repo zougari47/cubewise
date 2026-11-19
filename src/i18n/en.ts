@@ -1,6 +1,6 @@
 /**
- * Every piece of text the site shows, in English. Components read text from
- * here and never hard-code it, so another language is one more file like this.
+ * Every piece of text the site shows, in English. Its shape is `Messages`,
+ * which the file of every other language (`fr.ts`, `ar.ts`) must fill in.
  */
 import type { ColourKey } from '../pages/solver/entry.ts'
 import type { MethodId } from '../core/methods/index.ts'
@@ -11,6 +11,7 @@ import { rouxText } from './en/roux.ts'
 import { zzText } from './en/zz.ts'
 import { petrusText } from './en/petrus.ts'
 import { beforeYouStartText } from './en/before-you-start.ts'
+import { solverAboutText } from './en/solver-about.ts'
 import type { MethodText } from './method-text.ts'
 
 const colourNames: Record<ColourKey, string> = {
@@ -44,6 +45,7 @@ export const en = {
       'Enter the colours of your scrambled 3×3 cube and get a short, animated solution in seconds. Then learn to solve it yourself, step by step.',
     nav: { solver: 'Solver', learn: 'Learn' },
     menu: { open: 'Open the menu', close: 'Close the menu' },
+    language: 'Language',
     theme: { label: 'Theme', system: 'Same as your device', light: 'Light', dark: 'Dark' },
     footer: 'Made for people who have a scrambled cube on their desk.',
     builtBy: 'Built by',
@@ -64,8 +66,10 @@ export const en = {
     lead: 'Enter the colours of your scrambled 3×3 cube and watch it being solved, move by move. When you are ready, learn the method and solve it yourself.',
     solveAction: 'Solve my cube',
     learnAction: 'Learn to solve it',
-    cubeAlt: 'A scrambled 3×3 cube',
+    cubeAlt: 'A solved 3×3 cube',
     load3d: 'Tap to load the 3D cube',
+    /** Short reassurances under the hero buttons. */
+    perks: ['Free', 'No account', 'Solved in your browser'],
     how: {
       heading: 'How it works',
       steps: [
@@ -83,11 +87,20 @@ export const en = {
         },
       ],
     },
+    roadmap: {
+      heading: 'Where to start, and where to go next',
+      lead: 'Every method Cubewise teaches is a stop on this road, and the solver can solve your own cube with any of them. Take the first stops in order. Where the road forks, the methods are alternatives: pick the one that suits you, there is no need to learn them all.',
+      /** Signs on the road: where it starts, where it forks, and between two methods that are alternatives. */
+      signs: { start: 'Start', fork: 'Then pick one', or: 'or' },
+      moves: (count: number) => `about ${count} ${plural(count, 'move', 'moves')}`,
+      action: 'See the stages',
+      movesNote: 'The move counts are about what the Cubewise solver takes with each method.',
+      allMethods: 'See all the methods',
+    },
     learn: {
       heading: 'Learn the beginner method',
       lead: 'The beginner method solves the cube layer by layer in seven stages. Each stage has one goal and only a few sequences to remember.',
       action: 'See all the stages',
-      otherMethods: 'Other methods',
     },
     faq: {
       heading: 'Questions and answers',
@@ -124,14 +137,21 @@ export const en = {
         },
       ],
     },
+    closing: {
+      heading: 'Pick up your cube',
+      body: 'Enter its colours and follow the solution move by move, or open the first lesson and learn to solve it yourself.',
+      learnAction: 'Start the beginner method',
+    },
   },
 
   solver: {
-    title: 'Rubik’s cube solver: enter your colours, get the moves | Cubewise',
+    title: 'Rubik’s cube solver: solve your 3×3 step by step | Cubewise',
     description:
-      'Free online 3×3 Rubik’s cube solver. Enter the colours with your keyboard or by tapping, and follow an animated solution of about 21 moves.',
-    heading: 'Cube solver',
-    lead: 'Copy the colours of your cube, one face at a time, then press Solve.',
+      'Free online Rubik’s cube solver for the 3×3. Enter your colours or scan the cube with your camera, then follow a short solution or the method you are learning.',
+    heading: 'Rubik’s cube solver',
+    lead: 'Copy the colours of your scrambled 3×3 cube, one face at a time, or scan it with your camera. Then press Solve and follow the moves.',
+    /** The text under the tool. */
+    about: solverAboutText,
     loading3d: 'Loading the 3D cube…',
 
     entry: {
@@ -257,6 +277,11 @@ export const en = {
       failed: 'Something went wrong while solving. Please try again.',
     },
 
+    report: {
+      question: 'Faced an issue?',
+      action: 'Report it',
+    },
+
     playback: {
       heading: 'Solution',
       moveCount: (count: number) => `${count} ${plural(count, 'move', 'moves')}`,
@@ -301,6 +326,7 @@ export const en = {
     stageCount: (count: number) => `${count} ${plural(count, 'stage', 'stages')}`,
     progress: (done: number, total: number) => `${done} of ${total} completed`,
     stageNumber: (number: number) => `Stage ${number}`,
+    suggestUpdate: 'Suggest an update',
     beforeYouStart: beforeYouStartText,
     method: {
       pageTitle: (name: string) => `${name}: learn it stage by stage | Cubewise`,
@@ -317,12 +343,18 @@ export const en = {
       pageTitle: (name: string, method: string, number: number) =>
         `${name}: ${method}, stage ${number} | Cubewise`,
       allStages: 'All stages',
+      backToStages: (method: string) => `${method}: all stages`,
       stageOf: (number: number, total: number) => `Stage ${number} of ${total}`,
       goal: 'Goal',
       steps: 'How to do it',
       cases: 'What it looks like',
       tip: 'Tip',
       watch: 'Watch in 3D',
+      copyMarkdown: 'Copy as Markdown',
+      markdownCopied: 'Copied',
+      markdownCopyFailed: 'Could not copy',
+      /** Before the address of the lesson, on the last line of the copied Markdown. */
+      markdownSource: 'Source:',
       markComplete: 'Mark as complete',
       completed: 'Completed',
       tryIt: 'Try it on your own cube',

@@ -1,12 +1,13 @@
 import { Monitor, Moon, Sun } from 'lucide-react'
 import { cn } from 'cn'
-import { m } from '#/i18n'
+import { useM } from '#/i18n'
 import { THEME_CHOICES, useThemeChoice } from '#/lib/theme.ts'
 
 const ICONS = { system: Monitor, light: Sun, dark: Moon }
 
 /** Three small buttons to pick the system, light or dark theme. */
 export function ThemeToggle({ className }: { className?: string }) {
+  const m = useM()
   const { choice, setChoice } = useThemeChoice()
   return (
     <div

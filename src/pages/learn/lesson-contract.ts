@@ -9,6 +9,16 @@ import type { MethodText } from '../../i18n/method-text.ts'
 import { lessonSteps } from './lessons.ts'
 import type { LessonCase } from './lessons.ts'
 
+/** The colour names of every language of the site, which no stage name may contain. */
+const COLOUR_WORDS = new RegExp(
+  [
+    'white|yellow|red|orange|blue|green',
+    '\\b(blanc|blanche|jaune|rouge|bleu|vert)e?s?\\b',
+    'أبيض|بيضاء|أصفر|صفراء|أحمر|حمراء|برتقالي|أزرق|زرقاء|أخضر|خضراء',
+  ].join('|'),
+  'i',
+)
+
 export function describeLessons<Stage extends string>(
   name: string,
   stages: readonly Stage[],
@@ -25,7 +35,7 @@ export function describeLessons<Stage extends string>(
 
     test('stage names do not mention a colour', () => {
       for (const stage of stages) {
-        expect(text.stages[stage].name, stage).not.toMatch(/white|yellow|red|orange|blue|green/i)
+        expect(text.stages[stage].name, stage).not.toMatch(COLOUR_WORDS)
       }
     })
 

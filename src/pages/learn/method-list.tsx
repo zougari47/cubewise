@@ -1,12 +1,13 @@
 import { Link } from '@tanstack/react-router'
-import { ArrowRight } from 'lucide-react'
+import { ForwardArrow } from '#/components/arrows.tsx'
 import { Badge } from '#/components/ui/badge'
 import { METHOD_IDS, stagesOf } from '#/core/methods/index.ts'
-import { m } from '#/i18n'
+import { useM } from '#/i18n'
 import { useLessonProgress } from './progress.ts'
 
 /** The first page of the lessons: every method, to choose one to learn. */
 export function MethodListPage() {
+  const m = useM()
   const { completed } = useLessonProgress()
   const start = m.learn.beforeYouStart.card
 
@@ -16,7 +17,7 @@ export function MethodListPage() {
       <p className="mt-3 max-w-prose text-lg text-muted-foreground">{m.learn.lead}</p>
 
       <Link
-        to="/learn/before-you-start"
+        to="/{-$locale}/learn/before-you-start"
         className="group mt-8 flex flex-wrap items-center justify-between gap-4 rounded-xl border border-primary/40 bg-primary/10 p-5 transition-colors hover:border-primary/70"
       >
         <div className="max-w-prose">
@@ -25,7 +26,7 @@ export function MethodListPage() {
         </div>
         <span className="flex items-center gap-2 font-medium text-primary">
           {start.action}
-          <ArrowRight className="size-4 transition-transform group-hover:translate-x-0.5" />
+          <ForwardArrow className="size-4 transition-transform group-hover:translate-x-0.5 rtl:group-hover:-translate-x-0.5" />
         </span>
       </Link>
 
@@ -38,14 +39,14 @@ export function MethodListPage() {
           return (
             <li key={method}>
               <Link
-                to="/learn/$method"
+                to="/{-$locale}/learn/$method"
                 params={{ method }}
                 className="group flex h-full flex-col rounded-xl border bg-card p-5 transition-colors hover:border-primary/50 hover:bg-accent"
               >
                 <div className="flex flex-wrap items-center justify-between gap-2">
                   <h3 className="flex items-center gap-2 text-lg font-semibold">
                     {text.name}
-                    <ArrowRight className="size-4 text-muted-foreground transition-transform group-hover:translate-x-0.5" />
+                    <ForwardArrow className="size-4 text-muted-foreground transition-transform group-hover:translate-x-0.5 rtl:group-hover:-translate-x-0.5" />
                   </h3>
                   <Badge variant="secondary">{text.level}</Badge>
                 </div>

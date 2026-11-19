@@ -9,11 +9,12 @@ import { Kbd } from '#/components/ui/kbd'
 import { Slider } from '#/components/ui/slider'
 import { cubeFaceSeenAs } from '#/core/cube/orientation.ts'
 import { isWholeCubeTurn } from '#/core/cube/steps.ts'
-import { m } from '#/i18n'
+import { useM } from '#/i18n'
 import { cn } from '#/lib/utils'
 import type { ColourKey } from './entry.ts'
 import { MAX_PAUSE_MS } from './playback.ts'
 import type { Playback } from './playback.ts'
+import { ReportIssue } from './report-issue.tsx'
 import type { SolvedSteps } from './solver.worker.ts'
 
 export function KeyHints({ hints }: { hints: { keys: string[]; text: string }[] }) {
@@ -21,7 +22,7 @@ export function KeyHints({ hints }: { hints: { keys: string[]; text: string }[] 
     <ul className="hidden space-y-1.5 text-sm text-muted-foreground md:block">
       {hints.map((hint) => (
         <li key={hint.text} className="flex items-center gap-2">
-          <span className="flex shrink-0 gap-0.5">
+          <span dir="ltr" className="flex shrink-0 gap-0.5">
             {hint.keys.map((key) => (
               <Kbd key={key}>{key}</Kbd>
             ))}
@@ -50,7 +51,7 @@ function StepChips({
   }, [done])
 
   return (
-    <ol className="flex flex-wrap gap-1.5">
+    <ol dir="ltr" className="flex flex-wrap gap-1.5 rtl:justify-end">
       {solved.steps.slice(from, from + count).map((step, offset) => {
         const index = from + offset
         return (
@@ -81,6 +82,7 @@ export function SolutionPanel({
   pauseMs,
   onPauseChange,
   onEdit,
+  reportHref,
 }: {
   solved: SolvedSteps
   /** The user's centre colours, in U R F D L B order. */
@@ -90,7 +92,10 @@ export function SolutionPanel({
   pauseMs: number
   onPauseChange: (pauseMs: number) => void
   onEdit: () => void
+  /** Where a problem with this solution is reported. */
+  reportHref: string
 }) {
+  const m = useM()
   const text = m.solver.playback
   const total = solved.steps.length
   const moveCount = solved.steps.filter((step) => !isWholeCubeTurn(step)).length
@@ -127,7 +132,7 @@ export function SolutionPanel({
 
             <div
               aria-label={solved.steps.map((step) => step.text).join(' ')}
-              className="max-h-72 space-y-4 overflow-y-auto pr-1"
+              className="max-h-72 space-y-4 overflow-y-auto pe-1"
             >
               {byStage ? (
                 stages.map((stage, i) => (
@@ -137,7 +142,7 @@ export function SolutionPanel({
                         {i + 1}. {stageNames[stage.stage].name}
                       </span>
                       <Link
-                        to="/learn/$method/$stage"
+                        to="/{-$locale}/learn/$method/$stage"
                         params={{ method: solved.method as string, stage: stage.stage }}
                         className="text-xs font-normal text-muted-foreground underline underline-offset-2 hover:text-foreground"
                       >
@@ -188,6 +193,7 @@ export function SolutionPanel({
           <Pencil />
           {text.edit}
         </Button>
+        <ReportIssue href={reportHref} />
       </CardContent>
     </Card>
   )

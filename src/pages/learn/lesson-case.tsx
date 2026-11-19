@@ -6,7 +6,7 @@ import { Button } from '#/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '#/components/ui/card'
 import { rotateStickers } from '#/core/cube/orientation.ts'
 import { cubeAfterSteps, isWholeCubeTurn } from '#/core/cube/steps.ts'
-import { m } from '#/i18n'
+import { useM } from '#/i18n'
 import { cn } from '#/lib/utils'
 import { usePlayback } from '#/pages/solver/playback.ts'
 import { lessonColours, lessonOrientation, lessonSteps } from './lessons.ts'
@@ -27,6 +27,7 @@ export function LessonCaseCard({
   title: string
   body: string
 }) {
+  const m = useM()
   const [live, setLive] = useState(false)
   const steps = useMemo(() => lessonSteps(lessonCase.sequence), [lessonCase])
   const playback = usePlayback(steps)
@@ -66,7 +67,7 @@ export function LessonCaseCard({
           <p className="text-muted-foreground">{body}</p>
           {steps.length > 0 && (
             <>
-              <p className="flex flex-wrap gap-1.5" aria-label={lessonCase.sequence}>
+              <p dir="ltr" className="flex flex-wrap gap-1.5 rtl:justify-end" aria-label={lessonCase.sequence}>
                 {steps.map((step, i) => (
                   <span
                     key={i}

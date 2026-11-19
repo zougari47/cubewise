@@ -1,22 +1,26 @@
 import { Link } from '@tanstack/react-router'
-import { ArrowRight, Check } from 'lucide-react'
+import { Check } from 'lucide-react'
+import { BackArrow, ForwardArrow } from '#/components/arrows.tsx'
 import { Badge } from '#/components/ui/badge'
 import { Button } from '#/components/ui/button'
 import { stagesOf } from '#/core/methods/index.ts'
 import type { MethodId } from '#/core/methods/index.ts'
-import { m } from '#/i18n'
+import { useM } from '#/i18n'
 import { useLessonProgress } from './progress.ts'
+import { SuggestUpdate } from './suggest-update.tsx'
 
 /** One method: what it is, and its stages in order, each leading to a lesson. */
 export function MethodPage({ method }: { method: MethodId }) {
+  const m = useM()
   const { completed } = useLessonProgress()
   const text = m.methods[method]
   const stageText: Record<string, { name: string; summary: string }> = text.stages
 
   return (
     <div className="mx-auto max-w-3xl px-4 py-10">
-      <Link to="/learn" className="text-sm text-muted-foreground hover:text-foreground">
-        ← {m.learn.method.allMethods}
+      <Link to="/{-$locale}/learn" className="inline-flex items-center gap-1 text-sm text-muted-foreground hover:text-foreground">
+        <BackArrow className="size-3.5" />
+        {m.learn.method.allMethods}
       </Link>
       <h1 className="mt-6 flex flex-wrap items-center gap-3 text-3xl font-semibold tracking-tight">
         {text.name}
@@ -26,7 +30,7 @@ export function MethodPage({ method }: { method: MethodId }) {
       {method === 'beginner' && (
         <p className="mt-3 text-muted-foreground">
           {m.learn.beforeYouStart.pointer.question}{' '}
-          <Link to="/learn/before-you-start" className="underline underline-offset-4 hover:text-foreground">
+          <Link to="/{-$locale}/learn/before-you-start" className="underline underline-offset-4 hover:text-foreground">
             {m.learn.beforeYouStart.pointer.link}
           </Link>
         </p>
@@ -37,7 +41,7 @@ export function MethodPage({ method }: { method: MethodId }) {
         {stagesOf(method).map((stage, i) => (
           <li key={stage}>
             <Link
-              to="/learn/$method/$stage"
+              to="/{-$locale}/learn/$method/$stage"
               params={{ method, stage }}
               className="group block rounded-xl border p-5 transition-colors hover:bg-muted/50"
             >
@@ -45,7 +49,7 @@ export function MethodPage({ method }: { method: MethodId }) {
               <h3 className="mt-0.5 flex flex-wrap items-center justify-between gap-2 text-lg font-semibold">
                 <span className="flex items-center gap-2">
                   {stageText[stage].name}
-                  <ArrowRight className="size-4 text-muted-foreground transition-transform group-hover:translate-x-0.5" />
+                  <ForwardArrow className="size-4 text-muted-foreground transition-transform group-hover:translate-x-0.5 rtl:group-hover:-translate-x-0.5" />
                 </span>
                 {completed[method].includes(stage) && (
                   <Badge variant="secondary">
@@ -64,12 +68,16 @@ export function MethodPage({ method }: { method: MethodId }) {
         <h2 className="text-lg font-semibold">{m.learn.practice.heading}</h2>
         <p className="mt-2 text-muted-foreground">{m.learn.practice.body(text.name)}</p>
         <Button asChild className="mt-4">
-          <Link to="/solver" search={{ method }}>
+          <Link to="/{-$locale}/solver" search={{ method }}>
             {m.learn.practice.action}
-            <ArrowRight />
+            <ForwardArrow />
           </Link>
         </Button>
       </section>
+
+      <div className="mt-6 flex justify-end">
+        <SuggestUpdate text={method} />
+      </div>
     </div>
   )
 }
