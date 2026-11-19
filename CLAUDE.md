@@ -17,6 +17,7 @@ Page code sits under `src/pages/`, one folder per page; core never imports from 
 - `src/pages/home/`: the home page; `roadmap.ts` orders every method as a stop on its road map and `roadmap.tsx` draws it.
 - `src/pages/solver/`: colour entry (`entry.ts`), playback, the solution panel, and the Web Worker that runs every solver; `scan/` is the camera panel, loaded on demand. `solver-about.tsx` is the article under the tool; its text states facts of the solvers, the scan and the entry checks (move counts, limits, what is uploaded), so change them together.
 - `src/pages/learn/`: the list of methods, a method's stages, the lesson page, pictures and progress. `lessons.ts` is the lesson-case model; `lessons/<method>.ts` holds each method's cases.
+- `src/pages/history/`: the solve history page. `history.ts` is the saved-solve model (add, cap, read back), pure and tested in Node; `store.ts` is the only code that touches its `localStorage` key. The page is prerendered but not indexed (`UNINDEXED_PATHS` in `src/lib/pages.ts`).
 
 Shared pieces:
 

@@ -9,6 +9,7 @@ import {
   entryReducer,
   initialEntry,
   isSavedStickers,
+  stickersFromText,
   stickersText,
 } from './entry.ts'
 import type { EntryAction, EntryState, Paint } from './entry.ts'
@@ -241,5 +242,20 @@ describe('stickersText', () => {
   test('never fails on stickers that are missing', () => {
     expect(stickersText([])).toBe('')
     expect(stickersText(['W', null])).toBe('W -')
+  })
+})
+
+describe('stickersFromText', () => {
+  test('reads back what stickersText wrote', () => {
+    const scrambled = stickersOf("R U R' U'")
+    expect(stickersFromText(stickersText(scrambled))).toEqual(scrambled)
+    const unfinished = initialEntry().stickers
+    expect(stickersFromText(stickersText(unfinished))).toEqual(unfinished)
+  })
+
+  test('gives nothing for text that is not a whole cube', () => {
+    expect(stickersFromText('')).toBeNull()
+    expect(stickersFromText('WWWWWWWWW RRRRRRRRR')).toBeNull()
+    expect(stickersFromText(stickersText(stickersOf('')).replace('W', 'X'))).toBeNull()
   })
 })

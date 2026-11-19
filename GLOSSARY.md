@@ -106,6 +106,14 @@ _Avoid_: Action, instruction
 The cube as the user sees it at one moment of a solution, after any whole-cube, wide or slice turns: a piece counts as home when it matches the centres as they are now held.
 _Avoid_: Frame, perspective
 
+**Solve**:
+One cube the user had solved on the solver page, as it is kept: the cube as entered, the method, the solution and when. The same cube solved again with the same method is the same solve.
+_Avoid_: Entry (entry is entering colours), record, attempt
+
+**Solve history**:
+The user's solves, newest first, kept in their browser. Its page is `/history`.
+_Avoid_: Log, archive, saved cubes
+
 **Lesson**:
 A page that teaches one stage of a method, with cube pictures alongside the explanation. Its address is `/learn/<method>/<stage>`.
 _Avoid_: Tutorial, guide, chapter
@@ -134,6 +142,8 @@ One word per term in each language of the site. Notation (`R U R' F2`, `x`, `M`)
 | Step | pas | خطوة |
 | Solution, short solution | solution, solution courte | الحل، الحل القصير |
 | Solver | solveur | أداة الحل |
+| Solve (a saved one) | résolution | عملية حل |
+| Solve history | historique des résolutions | سجل الحلول |
 | Method | méthode | طريقة |
 | Beginner method | méthode débutant | طريقة المبتدئين |
 | Stage | étape | مرحلة |

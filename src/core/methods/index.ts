@@ -24,7 +24,7 @@ export type MethodId = keyof typeof METHOD_STAGES
 
 export const METHOD_IDS = Object.keys(METHOD_STAGES) as MethodId[]
 
-export const isMethodId = (value: string): value is MethodId => value in METHOD_STAGES
+export const isMethodId = (value: string): value is MethodId => Object.hasOwn(METHOD_STAGES, value)
 
 /** The stages of a method, in the order they are solved. */
 export const stagesOf = (method: MethodId): readonly string[] => METHOD_STAGES[method]

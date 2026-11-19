@@ -55,7 +55,7 @@ export const fr: Messages = {
     tagline: 'Résolvez votre cube et apprenez à le faire en même temps.',
     description:
       'Saisissez les couleurs de votre Rubik’s Cube 3×3 mélangé et obtenez en quelques secondes une solution courte et animée. Apprenez ensuite à le résoudre vous-même, étape par étape.',
-    nav: { solver: 'Solveur', learn: 'Apprendre' },
+    nav: { solver: 'Solveur', learn: 'Apprendre', history: 'Historique' },
     menu: { open: 'Ouvrir le menu', close: 'Fermer le menu' },
     language: 'Langue',
     theme: { label: 'Thème', system: 'Comme votre appareil', light: 'Clair', dark: 'Sombre' },
@@ -330,6 +330,38 @@ export const fr: Messages = {
       lesson: 'Leçon',
       stageDone: 'Déjà fait.',
     },
+  },
+
+  history: {
+    title: 'Votre historique des résolutions | Cubewise',
+    description:
+      'Les cubes que vous avez résolus avec Cubewise, conservés dans ce navigateur. Rouvrez-en un dans le solveur, copiez sa solution ou supprimez-le.',
+    heading: 'Historique des résolutions',
+    lead: (limit: number) =>
+      `Chaque cube que vous résolvez est conservé ici avec sa solution, du plus récent au plus ancien. L’historique reste dans ce navigateur et n’est jamais envoyé. Seules les ${limit} dernières résolutions sont conservées.`,
+    count: (count: number) => `${count} ${plural(count, 'résolution', 'résolutions')}`,
+    netLabel: 'Les six faces du cube tel qu’il a été saisi',
+    replay: 'Rejouer dans le solveur',
+    showSolution: 'Afficher la solution',
+    hideSolution: 'Masquer la solution',
+    copy: 'Copier la solution',
+    copied: 'Copié',
+    copyFailed: 'Copie impossible',
+    delete: 'Supprimer',
+    empty: {
+      heading: 'Aucune résolution pour l’instant',
+      body: 'Résolvez un cube dans le solveur et il apparaîtra ici.',
+      action: 'Ouvrir le solveur',
+    },
+    clear: {
+      action: 'Effacer l’historique',
+      title: 'Effacer votre historique des résolutions ?',
+      body: (count: number) =>
+        `${plural(count, 'La seule résolution sera supprimée', `Les ${count} résolutions seront supprimées`)} de ce navigateur. Cette action est irréversible.`,
+      confirm: 'Effacer l’historique',
+      cancel: 'Annuler',
+    },
+    fromSolver: 'Voir votre historique des résolutions',
   },
 
   methods,

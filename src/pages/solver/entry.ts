@@ -208,6 +208,15 @@ export function stickersText(stickers: readonly Paint[]): string {
   return faces.join(' ')
 }
 
+/**
+ * The stickers that `stickersText` wrote out, read back; `null` when the text
+ * is not a whole cube's worth of colour keys.
+ */
+export function stickersFromText(text: string): Paint[] | null {
+  const stickers = [...text.replaceAll(' ', '')].map((key) => (key === '-' ? null : key))
+  return isSavedStickers(stickers) ? stickers : null
+}
+
 /** Why the entered stickers cannot be solved yet. */
 export type EntryProblem = { code: 'unpainted'; stickers: number[] } | StickerError
 

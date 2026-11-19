@@ -28,6 +28,7 @@ import { issueReportBody } from '#/i18n/issue-report.ts'
 import { copyText } from '#/lib/clipboard.ts'
 import { newIssueUrl } from '#/lib/repo.ts'
 import { cn } from '#/lib/utils'
+import { findSolve, saveSolve } from '#/pages/history/store.ts'
 import { COLOUR_HEX, hexOf } from './colours.ts'
 import {
   COLOUR_KEYS,
@@ -37,12 +38,13 @@ import {
   initialEntry,
   isColourKey,
   isSavedStickers,
+  stickersFromText,
   stickersText,
 } from './entry.ts'
 import type { ColourKey, EntryProblem, Paint } from './entry.ts'
 import { usePlayback, usePlaybackPause } from './playback.ts'
 import { ReportIssue } from './report-issue.tsx'
-import { KeyHints, SolutionPanel } from './solution-panel.tsx'
+import { HistoryLink, KeyHints, SolutionPanel } from './solution-panel.tsx'
 import { solveCube, warmUpSolver } from './solver-client.ts'
 import type { SolveMethod, SolvedSteps } from './solver.worker.ts'
 
@@ -81,7 +83,17 @@ function problemText(
   }
 }
 
-export function SolverApp({ initialMethod }: { initialMethod?: SolveMethod }) {
+export function SolverApp({
+  initialMethod,
+  reopen,
+  onReopened,
+}: {
+  initialMethod?: SolveMethod
+  /** The id of a solve in the history to open the solver on. */
+  reopen?: string
+  /** Called once that solve has been looked up, found or not. */
+  onReopened?: () => void
+}) {
   const m = useM()
   const [entry, dispatch] = useReducer(entryReducer, undefined, initialEntry)
   const [activeColour, setActiveColour] = useState<ColourKey>('W')
@@ -144,19 +156,48 @@ export function SolverApp({ initialMethod }: { initialMethod?: SolveMethod }) {
     [entry.orientation, activeColour],
   )
 
-  const solve = useCallback(() => {
-    if (solving) return
-    const check = checkEntry(entry.stickers)
+  /** Solves these stickers; `keep` puts a solve that succeeds in the history. */
+  const solveStickers = useCallback((stickers: readonly Paint[], solveMethod: SolveMethod, keep: boolean) => {
+    const check = checkEntry(stickers)
     if (!check.ok) {
       setProblem(check.problem)
       return
     }
     setSolving(true)
-    solveCube(check.cube, method)
-      .then((solved) => setSolution({ cube: check.cube, scheme: check.scheme, solved }))
+    solveCube(check.cube, solveMethod)
+      .then((solved) => {
+        setSolution({ cube: check.cube, scheme: check.scheme, solved })
+        if (!keep) return
+        saveSolve({
+          stickers: stickersText(stickers),
+          method: solveMethod,
+          solution: solved.steps.map((step) => step.text).join(' '),
+          stages: solved.stages,
+        })
+      })
       .catch(() => setProblem('failed'))
       .finally(() => setSolving(false))
-  }, [entry.stickers, solving, method])
+  }, [])
+
+  const solve = useCallback(() => {
+    if (!solving) solveStickers(entry.stickers, method, true)
+  }, [entry.stickers, solving, method, solveStickers])
+
+  // --- Opening a solve from the history
+
+  // The cube and method of the solve are filled in and solved again, to be
+  // played. It was solved before, so this is not a new solve for the history;
+  // the cube that was on the page is one undo away.
+  useEffect(() => {
+    if (!reopen) return
+    const saved = findSolve(reopen)
+    const stickers = saved ? stickersFromText(saved.stickers) : null
+    onReopened?.()
+    if (!saved || !stickers) return
+    dispatch({ type: 'fill', stickers })
+    setMethod(saved.method)
+    solveStickers(stickers, saved.method, false)
+  }, [reopen, onReopened, solveStickers])
 
   const editCube = useCallback(() => setSolution(null), [])
 
@@ -478,6 +519,7 @@ export function SolverApp({ initialMethod }: { initialMethod?: SolveMethod }) {
               {solving ? m.solver.entry.solving : m.solver.entry.solve}
             </Button>
             <ReportIssue href={reportHref} />
+            <HistoryLink />
           </CardContent>
         </Card>
       )}

@@ -43,7 +43,7 @@ export const en = {
     tagline: 'Solve your cube and learn it at the same time.',
     description:
       'Enter the colours of your scrambled 3×3 cube and get a short, animated solution in seconds. Then learn to solve it yourself, step by step.',
-    nav: { solver: 'Solver', learn: 'Learn' },
+    nav: { solver: 'Solver', learn: 'Learn', history: 'History' },
     menu: { open: 'Open the menu', close: 'Close the menu' },
     language: 'Language',
     theme: { label: 'Theme', system: 'Same as your device', light: 'Light', dark: 'Dark' },
@@ -312,6 +312,39 @@ export const en = {
       lesson: 'Lesson',
       stageDone: 'Already done.',
     },
+  },
+
+  history: {
+    title: 'Your solve history | Cubewise',
+    description:
+      'The cubes you have solved with Cubewise, kept in this browser. Open one in the solver again, copy its solution or delete it.',
+    heading: 'Solve history',
+    lead: (limit: number) =>
+      `Every cube you solve is kept here with its solution, newest first. The history stays in this browser and is never uploaded. Only the latest ${limit} are kept.`,
+    count: (count: number) => `${count} ${plural(count, 'solve', 'solves')}`,
+    netLabel: 'The six faces of the cube as it was entered',
+    replay: 'Replay in the solver',
+    showSolution: 'Show solution',
+    hideSolution: 'Hide solution',
+    copy: 'Copy solution',
+    copied: 'Copied',
+    copyFailed: 'Could not copy',
+    delete: 'Delete',
+    empty: {
+      heading: 'No solves yet',
+      body: 'Solve a cube in the solver and it will appear here.',
+      action: 'Open the solver',
+    },
+    clear: {
+      action: 'Clear history',
+      title: 'Clear your solve history?',
+      body: (count: number) =>
+        `This deletes ${plural(count, 'the only solve', `all ${count} solves`)} from this browser. It cannot be undone.`,
+      confirm: 'Clear history',
+      cancel: 'Cancel',
+    },
+    /** The link to this page from the solver. */
+    fromSolver: 'See your solve history',
   },
 
   methods,

@@ -34,6 +34,21 @@ export function KeyHints({ hints }: { hints: { keys: string[]; text: string }[] 
   )
 }
 
+/** A quiet link from the solver to the solve history. */
+export function HistoryLink() {
+  const m = useM()
+  return (
+    <p className="text-center text-sm">
+      <Link
+        to="/{-$locale}/history"
+        className="text-muted-foreground underline underline-offset-2 hover:text-foreground"
+      >
+        {m.history.fromSolver}
+      </Link>
+    </p>
+  )
+}
+
 function StepChips({
   solved,
   from,
@@ -194,6 +209,7 @@ export function SolutionPanel({
           {text.edit}
         </Button>
         <ReportIssue href={reportHref} />
+        <HistoryLink />
       </CardContent>
     </Card>
   )

@@ -5,6 +5,7 @@ Cubewise solves a scrambled 3×3 Rubik's cube from the colours you enter, and te
 - **Solver.** Paint the six faces or scan the cube with your camera, then follow the moves on a 3D cube. Choose the short solution (about 21 moves) or a solution by the method you are learning, grouped by stage with a link to each lesson.
 - **Lessons.** Six methods, stage by stage: beginner, keyhole, CFOP, Roux, ZZ and Petrus. A lesson and the solver read the same sequences, so what is taught is what is played.
 - **Three languages.** English, French (`/fr`) and Arabic (`/ar`, right-to-left).
+- **History.** Every cube you solve is kept in your browser, to replay it later or copy its solution.
 - **Private.** Everything runs in the browser, including the camera scan and the solver. Nothing is uploaded and there is no account.
 
 ## Run it
@@ -33,7 +34,7 @@ pnpm build               # prerenders every page in every language
 | `src/core/cube/` | The cube model, moves, and the short-solution solver (our own Kociemba two-phase) |
 | `src/core/methods/` | One folder per method: its stages, its solver and its sequences |
 | `src/core/scan/` | Camera scan: finding a face in a picture and reading its colours |
-| `src/pages/` | Page code: `home/`, `solver/`, `learn/` |
+| `src/pages/` | Page code: `home/`, `solver/`, `learn/`, `history/` |
 | `src/routes/{-$locale}/` | Thin route files under an optional language prefix |
 | `src/i18n/` | All site text: `en.ts`, `fr.ts`, `ar.ts`, and one file per method in each language |
 

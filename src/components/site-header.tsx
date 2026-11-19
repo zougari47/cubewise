@@ -52,6 +52,9 @@ export function SiteHeader() {
               <Link to="/{-$locale}/learn" params={params} className={linkClass}>
                 {m.site.nav.learn}
               </Link>
+              <Link to="/{-$locale}/history" params={params} className={linkClass}>
+                {m.site.nav.history}
+              </Link>
               <LanguageMenu className="ms-1" />
               <ThemeToggle className="ms-1" />
             </nav>
@@ -80,6 +83,9 @@ export function SiteHeader() {
           </Link>
           <Link to="/{-$locale}/learn" params={params} className={menuLinkClass} onClick={closeMenu}>
             {m.site.nav.learn}
+          </Link>
+          <Link to="/{-$locale}/history" params={params} className={menuLinkClass} onClick={closeMenu}>
+            {m.site.nav.history}
           </Link>
         </nav>
         <div className="mt-2 flex items-center justify-between border-t px-3 pt-3">

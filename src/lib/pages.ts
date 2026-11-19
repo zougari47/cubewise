@@ -9,8 +9,16 @@ export const PAGE_PATHS: string[] = [
   '/solver',
   '/learn',
   '/learn/before-you-start',
+  '/history',
   ...METHOD_IDS.flatMap((method) => [
     `/learn/${method}`,
     ...stagesOf(method).map((stage) => `/learn/${method}/${stage}`),
   ]),
 ]
+
+/**
+ * Pages that are written out like the rest but kept from search engines: what
+ * they show is the visitor's own and exists only in their browser. `pageHead`
+ * marks them, and a list made for search engines must leave them out.
+ */
+export const UNINDEXED_PATHS: readonly string[] = ['/history']

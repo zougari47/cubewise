@@ -1,5 +1,6 @@
 import { DEFAULT_LOCALE, LOCALES, OG_LOCALES, localizedPath } from '#/i18n/locales.ts'
 import type { Locale } from '#/i18n/locales.ts'
+import { UNINDEXED_PATHS } from './pages.ts'
 
 /**
  * Where the site is published, without a trailing slash, so that the
@@ -16,7 +17,8 @@ export function pageUrl(path: string, locale: Locale): string {
 /**
  * The `<head>` entries every page needs: title, description and share-card
  * tags in the page's language, its own address as the canonical one, and
- * where the same page is in every other language.
+ * where the same page is in every other language. A page in `UNINDEXED_PATHS`
+ * instead tells search engines to leave it out, and advertises no address.
  *
  * `path` is the page's address without a language prefix, such as `/learn`.
  */
@@ -32,9 +34,11 @@ export function pageHead({
   path: string
 }) {
   const url = pageUrl(path, locale)
+  const indexed = !UNINDEXED_PATHS.includes(path)
   return {
     meta: [
       { title },
+      ...(indexed ? [] : [{ name: 'robots', content: 'noindex, nofollow' }]),
       { name: 'description', content: description },
       { property: 'og:title', content: title },
       { property: 'og:description', content: description },
@@ -45,11 +49,13 @@ export function pageHead({
       { name: 'twitter:title', content: title },
       { name: 'twitter:description', content: description },
     ],
-    links: [
-      { rel: 'canonical', href: url },
-      ...LOCALES.map((other) => ({ rel: 'alternate', hrefLang: other, href: pageUrl(path, other) })),
-      { rel: 'alternate', hrefLang: 'x-default', href: pageUrl(path, DEFAULT_LOCALE) },
-    ],
+    links: indexed
+      ? [
+          { rel: 'canonical', href: url },
+          ...LOCALES.map((other) => ({ rel: 'alternate', hrefLang: other, href: pageUrl(path, other) })),
+          { rel: 'alternate', hrefLang: 'x-default', href: pageUrl(path, DEFAULT_LOCALE) },
+        ]
+      : [],
   }
 }
 

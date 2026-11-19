@@ -11,6 +11,7 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as Char123LocaleChar125RouteRouteImport } from './routes/{-$locale}/route'
 import { Route as Char123LocaleChar125IndexRouteImport } from './routes/{-$locale}/index'
+import { Route as Char123LocaleChar125HistoryRouteImport } from './routes/{-$locale}/history'
 import { Route as Char123LocaleChar125SolverRouteImport } from './routes/{-$locale}/solver'
 import { Route as Char123LocaleChar125LearnIndexRouteImport } from './routes/{-$locale}/learn/index'
 import { Route as Char123LocaleChar125LearnBeforeYouStartRouteImport } from './routes/{-$locale}/learn/before-you-start'
@@ -27,6 +28,12 @@ const Char123LocaleChar125IndexRoute =
   Char123LocaleChar125IndexRouteImport.update({
     id: '/',
     path: '/',
+    getParentRoute: () => Char123LocaleChar125RouteRoute,
+  } as any)
+const Char123LocaleChar125HistoryRoute =
+  Char123LocaleChar125HistoryRouteImport.update({
+    id: '/history',
+    path: '/history',
     getParentRoute: () => Char123LocaleChar125RouteRoute,
   } as any)
 const Char123LocaleChar125SolverRoute =
@@ -62,6 +69,7 @@ const Char123LocaleChar125LearnMethodStageRoute =
 
 export interface FileRoutesByFullPath {
   '/{-$locale}': typeof Char123LocaleChar125RouteRouteWithChildren
+  '/{-$locale}/history': typeof Char123LocaleChar125HistoryRoute
   '/{-$locale}/solver': typeof Char123LocaleChar125SolverRoute
   '/{-$locale}/': typeof Char123LocaleChar125IndexRoute
   '/{-$locale}/learn/before-you-start': typeof Char123LocaleChar125LearnBeforeYouStartRoute
@@ -70,6 +78,7 @@ export interface FileRoutesByFullPath {
   '/{-$locale}/learn/$method/': typeof Char123LocaleChar125LearnMethodIndexRoute
 }
 export interface FileRoutesByTo {
+  '/{-$locale}/history': typeof Char123LocaleChar125HistoryRoute
   '/{-$locale}/solver': typeof Char123LocaleChar125SolverRoute
   '/{-$locale}': typeof Char123LocaleChar125IndexRoute
   '/{-$locale}/learn/before-you-start': typeof Char123LocaleChar125LearnBeforeYouStartRoute
@@ -80,6 +89,7 @@ export interface FileRoutesByTo {
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/{-$locale}': typeof Char123LocaleChar125RouteRouteWithChildren
+  '/{-$locale}/history': typeof Char123LocaleChar125HistoryRoute
   '/{-$locale}/solver': typeof Char123LocaleChar125SolverRoute
   '/{-$locale}/': typeof Char123LocaleChar125IndexRoute
   '/{-$locale}/learn/before-you-start': typeof Char123LocaleChar125LearnBeforeYouStartRoute
@@ -91,6 +101,7 @@ export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/{-$locale}'
+    | '/{-$locale}/history'
     | '/{-$locale}/solver'
     | '/{-$locale}/'
     | '/{-$locale}/learn/before-you-start'
@@ -99,6 +110,7 @@ export interface FileRouteTypes {
     | '/{-$locale}/learn/$method/'
   fileRoutesByTo: FileRoutesByTo
   to:
+    | '/{-$locale}/history'
     | '/{-$locale}/solver'
     | '/{-$locale}'
     | '/{-$locale}/learn/before-you-start'
@@ -108,6 +120,7 @@ export interface FileRouteTypes {
   id:
     | '__root__'
     | '/{-$locale}'
+    | '/{-$locale}/history'
     | '/{-$locale}/solver'
     | '/{-$locale}/'
     | '/{-$locale}/learn/before-you-start'
@@ -134,6 +147,13 @@ declare module '@tanstack/react-router' {
       path: '/'
       fullPath: '/{-$locale}/'
       preLoaderRoute: typeof Char123LocaleChar125IndexRouteImport
+      parentRoute: typeof Char123LocaleChar125RouteRoute
+    }
+    '/{-$locale}/history': {
+      id: '/{-$locale}/history'
+      path: '/history'
+      fullPath: '/{-$locale}/history'
+      preLoaderRoute: typeof Char123LocaleChar125HistoryRouteImport
       parentRoute: typeof Char123LocaleChar125RouteRoute
     }
     '/{-$locale}/solver': {
@@ -175,6 +195,7 @@ declare module '@tanstack/react-router' {
 }
 
 interface Char123LocaleChar125RouteRouteChildren {
+  Char123LocaleChar125HistoryRoute: typeof Char123LocaleChar125HistoryRoute
   Char123LocaleChar125SolverRoute: typeof Char123LocaleChar125SolverRoute
   Char123LocaleChar125IndexRoute: typeof Char123LocaleChar125IndexRoute
   Char123LocaleChar125LearnBeforeYouStartRoute: typeof Char123LocaleChar125LearnBeforeYouStartRoute
@@ -185,6 +206,7 @@ interface Char123LocaleChar125RouteRouteChildren {
 
 const Char123LocaleChar125RouteRouteChildren: Char123LocaleChar125RouteRouteChildren =
   {
+    Char123LocaleChar125HistoryRoute: Char123LocaleChar125HistoryRoute,
     Char123LocaleChar125SolverRoute: Char123LocaleChar125SolverRoute,
     Char123LocaleChar125IndexRoute: Char123LocaleChar125IndexRoute,
     Char123LocaleChar125LearnBeforeYouStartRoute:
