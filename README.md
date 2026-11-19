@@ -1,197 +1,60 @@
-Welcome to your new TanStack Start app!
+# Cubewise
 
-# Getting Started
+Cubewise solves a scrambled 3×3 Rubik's cube from the colours you enter, and teaches the methods people use to solve one by hand.
 
-To run this application:
+- **Solver.** Paint the six faces or scan the cube with your camera, then follow the moves on a 3D cube. Choose the short solution (about 21 moves) or a solution by the method you are learning, grouped by stage with a link to each lesson.
+- **Lessons.** Six methods, stage by stage: beginner, keyhole, CFOP, Roux, ZZ and Petrus. A lesson and the solver read the same sequences, so what is taught is what is played.
+- **Three languages.** English, French (`/fr`) and Arabic (`/ar`, right-to-left).
+- **Private.** Everything runs in the browser, including the camera scan and the solver. Nothing is uploaded and there is no account.
+
+## Run it
+
+You need Node and [pnpm](https://pnpm.io).
 
 ```bash
 pnpm install
-pnpm dev
+pnpm dev        # http://localhost:3000
 ```
 
-# Building For Production
-
-To build this application for production:
+Before pushing a change:
 
 ```bash
-pnpm build
+pnpm test                # Vitest
+pnpm exec tsc --noEmit   # types, including missing translations
+pnpm build               # prerenders every page in every language
 ```
 
-## Styling
+## How it is built
 
-This project uses [Tailwind CSS](https://tailwindcss.com/) for styling.
+[TanStack Start](https://tanstack.com/start) with React, prerendered to static HTML and deployed on Vercel from `main`. Tailwind and shadcn for the interface, three.js for the 3D cube.
 
-### Removing Tailwind CSS
+| Path | What is there |
+|---|---|
+| `src/core/cube/` | The cube model, moves, and the short-solution solver (our own Kociemba two-phase) |
+| `src/core/methods/` | One folder per method: its stages, its solver and its sequences |
+| `src/core/scan/` | Camera scan: finding a face in a picture and reading its colours |
+| `src/pages/` | Page code: `home/`, `solver/`, `learn/` |
+| `src/routes/{-$locale}/` | Thin route files under an optional language prefix |
+| `src/i18n/` | All site text: `en.ts`, `fr.ts`, `ar.ts`, and one file per method in each language |
 
-If you prefer not to use Tailwind CSS:
+`src/core/` is pure TypeScript with no React or browser APIs. Solvers run in a Web Worker and the 3D view is loaded on demand, so content pages stay light.
 
-1. Remove the demo pages in `src/routes/demo/`
-2. Replace the Tailwind import in `src/styles.css` with your own styles
-3. Remove `tailwindcss()` from the plugins array in `vite.config.ts`
-4. Remove `@tailwindcss/vite` and `tailwindcss` from `package.json`
+For more detail:
 
+- [CLAUDE.md](CLAUDE.md): where things live, the rules, and how to add a method.
+- [GLOSSARY.md](GLOSSARY.md): the vocabulary used in code and text, with its French and Arabic translations.
+- [docs/adr/](docs/adr/): the architectural decisions.
 
-## Deploy with Nitro
+## Configuration
 
-This project uses Nitro as a generic server adapter, so it can run on any Node-compatible host.
+Canonical and `hreflang` links use `SITE_URL` when it is set at build time, and otherwise Vercel's production URL. Local builds leave them root-relative.
 
-```bash
-npm run build
-node dist/server/index.mjs
-```
+## Contributing
 
-The build output is a self-contained Node server. To deploy, push the `dist/` directory to your host (Render, Fly.io, your own VPS, etc.) and run the server command above.
+- **Fix a lesson's text.** Every lesson page has a "Suggest an update" link that opens its text file on GitHub in the language you are reading.
+- **Report a problem with the solver.** Use the "Report it" link on the solver page, which fills in the colours you entered, or open an [issue](https://github.com/zougari47/cubewise/issues).
+- **Add text.** Add the key in `src/i18n/en.ts` (or `en/<method>.ts`), then in `fr` and `ar`; `tsc` fails until all three have it.
 
-For host-specific presets (Vercel, Netlify, Cloudflare, AWS Lambda, etc.) and tuning, see https://v3.nitro.build/deploy.
+## Licence
 
-
-
-## Routing
-
-This project uses [TanStack Router](https://tanstack.com/router) with file-based routing. Routes are managed as files in `src/routes`.
-
-### Adding A Route
-
-To add a new route to your application just add a new file in the `./src/routes` directory.
-
-TanStack will automatically generate the content of the route file for you.
-
-Now that you have two routes you can use a `Link` component to navigate between them.
-
-### Adding Links
-
-To use SPA (Single Page Application) navigation you will need to import the `Link` component from `@tanstack/react-router`.
-
-```tsx
-import { Link } from "@tanstack/react-router";
-```
-
-Then anywhere in your JSX you can use it like so:
-
-```tsx
-<Link to="/about">About</Link>
-```
-
-This will create a link that will navigate to the `/about` route.
-
-More information on the `Link` component can be found in the [Link documentation](https://tanstack.com/router/v1/docs/framework/react/api/router/linkComponent).
-
-### Using A Layout
-
-In the File Based Routing setup the layout is located in `src/routes/__root.tsx`. Anything you add to the root route will appear in all the routes. The route content will appear in the JSX where you render `{children}` in the `shellComponent`.
-
-Here is an example layout that includes a header:
-
-```tsx
-import { HeadContent, Scripts, createRootRoute } from '@tanstack/react-router'
-
-export const Route = createRootRoute({
-  head: () => ({
-    meta: [
-      { charSet: 'utf-8' },
-      { name: 'viewport', content: 'width=device-width, initial-scale=1' },
-      { title: 'My App' },
-    ],
-  }),
-  shellComponent: ({ children }) => (
-    <html lang="en">
-      <head>
-        <HeadContent />
-      </head>
-      <body>
-        <header>
-          <nav>
-            <Link to="/">Home</Link>
-            <Link to="/about">About</Link>
-          </nav>
-        </header>
-        {children}
-        <Scripts />
-      </body>
-    </html>
-  ),
-})
-```
-
-More information on layouts can be found in the [Layouts documentation](https://tanstack.com/router/latest/docs/framework/react/guide/routing-concepts#layouts).
-
-## Server Functions
-
-TanStack Start provides server functions that allow you to write server-side code that seamlessly integrates with your client components.
-
-```tsx
-import { createServerFn } from '@tanstack/react-start'
-
-const getServerTime = createServerFn({
-  method: 'GET',
-}).handler(async () => {
-  return new Date().toISOString()
-})
-
-// Use in a component
-function MyComponent() {
-  const [time, setTime] = useState('')
-  
-  useEffect(() => {
-    getServerTime().then(setTime)
-  }, [])
-  
-  return <div>Server time: {time}</div>
-}
-```
-
-## API Routes
-
-You can create API routes by using the `server` property in your route definitions:
-
-```tsx
-import { createFileRoute } from '@tanstack/react-router'
-import { json } from '@tanstack/react-start'
-
-export const Route = createFileRoute('/api/hello')({
-  server: {
-    handlers: {
-      GET: () => json({ message: 'Hello, World!' }),
-    },
-  },
-})
-```
-
-## Data Fetching
-
-There are multiple ways to fetch data in your application. You can use TanStack Query to fetch data from a server. But you can also use the `loader` functionality built into TanStack Router to load the data for a route before it's rendered.
-
-For example:
-
-```tsx
-import { createFileRoute } from '@tanstack/react-router'
-
-export const Route = createFileRoute('/people')({
-  loader: async () => {
-    const response = await fetch('https://swapi.dev/api/people')
-    return response.json()
-  },
-  component: PeopleComponent,
-})
-
-function PeopleComponent() {
-  const data = Route.useLoaderData()
-  return (
-    <ul>
-      {data.results.map((person) => (
-        <li key={person.name}>{person.name}</li>
-      ))}
-    </ul>
-  )
-}
-```
-
-Loaders simplify your data fetching logic dramatically. Check out more information in the [Loader documentation](https://tanstack.com/router/latest/docs/framework/react/guide/data-loading#loader-parameters).
-
-
-
-# Learn More
-
-You can learn more about all of the offerings from TanStack in the [TanStack documentation](https://tanstack.com).
-
-For TanStack Start specific documentation, visit [TanStack Start](https://tanstack.com/start).
+[MIT](LICENSE)
