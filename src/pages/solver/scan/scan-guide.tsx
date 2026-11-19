@@ -1,6 +1,6 @@
 /**
  * The scan guide: a dialog with two short animations, one for a laptop and
- * one for a phone, showing how to hold the cube and when to turn it. The
+ * one for a phone (a phone sees only its own), showing how to hold the cube and when to turn it. The
  * animations are GIFs recorded from the drawings in `scripts/scan-guide`.
  */
 import { CircleHelp } from 'lucide-react'
@@ -32,6 +32,30 @@ function GuidePicture({ device, label }: { device: 'laptop' | 'phone'; label: st
   )
 }
 
+/**
+ * The animations with their captions. A narrow screen is a phone, so it gets
+ * the phone's animation alone and never downloads the laptop's.
+ */
+function GuideDevices() {
+  const text = useM().solver.scan.guide
+  // Like the theme above, the width can be read directly: this is only drawn in the browser.
+  const wide = window.matchMedia('(min-width: 40rem)').matches
+  const devices = wide ? (['laptop', 'phone'] as const) : (['phone'] as const)
+  return (
+    <div className={wide ? 'grid grid-cols-2 gap-4' : 'grid gap-4'}>
+      {devices.map((device) => (
+        <section key={device} className="space-y-2">
+          <div className="overflow-hidden rounded-xl border">
+            <GuidePicture device={device} label={text[device].picture} />
+          </div>
+          <h3 className="text-sm font-semibold">{text[device].title}</h3>
+          <p className="text-sm text-muted-foreground">{text[device].hold}</p>
+        </section>
+      ))}
+    </div>
+  )
+}
+
 /** The "How to scan" button and the guide it opens. */
 export function ScanGuide({ open, onOpenChange }: { open: boolean; onOpenChange: (open: boolean) => void }) {
   const text = useM().solver.scan.guide
@@ -48,17 +72,7 @@ export function ScanGuide({ open, onOpenChange }: { open: boolean; onOpenChange:
           <DialogTitle>{text.title}</DialogTitle>
           <DialogDescription>{text.intro}</DialogDescription>
         </DialogHeader>
-        <div className="grid gap-4 sm:grid-cols-2">
-          {(['laptop', 'phone'] as const).map((device) => (
-            <section key={device} className="space-y-2">
-              <div className="overflow-hidden rounded-xl border">
-                <GuidePicture device={device} label={text[device].picture} />
-              </div>
-              <h3 className="text-sm font-semibold">{text[device].title}</h3>
-              <p className="text-sm text-muted-foreground">{text[device].hold}</p>
-            </section>
-          ))}
-        </div>
+        <GuideDevices />
         <section className="space-y-2">
           <h3 className="text-sm font-semibold">{text.stepsTitle}</h3>
           <ol className="grid list-inside list-decimal gap-x-6 gap-y-1 text-sm text-muted-foreground sm:grid-flow-col sm:grid-cols-2 sm:grid-rows-3">
