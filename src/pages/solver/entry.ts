@@ -190,6 +190,24 @@ export function colourCounts(stickers: readonly Paint[]): Record<ColourKey, numb
   return counts
 }
 
+/**
+ * The entered stickers written out for a person to read: one group of colour
+ * keys per face, in U R F D L B order, with `-` for an unpainted sticker.
+ */
+export function stickersText(stickers: readonly Paint[]): string {
+  const perFace = Math.max(1, Math.ceil(stickers.length / 6))
+  const faces: string[] = []
+  for (let from = 0; from < stickers.length; from += perFace) {
+    faces.push(
+      stickers
+        .slice(from, from + perFace)
+        .map((paint) => paint ?? '-')
+        .join(''),
+    )
+  }
+  return faces.join(' ')
+}
+
 /** Why the entered stickers cannot be solved yet. */
 export type EntryProblem = { code: 'unpainted'; stickers: number[] } | StickerError
 

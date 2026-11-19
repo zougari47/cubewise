@@ -9,6 +9,7 @@ import {
   entryReducer,
   initialEntry,
   isSavedStickers,
+  stickersText,
 } from './entry.ts'
 import type { EntryAction, EntryState, Paint } from './entry.ts'
 
@@ -218,5 +219,27 @@ describe('checkEntry', () => {
       ok: false,
       problem: { code: 'duplicate-centres', stickers: [4, 13] },
     })
+  })
+})
+
+describe('stickersText', () => {
+  test('writes one group of colour keys per face, in U R F D L B order', () => {
+    expect(stickersText(stickersOf(''))).toBe(
+      'WWWWWWWWW RRRRRRRRR GGGGGGGGG YYYYYYYYY OOOOOOOOO BBBBBBBBB',
+    )
+    const scrambled = stickersText(stickersOf("R U R' U'"))
+    expect(scrambled.split(' ').map((face) => face.length)).toEqual([9, 9, 9, 9, 9, 9])
+    expect(scrambled.replaceAll(' ', '')).toBe(stickersOf("R U R' U'").join(''))
+  })
+
+  test('marks an unpainted sticker with a dash', () => {
+    const text = stickersText(initialEntry().stickers)
+    expect(text.split(' ')).toHaveLength(6)
+    expect(text.split(' ')[0]).toBe('----W----')
+  })
+
+  test('never fails on stickers that are missing', () => {
+    expect(stickersText([])).toBe('')
+    expect(stickersText(['W', null])).toBe('W -')
   })
 })
