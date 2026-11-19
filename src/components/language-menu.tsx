@@ -1,5 +1,5 @@
 import { Link } from '@tanstack/react-router'
-import { Check, Languages } from 'lucide-react'
+import { Check, ChevronDown, Languages } from 'lucide-react'
 import { Button } from '#/components/ui/button'
 import {
   DropdownMenu,
@@ -8,6 +8,7 @@ import {
   DropdownMenuTrigger,
 } from '#/components/ui/dropdown-menu'
 import { useLocale, useM } from '#/i18n'
+import { cn } from '#/lib/utils'
 import { LOCALES, LOCALE_NAMES, localeParam } from '#/i18n/locales.ts'
 
 /** Opens the page being read in another language. Each language is shown by its own name. */
@@ -17,9 +18,15 @@ export function LanguageMenu({ className }: { className?: string }) {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button variant="ghost" size="sm" aria-label={m.site.language} className={className}>
+        <Button
+          variant="ghost"
+          size="sm"
+          aria-label={m.site.language}
+          className={cn('group', className)}
+        >
           <Languages />
           {LOCALE_NAMES[current]}
+          <ChevronDown className="opacity-60 transition-transform group-data-[state=open]:rotate-180" />
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end">
