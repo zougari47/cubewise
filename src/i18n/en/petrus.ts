@@ -238,6 +238,11 @@ export const petrusText: MethodText<PetrusStage> = {
   lead: 'The Petrus method is named after Lars Petrus, who worked it out in 1981 and came fourth at the 1982 world championship. His starting point was that a finished first layer gets in the way: every later move breaks it, and it has to be mended again and again. So this method never builds a layer. It builds a block of two by two by two in one corner, which leaves three faces free to turn, and grows it to two by two by three, which leaves two. The edges outside the block are then turned the "good" way round, after which the first two layers can be finished with the two free faces alone and the last layer starts with its cross made. Compared with the beginner method there are far fewer moves, and most of the solve is done by looking and thinking, not from sequences. Petrus himself gives 55 to 60 moves for a fast solve and 40 to 45 when the aim is few moves.',
   solverHint:
     'About 39 moves, in six stages. The first four are found by search and take about 20 moves together, fewer than a person would usually manage. The solver starts from whichever corner and direction give the shortest solution, so check how the first instruction asks you to hold the cube. It may also turn the cube once before the last layer.',
+  roadmap: {
+    picture: 'A block of 2×2×2 in one corner',
+    what: 'It never builds a layer, because a finished layer gets in the way. A small block in one corner grows until only two faces are free, and the first two layers are finished with those two alone.',
+    pick: 'Pick it if you would rather look and think than recite sequences: most of the solve is worked out, not memorised.',
+  },
   stages,
   lessons,
 }

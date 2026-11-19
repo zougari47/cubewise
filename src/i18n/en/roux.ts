@@ -404,6 +404,11 @@ export const rouxText: MethodText<RouxStage> = {
   lead: 'The Roux method was invented by Gilles Roux in 2003 and is the main alternative to CFOP among fast solvers. It does not work in layers. You build a block on the left and a block on the right, which leaves the top layer and the middle slice free. One sequence then solves the top corners, and the six edges that remain are solved with turns of the middle slice and the top alone. Compared with the beginner method it needs far fewer moves and only 42 sequences, and the cube is never turned over in the hands. The price is that the two blocks are built by eye, not by rule, and that takes practice.',
   solverHint:
     'About 39 moves, in six stages. The two blocks are found by search, so they are short. The top corners are one sequence out of 42, and the last six edges use only the middle slice and the top.',
+  roadmap: {
+    picture: 'A block on the left and a block on the right',
+    what: 'No layers. You build a block on each side by eye, solve the top corners with one sequence, then finish the last six edges with the middle slice and the top alone.',
+    pick: 'Pick it if you want few moves and few sequences, and enjoy working things out more than memorising.',
+  },
   stages,
   lessons,
 }

@@ -354,6 +354,11 @@ export const cfopText: MethodText<CfopStage> = {
   lead: 'CFOP is named after its four stages: Cross, First two layers, Orientation and Permutation of the last layer. It is also called the Fridrich method, after Jessica Fridrich, who made it widely known. Nearly all the fastest solvers use it. Compared with the beginner method it joins stages together: each first-layer corner goes in with the middle-layer edge above it, and the last layer takes two sequences instead of four stages. The price is learning to see pairs, and up to 78 sequences to memorise, though you can start with a few and add the rest over time.',
   solverHint:
     'About 53 moves, in four stages. The cross and the pairs are found by search, so they are short. The last layer is one sequence out of 57, then one out of 21.',
+  roadmap: {
+    picture: 'The cross and one corner-edge pair',
+    what: 'The method most speedsolvers use. It still works in layers, but each first-layer corner goes in together with the edge above it, and the last layer takes two sequences.',
+    pick: 'Pick it if you are happy to memorise: there are up to 78 sequences, though you can start with a few and add the rest over time.',
+  },
   stages,
   lessons,
 }

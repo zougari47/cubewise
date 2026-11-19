@@ -242,6 +242,11 @@ export const beginnerText: MethodText<BeginnerStage> = {
   lead: 'The beginner method solves the cube one layer at a time. There are seven stages. Each has a single goal, a picture of what to look for, and a short sequence you can watch in 3D.',
   solverHint:
     'About 130 moves, in the seven stages taught in the lessons. Longer, but you can follow why each move is made.',
+  roadmap: {
+    picture: 'The first layer, solved',
+    what: 'One layer at a time, in seven stages. Each stage has a single goal and a few short sequences, so you always know what to do next.',
+    pick: 'Pick it if you have never solved a cube. It is where almost everyone starts.',
+  },
   stages,
   lessons,
 }

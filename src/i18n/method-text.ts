@@ -34,6 +34,15 @@ export interface MethodText<Stage extends string = string> {
   lead: string
   /** Shown under the method in the solver: about how many moves, and what to expect. */
   solverHint: string
+  /** The method as a stop on the home page's road map. */
+  roadmap: {
+    /** What the stop's picture shows, in a few words. */
+    picture: string
+    /** One or two sentences on what makes the method different from the others. */
+    what: string
+    /** One sentence on who should pick it. */
+    pick: string
+  }
   /** Stage names never mention a colour. */
   stages: Record<Stage, { name: string; summary: string }>
   lessons: Record<Stage, LessonText>

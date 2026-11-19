@@ -141,6 +141,11 @@ export const keyholeText: MethodText<KeyholeStage> = {
   lead: 'The keyhole method is the beginner method with a faster way through the first two layers. Only three corners of the first layer are solved at first. The empty fourth place, the keyhole, is turned under each middle-layer edge in turn, and the edge drops in with three moves instead of eight. The last corner then goes in around its edge, and the last layer is solved exactly as before. It is a common first step for people who know the beginner method and want fewer moves before learning a speedsolving method.',
   solverHint:
     'About 110 moves, in eight stages. The first two layers take about 13 moves fewer than in the beginner method, and the last layer is solved the same way.',
+  roadmap: {
+    picture: 'Three corners in, the fourth place left empty',
+    what: 'The beginner method with one shortcut. A first-layer corner is left out, and the middle-layer edges slip in through the gap, three moves each instead of eight.',
+    pick: 'Pick it when the beginner method feels easy and you want fewer moves with almost nothing new to memorise.',
+  },
   stages,
   lessons,
 }

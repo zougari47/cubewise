@@ -136,6 +136,11 @@ export const zzText: MethodText<ZzStage> = {
   lead: 'ZZ is named after Zbigniew Zborowski, who published it in 2006. It begins with a stage no layer method has: every edge is turned the "good" way round while two bottom edges are placed as a line, a stage called EOLine. After that the first two layers are built as two blocks with turns of the right, top and left faces only, so the cube is never turned in the hands, and the last-layer edges face up without any work. Compared with the beginner method it has far fewer moves and stages, and compared with CFOP it has fewer last-layer sequences to learn, 28 instead of 78. The price is the first stage: seeing which edges are bad, and planning their fix before the first move, takes practice. This is the original form of the method; many ZZ solvers now make a whole cross in the first stage instead of the line, which is called EOCross.',
   solverHint:
     'About 43 moves, in four stages. The line takes about 6 moves and the two blocks about 16, found by search, so they are shorter than a person would usually manage. The line is made from front to back or from side to side, whichever gives the shorter solution, so check how the first instruction asks you to hold the cube.',
+  roadmap: {
+    picture: 'The line and the block beside it',
+    what: 'It starts by turning every edge the right way round and laying a line on the bottom. After that the first two layers need only three faces, and the cube is never turned in the hands.',
+    pick: 'Pick it if you like planning before the first move and want fewer last-layer sequences than CFOP.',
+  },
   stages,
   lessons,
 }
